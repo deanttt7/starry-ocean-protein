@@ -266,37 +266,41 @@
       z-index: 1;
     }
 
-    /* ===== Ocean Area ===== */
+    /* ===== Ocean Area — Particle Starfall ===== */
     .ocean-area {
       position: relative;
-      min-height: 200px;
+      min-height: 340px;
       background: #ffffff;
       overflow: hidden;
-      padding: 20px 30px 30px;
+      padding: 24px 30px 40px;
     }
     .ocean-label {
       font-size: 10px;
       color: #a0a0a0;
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      margin-bottom: 14px;
+      margin-bottom: 18px;
       font-weight: 500;
       text-align: center;
     }
     .ocean-canvas {
       position: relative;
-      min-height: 160px;
+      height: 260px;
+      margin: 0 auto;
+      max-width: 960px;
     }
     .ocean-dot {
       position: absolute;
       border-radius: 50%;
-      opacity: 0.7;
-      transition: transform 0.3s ease;
+      pointer-events: none;
+      will-change: transform, opacity;
     }
-    .ocean-dot:hover {
-      transform: scale(1.5);
-      opacity: 1;
-      z-index: 5;
+
+    @keyframes oceanPulse {
+      0%, 100% { transform: translateY(0) translateX(0) scale(1); }
+      25% { transform: translateY(-10px) translateX(7px) scale(1.08); }
+      50% { transform: translateY(8px) translateX(-5px) scale(0.96); }
+      75% { transform: translateY(-5px) translateX(6px) scale(1.04); }
     }
 
     .empty-hint {
@@ -532,33 +536,45 @@ function renderOcean() {
   const canvas = document.getElementById('oceanCanvas');
   canvas.innerHTML = '';
 
-  const width = canvas.offsetWidth || 900;
-  const height = 160;
-  const dotSize = 6;
+  const width = canvas.offsetWidth || 960;
+  const height = 260;
+  const totalDots = Math.max(200, Math.round(width * 0.38));
 
-  FIELD_LIST.forEach((field, idx) => {
-    const color = FIELD_COLORS[field];
-    // Number of dots proportional to total nodes in this field
-    const fieldData = HIERARCHY[field];
-    let count = 3;
-    if (fieldData && fieldData.children) {
-      count = Math.max(3, Math.min(18, Math.round(fieldData.children.length / 2)));
-    }
+  for (let i = 0; i < totalDots; i++) {
+    const fieldIdx = Math.floor(Math.random() * FIELD_LIST.length);
+    const color = FIELD_COLORS[FIELD_LIST[fieldIdx]];
 
-    for (let i = 0; i < count; i++) {
-      const dot = document.createElement('div');
-      dot.className = 'ocean-dot';
-      dot.style.width = dotSize + 'px';
-      dot.style.height = dotSize + 'px';
-      dot.style.background = color;
-      const left = (idx / FIELD_LIST.length) * width + (Math.random() * (width / FIELD_LIST.length - 10));
-      const top = Math.random() * (height - dotSize);
-      dot.style.left = Math.max(0, Math.min(width - dotSize, left)) + 'px';
-      dot.style.top = top + 'px';
-      dot.title = field;
-      canvas.appendChild(dot);
-    }
-  });
+    // depth: 0 = far/back/top, 1 = near/front/bottom
+    const depth = Math.pow(Math.random(), 0.7);
+
+    const size = 2.5 + depth * 6.5;
+    const opacity = 0.2 + depth * 0.8;
+    const blur = (1 - depth) * 2.2;
+
+    // Vertical: far dots cluster toward top, near dots toward bottom
+    const y = (1 - depth) * height * 0.82 + Math.random() * (height * 0.18);
+
+    // Horizontal indent: far = narrow & centered, near = wide spread
+    const spread = 0.16 + depth * 0.84;
+    const x = (width / 2) + (Math.random() - 0.5) * width * spread;
+
+    const dot = document.createElement('div');
+    dot.className = 'ocean-dot';
+    dot.style.width = size + 'px';
+    dot.style.height = size + 'px';
+    dot.style.background = color;
+    dot.style.left = (x - size / 2) + 'px';
+    dot.style.top = (y - size / 2) + 'px';
+    dot.style.opacity = opacity;
+    dot.style.filter = 'blur(' + blur + 'px)';
+
+    // Flow animation: slower in far depth, faster in near depth
+    const duration = 10 + (1 - depth) * 16 + Math.random() * 10;
+    const delay = Math.random() * -duration;
+    dot.style.animation = 'oceanPulse ' + duration + 's ease-in-out ' + delay + 's infinite';
+
+    canvas.appendChild(dot);
+  }
 }
 
 function handleSearch() {
