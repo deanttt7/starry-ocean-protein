@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Starry Ocean Protein Search</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #0a0e27;
+      color: #e8eaf6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== 顶部星空区 ===== */
+    .hero-section {
+      position: relative;
+      height: 280px;
+      background: linear-gradient(180deg, #050718 0%, #0a1a3a 40%, #0d2b5a 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.9), transparent),
+        radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 160px 20px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(2px 2px at 200px 60px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 250px 30px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(2px 2px at 300px 90px, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 350px 50px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(2px 2px at 400px 20px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 450px 80px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(2px 2px at 500px 40px, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 550px 70px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(2px 2px at 600px 30px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 650px 90px, rgba(255,255,255,0.9), transparent),
+        radial-gradient(2px 2px at 700px 50px, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1px 1px at 750px 20px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(2px 2px at 800px 80px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1px 1px at 850px 40px, rgba(255,255,255,0.7), transparent),
+        radial-gradient(2px 2px at 900px 70px, rgba(255,255,255,0.5), transparent);
+      background-size: 950px 120px;
+      opacity: 0.6;
+      pointer-events: none;
+    }
+    .hero-title {
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #fff;
+      z-index: 1;
+      text-shadow: 0 2px 20px rgba(100,180,255,0.4);
+    }
+    .hero-subtitle {
+      font-size: 14px;
+      color: rgba(200,220,255,0.7);
+      margin-top: 10px;
+      z-index: 1;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+    .brand-tag {
+      position: absolute;
+      top: 20px;
+      left: 30px;
+      font-size: 16px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      z-index: 1;
+      letter-spacing: 1px;
+    }
+
+    /* ===== 检索功能区 ===== */
+    .search-section {
+      background: linear-gradient(180deg, #0d2b5a 0%, #0a1a3a 100%);
+      padding: 24px 30px 20px;
+      border-bottom: 1px solid rgba(100,180,255,0.15);
+    }
+    .search-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      max-width: 700px;
+    }
+    .search-bar input {
+      flex: 1;
+      padding: 12px 18px;
+      border-radius: 8px;
+      border: 1px solid rgba(100,180,255,0.3);
+      background: rgba(10,20,50,0.6);
+      color: #e8eaf6;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-bar input::placeholder { color: rgba(200,220,255,0.4); }
+    .search-bar input:focus { border-color: rgba(100,180,255,0.7); }
+    .search-bar button {
+      padding: 12px 28px;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(135deg, #2a5aa0, #1e3a6f);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .search-bar button:hover { opacity: 0.9; }
+    .search-bar .reset-btn {
+      background: transparent;
+      border: 1px solid rgba(100,180,255,0.3);
+      color: rgba(200,220,255,0.8);
+    }
+    .search-bar .reset-btn:hover {
+      border-color: rgba(100,180,255,0.6);
+      color: #fff;
+    }
+
+    /* 研究领域外层框架 */
+    .field-label {
+      font-size: 12px;
+      color: rgba(150,190,255,0.6);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    .field-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .field-tab {
+      padding: 10px 22px;
+      border-radius: 8px;
+      border: 1px solid rgba(100,180,255,0.2);
+      background: rgba(10,25,60,0.5);
+      color: rgba(200,220,255,0.8);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .field-tab:hover {
+      border-color: rgba(100,180,255,0.5);
+      background: rgba(20,50,100,0.5);
+    }
+    .field-tab.active {
+      border-color: rgba(100,180,255,0.7);
+      background: linear-gradient(135deg, rgba(42,90,160,0.5), rgba(30,58,111,0.5));
+      color: #fff;
+      box-shadow: 0 0 15px rgba(100,180,255,0.2);
+    }
+
+    /* 适应症内层模块 */
+    .indication-section {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    .indication-section.active { display: block; }
+    .indication-label {
+      font-size: 12px;
+      color: rgba(150,190,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+    .indication-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .indication-tab {
+      padding: 8px 18px;
+      border-radius: 20px;
+      border: 1px solid rgba(100,180,255,0.15);
+      background: rgba(10,25,60,0.3);
+      color: rgba(200,220,255,0.7);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .indication-tab:hover {
+      border-color: rgba(100,180,255,0.4);
+      background: rgba(20,50,100,0.4);
+    }
+    .indication-tab.active {
+      border-color: rgba(100,200,255,0.6);
+      background: rgba(30,80,150,0.4);
+      color: #a8d8ff;
+    }
+
+    /* ===== 分子展示区 ===== */
+    .molecule-section {
+      position: relative;
+      min-height: 400px;
+      padding: 30px;
+      background: linear-gradient(180deg, #0a1a3a 0%, #071226 60%, #040a18 100%);
+    }
+    .molecule-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .molecule-count {
+      font-size: 14px;
+      color: rgba(150,190,255,0.6);
+    }
+    .molecule-count strong {
+      color: #7ec8ff;
+      font-size: 18px;
+      margin-right: 4px;
+    }
+    .status-badge {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      background: rgba(10,30,70,0.6);
+      border: 1px solid rgba(100,180,255,0.2);
+      color: rgba(200,220,255,0.7);
+    }
+    .status-badge.has-filter {
+      background: rgba(30,80,150,0.3);
+      border-color: rgba(100,200,255,0.4);
+      color: #a8d8ff;
+    }
+
+    /* 分子大海 — 默认状态 */
+    .molecule-ocean {
+      position: relative;
+      min-height: 320px;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 12px;
+      padding: 20px;
+      border-radius: 12px;
+      background: rgba(5,12,30,0.4);
+      border: 1px dashed rgba(100,180,255,0.1);
+    }
+    .molecule-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(100,180,255,0.4);
+      box-shadow: 0 0 6px rgba(100,180,255,0.2);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .molecule-dot:hover {
+      background: rgba(100,200,255,0.8);
+      box-shadow: 0 0 12px rgba(100,200,255,0.5);
+      transform: scale(1.8);
+    }
+    .molecule-dot.matched {
+      background: rgba(120,220,255,0.9);
+      box-shadow: 0 0 14px rgba(120,220,255,0.6), 0 0 30px rgba(120,220,255,0.2);
+      transform: scale(1.5);
+    }
+    .molecule-dot.dimmed {
+      opacity: 0.15;
+    }
+
+    /* 分子卡片 — 筛选后展示 */
+    .molecule-cards {
+      display: none;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 16px;
+      animation: fadeIn 0.4s ease;
+    }
+    .molecule-cards.active { display: grid; }
+    .molecule-card {
+      padding: 18px;
+      border-radius: 10px;
+      background: rgba(10,25,60,0.5);
+      border: 1px solid rgba(100,180,255,0.15);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .molecule-card:hover {
+      border-color: rgba(100,180,255,0.4);
+      background: rgba(15,40,80,0.5);
+      transform: translateY(-2px);
+    }
+    .molecule-card-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #c8e4ff;
+      margin-bottom: 6px;
+    }
+    .molecule-card-meta {
+      font-size: 12px;
+      color: rgba(150,190,255,0.6);
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .molecule-card-meta span {
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(100,180,255,0.08);
+    }
+
+    /* 星座展示区 — 筛选后顶部出现 */
+    .constellation-area {
+      display: none;
+      margin-bottom: 24px;
+      padding: 20px;
+      border-radius: 12px;
+      background: rgba(8,20,50,0.4);
+      border: 1px solid rgba(100,180,255,0.15);
+      min-height: 120px;
+      animation: fadeIn 0.5s ease;
+    }
+    .constellation-area.active { display: block; }
+    .constellation-title {
+      font-size: 13px;
+      color: rgba(150,190,255,0.6);
+      margin-bottom: 14px;
+    }
+    .constellation-nodes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .constellation-node {
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: rgba(30,70,140,0.3);
+      border: 1px solid rgba(100,200,255,0.3);
+      color: #a8d8ff;
+      font-size: 13px;
+      box-shadow: 0 0 10px rgba(100,200,255,0.1);
+    }
+
+    /* ===== 问卷反馈入口 ===== */
+    .feedback-section {
+      padding: 20px 30px;
+      background: #040a18;
+      border-top: 1px solid rgba(100,180,255,0.1);
+      text-align: center;
+    }
+    .feedback-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 24px;
+      border-radius: 8px;
+      border: 1px solid rgba(100,180,255,0.2);
+      background: rgba(10,25,60,0.4);
+      color: rgba(200,220,255,0.8);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .feedback-trigger:hover {
+      border-color: rgba(100,180,255,0.5);
+      background: rgba(20,50,100,0.4);
+      color: #fff;
+    }
+
+    /* 问卷弹窗 */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      width: 90%;
+      max-width: 480px;
+      background: linear-gradient(180deg, #0d1f4a, #0a1630);
+      border: 1px solid rgba(100,180,255,0.25);
+      border-radius: 16px;
+      padding: 28px;
+      animation: slideUp 0.3s ease;
+    }
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    .modal-field { margin-bottom: 16px; }
+    .modal-field label {
+      display: block;
+      font-size: 13px;
+      color: rgba(150,190,255,0.7);
+      margin-bottom: 6px;
+    }
+    .modal-field input,
+    .modal-field textarea,
+    .modal-field select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(100,180,255,0.2);
+      background: rgba(10,20,50,0.5);
+      color: #e8eaf6;
+      font-size: 14px;
+      outline: none;
+    }
+    .modal-field textarea { min-height: 80px; resize: vertical; }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+    .modal-actions button {
+      padding: 10px 22px;
+      border-radius: 8px;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .modal-actions .btn-primary {
+      background: linear-gradient(135deg, #2a5aa0, #1e3a6f);
+      color: #fff;
+    }
+    .modal-actions .btn-secondary {
+      background: transparent;
+      border: 1px solid rgba(100,180,255,0.3);
+      color: rgba(200,220,255,0.8);
+    }
+
+    /* ===== 底部辅助信息 ===== */
+    .footer-section {
+      padding: 24px 30px;
+      background: #02050e;
+      border-top: 1px solid rgba(100,180,255,0.08);
+    }
+    .footer-content {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .footer-title {
+      font-size: 14px;
+      color: rgba(150,190,255,0.5);
+      margin-bottom: 8px;
+    }
+    .footer-text {
+      font-size: 12px;
+      color: rgba(150,190,255,0.35);
+      line-height: 1.8;
+    }
+
+    /* ===== 动画 ===== */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== 详情弹窗 ===== */
+    .detail-modal .modal { max-width: 520px; }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(100,180,255,0.08);
+      font-size: 14px;
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-row .label { color: rgba(150,190,255,0.6); }
+    .detail-row .value { color: #c8e4ff; text-align: right; max-width: 60%; }
+  </style>
+</head>
+<body>
+
+  <!-- 顶部星空区 -->
+  <section class="hero-section">
+    <div class="brand-tag">STARRY OCEAN</div>
+    <h1 class="hero-title">Early-Stage Protein Discovery</h1>
+    <p class="hero-subtitle">Explore our comprehensive library of early-stage protein molecules across multiple therapeutic areas, designed for global R&D collaboration.</p>
+  </section>
+
+  <!-- 检索功能区 -->
+  <section class="search-section">
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Search protein name, target, or keyword...">
+      <button onclick="applySearch()">Search</button>
+      <button class="reset-btn" onclick="resetAll()">Reset</button>
+    </div>
+
+    <div class="field-label">Research Field</div>
+    <div class="field-tabs" id="fieldTabs"></div>
+
+    <div id="indicationContainer"></div>
+  </section>
+
+  <!-- 分子展示区 -->
+  <section class="molecule-section">
+    <div class="molecule-header">
+      <div class="molecule-count"><strong id="countNum">0</strong> proteins found</div>
+      <div class="status-badge" id="statusBadge">All Library — Unfiltered</div>
+    </div>
+
+    <!-- 星座展示区（筛选后） -->
+    <div class="constellation-area" id="constellationArea">
+      <div class="constellation-title">Constellation View — Matched Molecules</div>
+      <div class="constellation-nodes" id="constellationNodes"></div>
+    </div>
+
+    <!-- 分子大海（默认状态） -->
+    <div class="molecule-ocean" id="moleculeOcean"></div>
+
+    <!-- 分子卡片（筛选后） -->
+    <div class="molecule-cards" id="moleculeCards"></div>
+  </section>
+
+  <!-- 问卷反馈入口 -->
+  <section class="feedback-section">
+    <div class="feedback-trigger" onclick="openFeedback()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Share Your Feedback
+    </div>
+  </section>
+
+  <!-- 底部辅助信息 -->
+  <section class="footer-section">
+    <div class="footer-content">
+      <div class="footer-title">Platform Overview</div>
+      <div class="footer-text">
+        Starry Ocean Protein Discovery Platform provides a structured, multi-dimensional view of our early-stage protein pipeline.
+        Use the Research Field and Indication filters to explore molecules by therapeutic area, or search directly by target name.
+        All data is updated dynamically and maintained with ≥98% accuracy.
+      </div>
+    </div>
+  </section>
+
+  <!-- 问卷弹窗 -->
+  <div class="modal-overlay" id="feedbackModal">
+    <div class="modal">
+      <div class="modal-title">Your Feedback Matters</div>
+      <div class="modal-field">
+        <label>How would you rate your experience?</label>
+        <select id="rating">
+          <option value="5">Excellent</option>
+          <option value="4">Good</option>
+          <option value="3">Average</option>
+          <option value="2">Below Average</option>
+          <option value="1">Poor</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <label>What can we improve? (Optional)</label>
+        <textarea id="feedbackText" placeholder="Share your suggestions..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeFeedback()">Cancel</button>
+        <button class="btn-primary" onclick="submitFeedback()">Submit</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 详情弹窗 -->
+  <div class="modal-overlay detail-modal" id="detailModal">
+    <div class="modal">
+      <div class="modal-title" id="detailTitle">Protein Details</div>
+      <div id="detailContent"></div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeDetail()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ===== 模拟数据 =====
+    const fields = {
+      "Oncology": ["Lung Cancer", "Breast Cancer", "Colorectal Cancer", "Gastric Cancer", "Liver Cancer", "Pancreatic Cancer"],
+      "Immunology": ["Rheumatoid Arthritis", "Psoriasis", "Lupus", "Multiple Sclerosis", "Type 1 Diabetes"],
+      "Neurology": ["Alzheimer's Disease", "Parkinson's Disease", "Epilepsy", "Migraine", "ALS"],
+      "Metabolism": ["Type 2 Diabetes", "Obesity", "NASH", "Dyslipidemia", "Gout"],
+      "Cardiovascular": ["Atherosclerosis", "Heart Failure", "Atrial Fibrillation", "Hypertension", "Thrombosis"],
+      "Infectious Disease": ["COVID-19", "Influenza", "HBV", "HIV", "RSV"]
+    };
+
+    const fieldColors = {
+      "Oncology": "#ff6b6b",
+      "Immunology": "#4ecdc4",
+      "Neurology": "#a78bfa",
+      "Metabolism": "#f9ca24",
+      "Cardiovascular": "#ff7979",
+      "Infectious Disease": "#7bed9f"
+    };
+
+    // 生成 120 个模拟蛋白分子
+    const proteins = [];
+    const prefixes = ["AB", "CD", "EF", "GH", "IJ", "KL", "MN", "OP", "QR", "ST", "UV", "WX", "YZ"];
+    const suffixes = ["mab", "cept", " nib", "tinib", "zumab", "ximab", "limab", "tide", "stat", "vatinib"];
+    let id = 1;
+    for (const [field, indications] of Object.entries(fields)) {
+      const count = 18 + Math.floor(Math.random() * 12);
+      for (let i = 0; i < count; i++) {
+        const indication = indications[Math.floor(Math.random() * indications.length)];
+        const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+        const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+        const num = 100 + Math.floor(Math.random() * 900);
+        proteins.push({
+          id: id++,
+          name: `${prefix}-${num}${suffix}`,
+          field: field,
+          indication: indication,
+          target: `Target-${String.fromCharCode(65 + Math.floor(Math.random() * 26))}${Math.floor(Math.random() * 99)}`,
+          phase: ["Discovery", "Preclinical", "IND-enabling", "Phase I"][Math.floor(Math.random() * 4)],
+          format: ["Monoclonal Antibody", "Bispecific", "Small Molecule", "Peptide", "Fusion Protein"][Math.floor(Math.random() * 5)]
+        });
+      }
+    }
+
+    // ===== 状态 =====
+    let activeField = null;
+    let activeIndication = null;
+    let searchQuery = "";
+
+    // ===== 初始化 =====
+    function init() {
+      renderFieldTabs();
+      renderOcean();
+      updateCount(proteins.length);
+    }
+
+    // ===== 渲染领域Tab =====
+    function renderFieldTabs() {
+      const container = document.getElementById('fieldTabs');
+      container.innerHTML = '';
+      Object.keys(fields).forEach(field => {
+        const btn = document.createElement('div');
+        btn.className = 'field-tab';
+        btn.textContent = field;
+        btn.onclick = () => selectField(field);
+        container.appendChild(btn);
+      });
+    }
+
+    // ===== 渲染适应症Tab =====
+    function renderIndicationTabs(field) {
+      const container = document.getElementById('indicationContainer');
+      if (!field) {
+        container.innerHTML = '';
+        return;
+      }
+      const indications = fields[field];
+      container.innerHTML = `
+        <div class="indication-section active">
+          <div class="indication-label">Indication for ${field}</div>
+          <div class="indication-tabs" id="indicationTabs"></div>
+        </div>
+      `;
+      const tabs = document.getElementById('indicationTabs');
+      indications.forEach(ind => {
+        const btn = document.createElement('div');
+        btn.className = 'indication-tab';
+        btn.textContent = ind;
+        btn.onclick = () => selectIndication(ind);
+        tabs.appendChild(btn);
+      });
+    }
+
+    // ===== 选择领域 =====
+    function selectField(field) {
+      if (activeField === field) {
+        activeField = null;
+        activeIndication = null;
+      } else {
+        activeField = field;
+        activeIndication = null;
+      }
+      refreshUI();
+    }
+
+    // ===== 选择适应症 =====
+    function selectIndication(indication) {
+      activeIndication = activeIndication === indication ? null : indication;
+      refreshUI();
+    }
+
+    // ===== 搜索 =====
+    function applySearch() {
+      searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+      refreshUI();
+    }
+
+    // ===== 重置 =====
+    function resetAll() {
+      activeField = null;
+      activeIndication = null;
+      searchQuery = "";
+      document.getElementById('searchInput').value = "";
+      refreshUI();
+    }
+
+    // ===== 刷新UI =====
+    function refreshUI() {
+      // 更新领域tab样式
+      document.querySelectorAll('.field-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.textContent === activeField);
+      });
+
+      // 更新适应症区域
+      renderIndicationTabs(activeField);
+      if (activeField && activeIndication) {
+        document.querySelectorAll('.indication-tab').forEach(tab => {
+          tab.classList.toggle('active', tab.textContent === activeIndication);
+        });
+      }
+
+      // 筛选数据
+      const filtered = proteins.filter(p => {
+        if (activeField && p.field !== activeField) return false;
+        if (activeIndication && p.indication !== activeIndication) return false;
+        if (searchQuery) {
+          const q = searchQuery;
+          return p.name.toLowerCase().includes(q) ||
+                 p.target.toLowerCase().includes(q) ||
+                 p.field.toLowerCase().includes(q) ||
+                 p.indication.toLowerCase().includes(q);
+        }
+        return true;
+      });
+
+      updateCount(filtered.length);
+      updateStatusBadge();
+
+      if (activeField || activeIndication || searchQuery) {
+        showFilteredView(filtered);
+      } else {
+        showDefaultView();
+      }
+    }
+
+    // ===== 更新计数 =====
+    function updateCount(n) {
+      document.getElementById('countNum').textContent = n;
+    }
+
+    // ===== 更新状态标签 =====
+    function updateStatusBadge() {
+      const badge = document.getElementById('statusBadge');
+      if (!activeField && !activeIndication && !searchQuery) {
+        badge.textContent = "All Library — Unfiltered";
+        badge.className = "status-badge";
+      } else {
+        const parts = [];
+        if (activeField) parts.push(activeField);
+        if (activeIndication) parts.push(activeIndication);
+        if (searchQuery) parts.push(`Search: "${searchQuery}"`);
+        badge.textContent = parts.join(" > ");
+        badge.className = "status-badge has-filter";
+      }
+    }
+
+    // ===== 默认视图：分子大海 =====
+    function showDefaultView() {
+      document.getElementById('constellationArea').classList.remove('active');
+      document.getElementById('moleculeOcean').style.display = 'flex';
+      document.getElementById('moleculeCards').classList.remove('active');
+      renderOcean();
+    }
+
+    // ===== 筛选视图 =====
+    function showFilteredView(filtered) {
+      document.getElementById('constellationArea').classList.add('active');
+      document.getElementById('moleculeOcean').style.display = 'none';
+      document.getElementById('moleculeCards').classList.add('active');
+
+      // 星座节点
+      const nodes = document.getElementById('constellationNodes');
+      nodes.innerHTML = '';
+      filtered.slice(0, 16).forEach(p => {
+        const node = document.createElement('div');
+        node.className = 'constellation-node';
+        node.textContent = p.name;
+        node.onclick = () => showDetail(p);
+        nodes.appendChild(node);
+      });
+      if (filtered.length > 16) {
+        const more = document.createElement('div');
+        more.className = 'constellation-node';
+        more.style.opacity = '0.6';
+        more.textContent = `+${filtered.length - 16} more`;
+        nodes.appendChild(more);
+      }
+
+      // 分子卡片
+      const cards = document.getElementById('moleculeCards');
+      cards.innerHTML = '';
+      filtered.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'molecule-card';
+        card.innerHTML = `
+          <div class="molecule-card-name">${p.name}</div>
+          <div class="molecule-card-meta">
+            <span>${p.field}</span>
+            <span>${p.indication}</span>
+            <span>${p.phase}</span>
+          </div>
+        `;
+        card.onclick = () => showDetail(p);
+        cards.appendChild(card);
+      });
+    }
+
+    // ===== 渲染分子大海 =====
+    function renderOcean() {
+      const ocean = document.getElementById('moleculeOcean');
+      ocean.innerHTML = '';
+      for (let i = 0; i < 180; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'molecule-dot';
+        dot.style.opacity = 0.3 + Math.random() * 0.7;
+        dot.style.width = (6 + Math.random() * 6) + 'px';
+        dot.style.height = dot.style.width;
+        dot.title = proteins[i % proteins.length]?.name || '';
+        ocean.appendChild(dot);
+      }
+    }
+
+    // ===== 详情弹窗 =====
+    function showDetail(p) {
+      document.getElementById('detailTitle').textContent = p.name;
+      document.getElementById('detailContent').innerHTML = `
+        <div class="detail-row"><span class="label">Research Field</span><span class="value">${p.field}</span></div>
+        <div class="detail-row"><span class="label">Indication</span><span class="value">${p.indication}</span></div>
+        <div class="detail-row"><span class="label">Target</span><span class="value">${p.target}</span></div>
+        <div class="detail-row"><span class="label">Development Phase</span><span class="value">${p.phase}</span></div>
+        <div class="detail-row"><span class="label">Molecule Format</span><span class="value">${p.format}</span></div>
+        <div class="detail-row"><span class="label">Molecule ID</span><span class="value">#${String(p.id).padStart(4, '0')}</span></div>
+      `;
+      document.getElementById('detailModal').classList.add('active');
+    }
+
+    function closeDetail() {
+      document.getElementById('detailModal').classList.remove('active');
+    }
+
+    // ===== 反馈弹窗 =====
+    function openFeedback() {
+      document.getElementById('feedbackModal').classList.add('active');
+    }
+    function closeFeedback() {
+      document.getElementById('feedbackModal').classList.remove('active');
+    }
+    function submitFeedback() {
+      const rating = document.getElementById('rating').value;
+      const text = document.getElementById('feedbackText').value;
+      alert(`Thank you for your feedback!\nRating: ${rating}/5\n${text ? 'Comment: ' + text : ''}`);
+      closeFeedback();
+      document.getElementById('rating').value = '5';
+      document.getElementById('feedbackText').value = '';
+    }
+
+    // ===== 键盘与点击事件 =====
+    document.getElementById('searchInput').addEventListener('keypress', e => {
+      if (e.key === 'Enter') applySearch();
+    });
+
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay) overlay.classList.remove('active');
+      });
+    });
+
+    // 启动
+    init();
+  </script>
+</body>
+</html>
