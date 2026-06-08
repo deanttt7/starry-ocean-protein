@@ -8,259 +8,197 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: #050914;
-      color: #e2e8f0;
+      background: #ffffff;
+      color: #2d3436;
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    /* ===== 顶部星空标题区 ===== */
+    /* ===== 顶部标题区（简洁白底） ===== */
     .hero {
-      position: relative;
-      height: 160px;
-      background: linear-gradient(180deg, #02040a 0%, #070d1c 50%, #0a1528 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      background: #ffffff;
+      border-bottom: 1px solid #eceef1;
+      padding: 40px 30px 28px;
       text-align: center;
-      overflow: hidden;
-    }
-    .hero-stars {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-    }
-    .hero-star {
-      position: absolute;
-      border-radius: 50%;
-      background: #fff;
-      animation: twinkle var(--dur) ease-in-out infinite;
-      animation-delay: var(--delay);
-    }
-    @keyframes twinkle {
-      0%, 100% { opacity: var(--min-op); transform: scale(var(--min-s)); }
-      50% { opacity: var(--max-op); transform: scale(var(--max-s)); }
     }
     .hero h1 {
-      font-size: 30px;
+      font-size: 28px;
       font-weight: 700;
-      color: #fff;
-      z-index: 1;
-      letter-spacing: 2.5px;
-      text-shadow: 0 0 24px rgba(80,160,255,0.35), 0 2px 10px rgba(0,0,0,0.5);
-    }
-    .hero p {
-      font-size: 13px;
-      color: rgba(140,190,255,0.55);
-      margin-top: 6px;
-      z-index: 1;
+      color: #1a1a2e;
       letter-spacing: 0.5px;
     }
+    .hero p {
+      font-size: 14px;
+      color: #636e72;
+      margin-top: 8px;
+      font-weight: 400;
+    }
+    .hero-divider {
+      width: 40px;
+      height: 2px;
+      background: #e74c3c;
+      margin: 14px auto 0;
+      border-radius: 1px;
+    }
 
-    /* ===== 核心检索与分类功能区（居中） ===== */
+    /* ===== 检索功能区（居中） ===== */
     .search-section {
-      background: linear-gradient(180deg, #0a1528 0%, #0c1a30 100%);
-      padding: 28px 30px 20px;
-      border-bottom: 1px solid rgba(60,120,200,0.08);
+      background: #fafbfc;
+      padding: 24px 30px 18px;
+      border-bottom: 1px solid #eceef1;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
     .search-bar {
       display: flex;
-      gap: 10px;
-      margin-bottom: 22px;
-      max-width: 600px;
+      gap: 8px;
+      margin-bottom: 18px;
+      max-width: 560px;
       width: 100%;
     }
     .search-bar input {
       flex: 1;
-      padding: 11px 16px;
-      border-radius: 10px;
-      border: 1px solid rgba(60,120,200,0.18);
-      background: rgba(6,14,35,0.6);
-      color: #e2e8f0;
+      padding: 10px 14px;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      color: #2d3436;
       font-size: 14px;
       outline: none;
-      transition: all 0.2s;
+      transition: border-color 0.2s;
     }
-    .search-bar input:focus {
-      border-color: rgba(60,120,200,0.4);
-      background: rgba(8,20,50,0.7);
-    }
-    .search-bar input::placeholder { color: rgba(120,170,230,0.35); }
+    .search-bar input:focus { border-color: #e74c3c; }
+    .search-bar input::placeholder { color: #a0a0a0; }
     .search-bar button {
-      padding: 11px 24px;
-      border-radius: 10px;
+      padding: 10px 22px;
+      border-radius: 6px;
       border: none;
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      background: #e74c3c;
       color: #fff;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
-      transition: opacity 0.2s;
+      transition: background 0.2s;
     }
-    .search-bar button:hover { opacity: 0.9; }
+    .search-bar button:hover { background: #c0392b; }
     .search-bar .reset-btn {
-      background: transparent;
-      border: 1px solid rgba(60,120,200,0.2);
-      color: rgba(140,180,240,0.6);
+      background: #ffffff;
+      color: #636e72;
+      border: 1px solid #d1d5db;
     }
-    .search-bar .reset-btn:hover {
-      border-color: rgba(60,120,200,0.45);
-      color: rgba(220,235,255,0.9);
-      background: rgba(15,40,80,0.4);
-    }
+    .search-bar .reset-btn:hover { background: #f5f5f5; color: #2d3436; }
 
     .field-label {
       font-size: 11px;
-      color: rgba(100,160,240,0.45);
+      color: #a0a0a0;
       text-transform: uppercase;
-      letter-spacing: 1.2px;
+      letter-spacing: 1px;
       margin-bottom: 10px;
-      align-self: flex-start;
-      max-width: 900px;
-      width: 100%;
+      font-weight: 500;
     }
     .field-tabs {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
       justify-content: center;
       max-width: 900px;
       width: 100%;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
     .field-tab {
-      padding: 10px 20px;
-      border-radius: 10px;
-      border: 1px solid rgba(60,120,200,0.15);
-      background: rgba(6,16,38,0.4);
-      color: rgba(170,200,235,0.7);
+      padding: 8px 16px;
+      border-radius: 16px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      color: #636e72;
       font-size: 13px;
-      font-weight: 500;
       cursor: pointer;
-      transition: all 0.25s;
+      transition: all 0.2s;
       white-space: nowrap;
     }
     .field-tab:hover {
-      border-color: rgba(60,120,200,0.4);
-      background: rgba(15,40,80,0.4);
-      color: rgba(220,235,255,0.9);
+      border-color: #e74c3c;
+      color: #e74c3c;
     }
     .field-tab.active {
-      border-color: rgba(80,160,255,0.5);
-      background: linear-gradient(135deg, rgba(37,99,235,0.25), rgba(30,58,111,0.25));
-      color: #93c5fd;
-      box-shadow: 0 0 16px rgba(60,120,200,0.15);
+      border-color: #e74c3c;
+      background: #fdf2f2;
+      color: #e74c3c;
+      font-weight: 600;
     }
 
     .indication-section {
       display: none;
-      animation: fadeIn 0.3s ease;
+      animation: fadeIn 0.25s ease;
       max-width: 900px;
       width: 100%;
     }
     .indication-section.active { display: block; }
     .indication-label {
       font-size: 11px;
-      color: rgba(100,160,240,0.4);
+      color: #a0a0a0;
       text-transform: uppercase;
       letter-spacing: 1px;
       margin-bottom: 10px;
+      font-weight: 500;
     }
     .indication-tabs {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
+      justify-content: center;
     }
     .indication-tab {
-      padding: 7px 16px;
-      border-radius: 20px;
-      border: 1px solid rgba(60,120,200,0.1);
-      background: rgba(6,16,38,0.25);
-      color: rgba(160,190,225,0.6);
+      padding: 6px 14px;
+      border-radius: 14px;
+      border: 1px solid #e0e0e0;
+      background: #ffffff;
+      color: #888888;
       font-size: 12px;
       cursor: pointer;
       transition: all 0.2s;
       white-space: nowrap;
     }
     .indication-tab:hover {
-      border-color: rgba(60,120,200,0.3);
-      background: rgba(15,40,80,0.35);
-      color: rgba(200,220,255,0.85);
+      border-color: #e74c3c;
+      color: #e74c3c;
     }
     .indication-tab.active {
-      border-color: rgba(80,170,255,0.4);
-      background: rgba(37,99,235,0.15);
-      color: #93c5fd;
+      border-color: #e74c3c;
+      background: #fdf2f2;
+      color: #e74c3c;
     }
 
     /* ===== 星座展示区 ===== */
     .constellation-area {
       position: relative;
-      min-height: 320px;
-      background: linear-gradient(180deg, #0c1a30 0%, #081020 60%, #060c18 100%);
+      min-height: 340px;
+      background: #ffffff;
       overflow: hidden;
       padding: 24px 30px;
-    }
-    .constellation-area::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.4), transparent),
-        radial-gradient(1.5px 1.5px at 25% 45%, rgba(255,255,255,0.25), transparent),
-        radial-gradient(1px 1px at 40% 15%, rgba(255,255,255,0.5), transparent),
-        radial-gradient(2px 2px at 55% 60%, rgba(255,255,255,0.15), transparent),
-        radial-gradient(1px 1px at 70% 30%, rgba(255,255,255,0.35), transparent),
-        radial-gradient(1.5px 1.5px at 85% 55%, rgba(255,255,255,0.25), transparent),
-        radial-gradient(1px 1px at 15% 70%, rgba(255,255,255,0.2), transparent),
-        radial-gradient(2px 2px at 42% 85%, rgba(255,255,255,0.3), transparent),
-        radial-gradient(1px 1px at 60% 80%, rgba(255,255,255,0.2), transparent),
-        radial-gradient(1.5px 1.5px at 80% 20%, rgba(255,255,255,0.4), transparent);
-      pointer-events: none;
+      border-bottom: 1px solid #eceef1;
     }
     .constellation-label {
       font-size: 11px;
-      color: rgba(100,160,230,0.35);
+      color: #a0a0a0;
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-    .constellation-label::before,
-    .constellation-label::after {
-      content: "";
-      width: 24px;
-      height: 1px;
-    }
-    .constellation-label::before {
-      background: linear-gradient(90deg, transparent, rgba(100,160,230,0.4));
-    }
-    .constellation-label::after {
-      background: linear-gradient(90deg, rgba(100,160,230,0.4), transparent);
+      margin-bottom: 16px;
+      text-align: center;
+      font-weight: 500;
     }
     .constellation-canvas {
       position: relative;
-      min-height: 260px;
+      min-height: 280px;
     }
 
     /* 虚线星座轮廓 */
     .ghost-constellation {
       position: absolute;
-      border: 1px dashed rgba(60,120,200,0.1);
+      border: 1px dashed #e0e0e0;
       border-radius: 50%;
       pointer-events: none;
-      animation: ghostFloat 8s ease-in-out infinite;
-    }
-    @keyframes ghostFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
     }
     .ghost-constellation::after {
       content: attr(data-label);
@@ -269,58 +207,52 @@
       left: 50%;
       transform: translateX(-50%);
       font-size: 10px;
-      color: rgba(80,140,220,0.18);
+      color: #c0c0c0;
       white-space: nowrap;
+      letter-spacing: 0.3px;
     }
 
     /* 分子节点 */
     .molecule-node {
       position: absolute;
-      padding: 5px 12px;
-      border-radius: 14px;
+      padding: 4px 10px;
+      border-radius: 12px;
       font-size: 11px;
       font-weight: 500;
       cursor: pointer;
-      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s ease;
       white-space: nowrap;
       user-select: none;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.2px;
     }
     .molecule-node.ghost {
-      border: 1px dashed rgba(60,120,200,0.12);
+      border: 1px dashed #e0e0e0;
       background: transparent;
-      color: rgba(80,140,220,0.18);
-      box-shadow: none;
+      color: #c0c0c0;
     }
     .molecule-node.active {
-      border: 1px solid rgba(100,200,255,0.4);
-      background: rgba(25,60,120,0.4);
-      color: #bfdbfe;
-      box-shadow: 0 0 14px rgba(80,180,255,0.2), 0 0 40px rgba(80,180,255,0.06), inset 0 1px 0 rgba(255,255,255,0.08);
-      animation: pulseGlow 3s ease-in-out infinite;
+      border: 1px solid #e74c3c;
+      background: #ffffff;
+      color: #e74c3c;
     }
     .molecule-node.active:hover {
-      transform: scale(1.12);
-      box-shadow: 0 0 22px rgba(100,200,255,0.3), 0 0 60px rgba(100,200,255,0.1), inset 0 1px 0 rgba(255,255,255,0.12);
+      background: #fdf2f2;
+      transform: scale(1.08);
       z-index: 10;
-    }
-    @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 14px rgba(80,180,255,0.2), 0 0 40px rgba(80,180,255,0.06), inset 0 1px 0 rgba(255,255,255,0.08); }
-      50% { box-shadow: 0 0 20px rgba(80,180,255,0.3), 0 0 55px rgba(80,180,255,0.1), inset 0 1px 0 rgba(255,255,255,0.12); }
     }
 
     /* 星座连线 */
     .constellation-line {
       position: absolute;
       height: 1px;
-      background: linear-gradient(90deg, rgba(60,120,200,0.08), rgba(60,120,200,0.02));
+      background: #e0e0e0;
       transform-origin: left center;
       pointer-events: none;
-      transition: all 0.5s ease;
+      transition: all 0.4s ease;
     }
     .constellation-line.active {
-      background: linear-gradient(90deg, rgba(100,200,255,0.22), rgba(100,200,255,0.05));
-      box-shadow: 0 0 6px rgba(100,200,255,0.12);
+      background: #e74c3c;
+      opacity: 0.4;
     }
 
     /* 升腾粒子 */
@@ -333,107 +265,70 @@
     .ascend-dot {
       position: absolute;
       border-radius: 50%;
-      background: rgba(120,200,255,0.7);
-      box-shadow: 0 0 10px rgba(120,200,255,0.4);
-      animation: ascendUp 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      background: #e74c3c;
+      opacity: 0.5;
+      animation: ascendUp 1.2s ease-out forwards;
     }
     @keyframes ascendUp {
       0% { opacity: 0; transform: translateY(0) scale(0.3); }
-      15% { opacity: 1; }
-      100% { opacity: 0; transform: translateY(-220px) scale(0.1); }
+      20% { opacity: 0.5; }
+      100% { opacity: 0; transform: translateY(-200px) scale(0.1); }
     }
 
-    /* ===== 底部分子大海 — 海浪流动效果 ===== */
+    /* ===== 底部分子大海 — 散点图风格 ===== */
     .ocean-area {
       position: relative;
-      height: 220px;
-      background: linear-gradient(180deg, #060c18 0%, #03060e 40%, #010308 100%);
+      min-height: 200px;
+      background: #ffffff;
       overflow: hidden;
-      border-top: 1px solid rgba(40,80,150,0.06);
+      padding: 20px 30px 30px;
     }
     .ocean-label {
-      position: absolute;
-      top: 10px;
-      left: 30px;
       font-size: 10px;
-      color: rgba(50,100,180,0.3);
+      color: #a0a0a0;
       text-transform: uppercase;
       letter-spacing: 1.5px;
-      z-index: 2;
+      margin-bottom: 14px;
+      font-weight: 500;
+      text-align: center;
     }
-
-    /* 海浪层 */
-    .wave-layer {
-      position: absolute;
-      width: 200%;
-      height: 100%;
-      left: -50%;
+    .ocean-canvas {
+      position: relative;
+      min-height: 160px;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 10px;
+      justify-content: center;
     }
-    .wave-dots {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-    }
-    .wave-dot {
-      position: absolute;
+    .ocean-dot {
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
-      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.4s ease;
+      cursor: pointer;
+    }
+    .ocean-dot:hover {
+      transform: scale(1.6);
+      z-index: 5;
+    }
+    .ocean-dot.dimmed {
+      opacity: 0.08;
+      transform: scale(0.6);
+    }
+    .ocean-dot.matched {
+      animation: matchPulse 1.5s ease-in-out infinite;
+    }
+    @keyframes matchPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
     }
 
-    /* 三层海浪，不同速度和方向 */
-    .wave-1 { animation: waveFlow1 20s linear infinite; }
-    .wave-2 { animation: waveFlow2 28s linear infinite; }
-    .wave-3 { animation: waveFlow3 35s linear infinite; }
-
-    @keyframes waveFlow1 {
-      0% { transform: translateX(-5%); }
-      50% { transform: translateX(5%); }
-      100% { transform: translateX(-5%); }
-    }
-    @keyframes waveFlow2 {
-      0% { transform: translateX(3%); }
-      50% { transform: translateX(-7%); }
-      100% { transform: translateX(3%); }
-    }
-    @keyframes waveFlow3 {
-      0% { transform: translateX(-8%); }
-      50% { transform: translateX(2%); }
-      100% { transform: translateX(-8%); }
-    }
-
-    /* 单个光点的波浪运动 */
-    .wave-dot {
-      animation: dotWave var(--wave-dur) ease-in-out infinite;
-      animation-delay: var(--wave-delay);
-    }
-    @keyframes dotWave {
-      0%, 100% { transform: translateY(0) scale(1); opacity: var(--op-min); }
-      25% { transform: translateY(var(--wave-y)) scale(1.2); opacity: var(--op-max); }
-      50% { transform: translateY(0) scale(1); opacity: var(--op-min); }
-      75% { transform: translateY(calc(var(--wave-y) * -0.6)) scale(1.1); opacity: calc((var(--op-min) + var(--op-max)) / 2); }
-    }
-
-    .wave-dot.dimmed {
-      opacity: 0.04 !important;
-      transform: scale(0.6) !important;
-      animation: none;
-    }
-    .wave-dot.matched {
-      background: rgba(100,200,255,0.8) !important;
-      box-shadow: 0 0 10px rgba(100,200,255,0.4), 0 0 25px rgba(100,200,255,0.1) !important;
-      animation: dotWaveMatched 2s ease-in-out infinite, dotWave var(--wave-dur) ease-in-out infinite !important;
-      animation-delay: 0s, var(--wave-delay) !important;
-    }
-    @keyframes dotWaveMatched {
-      0%, 100% { opacity: 0.9; }
-      50% { opacity: 0.45; }
-    }
-
-    /* ===== 底部问卷 + 信息区 ===== */
+    /* ===== 底部信息区 ===== */
     .footer {
-      background: #010308;
-      border-top: 1px solid rgba(30,60,120,0.06);
-      padding: 20px 30px;
+      background: #fafbfc;
+      border-top: 1px solid #eceef1;
+      padding: 18px 30px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -441,8 +336,8 @@
       gap: 12px;
     }
     .footer-info {
-      font-size: 11px;
-      color: rgba(60,110,180,0.3);
+      font-size: 12px;
+      color: #a0a0a0;
       line-height: 1.6;
       max-width: 500px;
     }
@@ -450,19 +345,18 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 8px 18px;
-      border-radius: 8px;
-      border: 1px solid rgba(60,120,200,0.12);
-      background: rgba(5,14,35,0.4);
-      color: rgba(130,170,230,0.55);
+      padding: 8px 16px;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      color: #636e72;
       font-size: 12px;
       cursor: pointer;
       transition: all 0.2s;
     }
     .feedback-btn:hover {
-      border-color: rgba(60,120,200,0.3);
-      color: rgba(210,230,255,0.85);
-      background: rgba(12,35,75,0.4);
+      border-color: #e74c3c;
+      color: #e74c3c;
     }
 
     /* ===== 弹窗 ===== */
@@ -470,8 +364,7 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(2,4,10,0.8);
-      backdrop-filter: blur(4px);
+      background: rgba(0,0,0,0.5);
       z-index: 100;
       align-items: center;
       justify-content: center;
@@ -479,65 +372,56 @@
     .modal-overlay.active { display: flex; }
     .modal {
       width: 90%;
-      max-width: 460px;
-      background: linear-gradient(180deg, #0e1f3a, #0a1628);
-      border: 1px solid rgba(60,120,200,0.15);
-      border-radius: 16px;
-      padding: 26px;
-      animation: slideUp 0.3s ease;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+      max-width: 440px;
+      background: #ffffff;
+      border: 1px solid #eceef1;
+      border-radius: 12px;
+      padding: 24px;
+      animation: slideUp 0.25s ease;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
     }
     .modal-title {
       font-size: 16px;
       font-weight: 600;
-      color: #fff;
-      margin-bottom: 18px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      color: #1a1a2e;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eceef1;
     }
-    .modal-title::before {
-      content: "";
-      width: 4px;
-      height: 16px;
-      border-radius: 2px;
-      background: linear-gradient(180deg, #3b82f6, #1d4ed8);
-    }
-    .modal-field { margin-bottom: 14px; }
+    .modal-field { margin-bottom: 12px; }
     .modal-field label {
       display: block;
-      font-size: 11px;
-      color: rgba(120,170,240,0.5);
+      font-size: 12px;
+      color: #888888;
       margin-bottom: 5px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-weight: 500;
     }
     .modal-field input,
     .modal-field textarea,
     .modal-field select {
       width: 100%;
-      padding: 10px 13px;
-      border-radius: 8px;
-      border: 1px solid rgba(60,120,200,0.1);
-      background: rgba(5,12,30,0.55);
-      color: #e2e8f0;
+      padding: 10px 12px;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+      background: #ffffff;
+      color: #2d3436;
       font-size: 13px;
       outline: none;
       transition: border-color 0.2s;
     }
     .modal-field input:focus,
     .modal-field textarea:focus,
-    .modal-field select:focus { border-color: rgba(60,120,200,0.3); }
-    .modal-field textarea { min-height: 80px; resize: vertical; }
+    .modal-field select:focus { border-color: #e74c3c; }
+    .modal-field textarea { min-height: 70px; resize: vertical; }
     .modal-actions {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       justify-content: flex-end;
-      margin-top: 18px;
+      margin-top: 16px;
     }
     .modal-actions button {
-      padding: 9px 20px;
-      border-radius: 8px;
+      padding: 9px 18px;
+      border-radius: 6px;
       border: none;
       font-size: 13px;
       cursor: pointer;
@@ -545,58 +429,55 @@
       font-weight: 500;
     }
     .modal-actions .btn-primary {
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      background: #e74c3c;
       color: #fff;
     }
-    .modal-actions .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .modal-actions .btn-primary:hover { background: #c0392b; }
     .modal-actions .btn-secondary {
-      background: transparent;
-      border: 1px solid rgba(60,120,200,0.12);
-      color: rgba(130,170,230,0.55);
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      color: #636e72;
     }
-    .modal-actions .btn-secondary:hover {
-      border-color: rgba(60,120,200,0.3);
-      color: rgba(200,220,255,0.8);
-    }
+    .modal-actions .btn-secondary:hover { background: #f5f5f5; }
 
     .detail-row {
       display: flex;
       justify-content: space-between;
       padding: 10px 0;
-      border-bottom: 1px solid rgba(60,120,200,0.05);
+      border-bottom: 1px solid #f0f0f0;
       font-size: 13px;
     }
     .detail-row:last-child { border-bottom: none; }
-    .detail-row .label { color: rgba(110,160,230,0.4); }
-    .detail-row .value { color: #bfdbfe; text-align: right; max-width: 55%; font-weight: 500; }
+    .detail-row .label { color: #a0a0a0; }
+    .detail-row .value { color: #2d3436; text-align: right; max-width: 55%; font-weight: 500; }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
+      from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
     @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px) scale(0.98); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
-  <!-- 顶部星空标题 -->
+  <!-- 顶部标题 -->
   <header class="hero">
-    <div class="hero-stars" id="heroStars"></div>
     <h1>Starry Ocean Map</h1>
     <p>Explore biomolecules via Therapeutic Areas &amp; Indications</p>
+    <div class="hero-divider"></div>
   </header>
 
-  <!-- 核心检索与分类功能区（居中） -->
+  <!-- 检索功能区 -->
   <section class="search-section">
     <div class="search-bar">
       <input type="text" id="searchInput" placeholder="Search protein name, target, or keyword..." autocomplete="off">
       <button onclick="applySearch()">Search</button>
       <button class="reset-btn" onclick="resetAll()">Reset</button>
     </div>
-    <div class="field-label" style="text-align:center;align-self:center;">Research Fields</div>
+    <div class="field-label">Research Fields</div>
     <div class="field-tabs" id="fieldTabs"></div>
     <div class="indication-section" id="indicationSection">
       <div class="indication-label">Indications</div>
@@ -612,12 +493,10 @@
     </div>
   </section>
 
-  <!-- 底部分子大海 — 海浪流动 -->
+  <!-- 分子大海 — 散点图 -->
   <section class="ocean-area">
-    <div class="ocean-label">Molecule Ocean</div>
-    <div class="wave-layer wave-1" id="wave1"></div>
-    <div class="wave-layer wave-2" id="wave2"></div>
-    <div class="wave-layer wave-3" id="wave3"></div>
+    <div class="ocean-label">Molecule Ocean — All Early-Stage Proteins</div>
+    <div class="ocean-canvas" id="oceanCanvas"></div>
   </section>
 
   <!-- 底部 -->
@@ -672,6 +551,15 @@
       "Infectious Disease": ["COVID-19","Influenza","HBV","HIV","RSV"]
     };
 
+    const fieldColors = {
+      "Oncology": "#e74c3c",
+      "Immunology": "#3498db",
+      "Neurology": "#9b59b6",
+      "Metabolism": "#f39c12",
+      "Cardiovascular": "#1abc9c",
+      "Infectious Disease": "#2ecc71"
+    };
+
     const proteins = [];
     const prefixes = ["AB","CD","EF","GH","IJ","KL","MN","OP","QR","ST","UV","WX","YZ"];
     const suffixes = ["mab","cept","nib","tinib","zumab","ximab","limab","tide","stat","vatinib"];
@@ -704,30 +592,8 @@
     let activeIndication = null;
     let searchQuery = "";
 
-    // ===== 初始化顶部星星 =====
-    function initHeroStars() {
-      const container = document.getElementById('heroStars');
-      for (let i = 0; i < 45; i++) {
-        const star = document.createElement('div');
-        star.className = 'hero-star';
-        star.style.left = (Math.random() * 100) + '%';
-        star.style.top = (Math.random() * 100) + '%';
-        const size = 1 + Math.random() * 2.5;
-        star.style.width = size + 'px';
-        star.style.height = size + 'px';
-        star.style.setProperty('--min-op', 0.15 + Math.random() * 0.3);
-        star.style.setProperty('--max-op', 0.5 + Math.random() * 0.5);
-        star.style.setProperty('--min-s', 0.7);
-        star.style.setProperty('--max-s', 1 + Math.random() * 0.7);
-        star.style.setProperty('--dur', (2.5 + Math.random() * 4) + 's');
-        star.style.setProperty('--delay', (Math.random() * 4) + 's');
-        container.appendChild(star);
-      }
-    }
-
     // ===== 初始化 =====
     function init() {
-      initHeroStars();
       renderFieldTabs();
       renderOcean();
       setTimeout(showGhostConstellations, 150);
@@ -768,7 +634,6 @@
         tab.classList.toggle('active', tab.textContent === activeField);
       });
 
-      // 适应症区域
       const indSection = document.getElementById('indicationSection');
       const indTabs = document.getElementById('indicationTabs');
       if (activeField) {
@@ -823,7 +688,6 @@
         ghost.style.width = '100px';
         ghost.style.height = '50px';
         ghost.dataset.label = field;
-        ghost.style.animationDelay = (idx * 0.4) + 's';
         canvas.appendChild(ghost);
 
         const ghostProteins = ghostConstellations[field];
@@ -874,7 +738,6 @@
         nodes.push({x, y});
       }
 
-      // 邻近连线
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dx = nodes[j].x - nodes[i].x;
@@ -895,62 +758,49 @@
 
     function triggerAscendEffect() {
       const container = document.getElementById('ascendingParticles');
-      for (let i = 0; i < 28; i++) {
+      for (let i = 0; i < 20; i++) {
         const dot = document.createElement('div');
         dot.className = 'ascend-dot';
-        const size = 3 + Math.random() * 5;
+        const size = 3 + Math.random() * 4;
         dot.style.width = size + 'px';
         dot.style.height = size + 'px';
-        dot.style.left = (20 + Math.random() * 60) + '%';
-        dot.style.bottom = (5 + Math.random() * 12) + '%';
-        dot.style.animationDelay = (Math.random() * 0.7) + 's';
+        dot.style.left = (25 + Math.random() * 50) + '%';
+        dot.style.bottom = (5 + Math.random() * 10) + '%';
+        dot.style.animationDelay = (Math.random() * 0.6) + 's';
         container.appendChild(dot);
-        setTimeout(() => dot.remove(), 2000);
+        setTimeout(() => dot.remove(), 1500);
       }
     }
 
-    // ===== 分子大海 — 海浪流动 =====
+    // ===== 分子大海 — 散点图 =====
     function renderOcean() {
-      const colors = [
-        'rgba(40,100,180,0.25)',
-        'rgba(60,130,200,0.2)',
-        'rgba(80,160,220,0.15)'
-      ];
-      [1, 2, 3].forEach(layerIdx => {
-        const layer = document.getElementById('wave' + layerIdx);
-        const dotCount = 50 + layerIdx * 20;
-        for (let i = 0; i < dotCount; i++) {
-          const dot = document.createElement('div');
-          dot.className = 'wave-dot';
-          const size = 3 + Math.random() * 4 + (3 - layerIdx);
-          dot.style.width = size + 'px';
-          dot.style.height = size + 'px';
-          dot.style.left = (Math.random() * 100) + '%';
-          dot.style.top = (20 + Math.random() * 70) + '%';
-          dot.style.background = colors[layerIdx - 1];
-          dot.style.boxShadow = `0 0 ${size * 1.5}px ${colors[layerIdx - 1]}`;
-          dot.style.setProperty('--wave-dur', (5 + Math.random() * 4) + 's');
-          dot.style.setProperty('--wave-delay', (Math.random() * 5) + 's');
-          dot.style.setProperty('--wave-y', -(4 + Math.random() * 8) + 'px');
-          dot.style.setProperty('--op-min', 0.1 + Math.random() * 0.2);
-          dot.style.setProperty('--op-max', 0.3 + Math.random() * 0.4);
-          layer.appendChild(dot);
-        }
-      });
+      const canvas = document.getElementById('oceanCanvas');
+      canvas.innerHTML = '';
+      for (let i = 0; i < proteins.length; i++) {
+        const p = proteins[i];
+        const dot = document.createElement('div');
+        dot.className = 'ocean-dot';
+        dot.style.background = fieldColors[p.field] || '#e74c3c';
+        dot.title = `${p.name} | ${p.field} | ${p.indication}`;
+        dot.onclick = () => showDetail(p);
+        canvas.appendChild(dot);
+      }
     }
 
     function updateOcean(filtered) {
-      const dots = document.querySelectorAll('.wave-dot');
+      const dots = document.querySelectorAll('.ocean-dot');
       if (!activeField && !activeIndication && !searchQuery) {
         dots.forEach(d => d.classList.remove('dimmed', 'matched'));
         return;
       }
       dots.forEach(d => d.classList.add('dimmed'));
-      const matched = Math.min(filtered.length, dots.length);
-      for (let i = 0; i < matched; i++) {
-        dots[i].classList.remove('dimmed');
-        dots[i].classList.add('matched');
-      }
+      const matchedIds = new Set(filtered.map(p => p.id));
+      dots.forEach((d, i) => {
+        if (matchedIds.has(proteins[i].id)) {
+          d.classList.remove('dimmed');
+          d.classList.add('matched');
+        }
+      });
     }
 
     // ===== 搜索 =====
