@@ -3,22 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Starry Ocean Protein Search</title>
+  <title>Starry Ocean Map — Protein Discovery</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: #0a0e27;
-      color: #e8eaf6;
+      background: #050914;
+      color: #e2e8f0;
       min-height: 100vh;
       overflow-x: hidden;
     }
 
-    /* ===== 顶部星空区 ===== */
-    .hero-section {
+    /* ===== 顶部星空标题区 ===== */
+    .hero {
       position: relative;
-      height: 280px;
-      background: linear-gradient(180deg, #050718 0%, #0a1a3a 40%, #0d2b5a 100%);
+      height: 160px;
+      background: linear-gradient(180deg, #02040a 0%, #070d1c 50%, #0a1528 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -26,94 +26,77 @@
       text-align: center;
       overflow: hidden;
     }
-    .hero-section::before {
-      content: "";
+    .hero-stars {
       position: absolute;
       inset: 0;
-      background-image:
-        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.8), transparent),
-        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.6), transparent),
-        radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.9), transparent),
-        radial-gradient(2px 2px at 130px 80px, rgba(255,255,255,0.5), transparent),
-        radial-gradient(1px 1px at 160px 20px, rgba(255,255,255,0.7), transparent),
-        radial-gradient(2px 2px at 200px 60px, rgba(255,255,255,0.6), transparent),
-        radial-gradient(1px 1px at 250px 30px, rgba(255,255,255,0.8), transparent),
-        radial-gradient(2px 2px at 300px 90px, rgba(255,255,255,0.5), transparent),
-        radial-gradient(1px 1px at 350px 50px, rgba(255,255,255,0.7), transparent),
-        radial-gradient(2px 2px at 400px 20px, rgba(255,255,255,0.6), transparent),
-        radial-gradient(1px 1px at 450px 80px, rgba(255,255,255,0.8), transparent),
-        radial-gradient(2px 2px at 500px 40px, rgba(255,255,255,0.5), transparent),
-        radial-gradient(1px 1px at 550px 70px, rgba(255,255,255,0.7), transparent),
-        radial-gradient(2px 2px at 600px 30px, rgba(255,255,255,0.6), transparent),
-        radial-gradient(1px 1px at 650px 90px, rgba(255,255,255,0.9), transparent),
-        radial-gradient(2px 2px at 700px 50px, rgba(255,255,255,0.5), transparent),
-        radial-gradient(1px 1px at 750px 20px, rgba(255,255,255,0.8), transparent),
-        radial-gradient(2px 2px at 800px 80px, rgba(255,255,255,0.6), transparent),
-        radial-gradient(1px 1px at 850px 40px, rgba(255,255,255,0.7), transparent),
-        radial-gradient(2px 2px at 900px 70px, rgba(255,255,255,0.5), transparent);
-      background-size: 950px 120px;
-      opacity: 0.6;
       pointer-events: none;
     }
-    .hero-title {
-      font-size: 32px;
+    .hero-star {
+      position: absolute;
+      border-radius: 50%;
+      background: #fff;
+      animation: twinkle var(--dur) ease-in-out infinite;
+      animation-delay: var(--delay);
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: var(--min-op); transform: scale(var(--min-s)); }
+      50% { opacity: var(--max-op); transform: scale(var(--max-s)); }
+    }
+    .hero h1 {
+      font-size: 30px;
       font-weight: 700;
-      letter-spacing: 2px;
       color: #fff;
       z-index: 1;
-      text-shadow: 0 2px 20px rgba(100,180,255,0.4);
+      letter-spacing: 2.5px;
+      text-shadow: 0 0 24px rgba(80,160,255,0.35), 0 2px 10px rgba(0,0,0,0.5);
     }
-    .hero-subtitle {
-      font-size: 14px;
-      color: rgba(200,220,255,0.7);
-      margin-top: 10px;
+    .hero p {
+      font-size: 13px;
+      color: rgba(140,190,255,0.55);
+      margin-top: 6px;
       z-index: 1;
-      max-width: 600px;
-      line-height: 1.6;
-    }
-    .brand-tag {
-      position: absolute;
-      top: 20px;
-      left: 30px;
-      font-size: 16px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.9);
-      z-index: 1;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
     }
 
-    /* ===== 检索功能区 ===== */
+    /* ===== 核心检索与分类功能区（居中） ===== */
     .search-section {
-      background: linear-gradient(180deg, #0d2b5a 0%, #0a1a3a 100%);
-      padding: 24px 30px 20px;
-      border-bottom: 1px solid rgba(100,180,255,0.15);
+      background: linear-gradient(180deg, #0a1528 0%, #0c1a30 100%);
+      padding: 28px 30px 20px;
+      border-bottom: 1px solid rgba(60,120,200,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .search-bar {
       display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
-      max-width: 700px;
+      gap: 10px;
+      margin-bottom: 22px;
+      max-width: 600px;
+      width: 100%;
     }
     .search-bar input {
       flex: 1;
-      padding: 12px 18px;
-      border-radius: 8px;
-      border: 1px solid rgba(100,180,255,0.3);
-      background: rgba(10,20,50,0.6);
-      color: #e8eaf6;
+      padding: 11px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(60,120,200,0.18);
+      background: rgba(6,14,35,0.6);
+      color: #e2e8f0;
       font-size: 14px;
       outline: none;
-      transition: border-color 0.2s;
+      transition: all 0.2s;
     }
-    .search-bar input::placeholder { color: rgba(200,220,255,0.4); }
-    .search-bar input:focus { border-color: rgba(100,180,255,0.7); }
+    .search-bar input:focus {
+      border-color: rgba(60,120,200,0.4);
+      background: rgba(8,20,50,0.7);
+    }
+    .search-bar input::placeholder { color: rgba(120,170,230,0.35); }
     .search-bar button {
-      padding: 12px 28px;
-      border-radius: 8px;
+      padding: 11px 24px;
+      border-radius: 10px;
       border: none;
-      background: linear-gradient(135deg, #2a5aa0, #1e3a6f);
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
       color: #fff;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       transition: opacity 0.2s;
@@ -121,59 +104,68 @@
     .search-bar button:hover { opacity: 0.9; }
     .search-bar .reset-btn {
       background: transparent;
-      border: 1px solid rgba(100,180,255,0.3);
-      color: rgba(200,220,255,0.8);
+      border: 1px solid rgba(60,120,200,0.2);
+      color: rgba(140,180,240,0.6);
     }
     .search-bar .reset-btn:hover {
-      border-color: rgba(100,180,255,0.6);
-      color: #fff;
+      border-color: rgba(60,120,200,0.45);
+      color: rgba(220,235,255,0.9);
+      background: rgba(15,40,80,0.4);
     }
 
-    /* 研究领域外层框架 */
     .field-label {
-      font-size: 12px;
-      color: rgba(150,190,255,0.6);
+      font-size: 11px;
+      color: rgba(100,160,240,0.45);
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 1.2px;
       margin-bottom: 10px;
+      align-self: flex-start;
+      max-width: 900px;
+      width: 100%;
     }
     .field-tabs {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      margin-bottom: 16px;
+      justify-content: center;
+      max-width: 900px;
+      width: 100%;
+      margin-bottom: 14px;
     }
     .field-tab {
-      padding: 10px 22px;
-      border-radius: 8px;
-      border: 1px solid rgba(100,180,255,0.2);
-      background: rgba(10,25,60,0.5);
-      color: rgba(200,220,255,0.8);
-      font-size: 14px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(60,120,200,0.15);
+      background: rgba(6,16,38,0.4);
+      color: rgba(170,200,235,0.7);
+      font-size: 13px;
+      font-weight: 500;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.25s;
       white-space: nowrap;
     }
     .field-tab:hover {
-      border-color: rgba(100,180,255,0.5);
-      background: rgba(20,50,100,0.5);
+      border-color: rgba(60,120,200,0.4);
+      background: rgba(15,40,80,0.4);
+      color: rgba(220,235,255,0.9);
     }
     .field-tab.active {
-      border-color: rgba(100,180,255,0.7);
-      background: linear-gradient(135deg, rgba(42,90,160,0.5), rgba(30,58,111,0.5));
-      color: #fff;
-      box-shadow: 0 0 15px rgba(100,180,255,0.2);
+      border-color: rgba(80,160,255,0.5);
+      background: linear-gradient(135deg, rgba(37,99,235,0.25), rgba(30,58,111,0.25));
+      color: #93c5fd;
+      box-shadow: 0 0 16px rgba(60,120,200,0.15);
     }
 
-    /* 适应症内层模块 */
     .indication-section {
       display: none;
       animation: fadeIn 0.3s ease;
+      max-width: 900px;
+      width: 100%;
     }
     .indication-section.active { display: block; }
     .indication-label {
-      font-size: 12px;
-      color: rgba(150,190,255,0.5);
+      font-size: 11px;
+      color: rgba(100,160,240,0.4);
       text-transform: uppercase;
       letter-spacing: 1px;
       margin-bottom: 10px;
@@ -184,202 +176,302 @@
       flex-wrap: wrap;
     }
     .indication-tab {
-      padding: 8px 18px;
+      padding: 7px 16px;
       border-radius: 20px;
-      border: 1px solid rgba(100,180,255,0.15);
-      background: rgba(10,25,60,0.3);
-      color: rgba(200,220,255,0.7);
-      font-size: 13px;
+      border: 1px solid rgba(60,120,200,0.1);
+      background: rgba(6,16,38,0.25);
+      color: rgba(160,190,225,0.6);
+      font-size: 12px;
       cursor: pointer;
       transition: all 0.2s;
       white-space: nowrap;
     }
     .indication-tab:hover {
-      border-color: rgba(100,180,255,0.4);
-      background: rgba(20,50,100,0.4);
+      border-color: rgba(60,120,200,0.3);
+      background: rgba(15,40,80,0.35);
+      color: rgba(200,220,255,0.85);
     }
     .indication-tab.active {
-      border-color: rgba(100,200,255,0.6);
-      background: rgba(30,80,150,0.4);
-      color: #a8d8ff;
+      border-color: rgba(80,170,255,0.4);
+      background: rgba(37,99,235,0.15);
+      color: #93c5fd;
     }
 
-    /* ===== 分子展示区 ===== */
-    .molecule-section {
+    /* ===== 星座展示区 ===== */
+    .constellation-area {
       position: relative;
-      min-height: 400px;
-      padding: 30px;
-      background: linear-gradient(180deg, #0a1a3a 0%, #071226 60%, #040a18 100%);
+      min-height: 320px;
+      background: linear-gradient(180deg, #0c1a30 0%, #081020 60%, #060c18 100%);
+      overflow: hidden;
+      padding: 24px 30px;
     }
-    .molecule-header {
+    .constellation-area::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.4), transparent),
+        radial-gradient(1.5px 1.5px at 25% 45%, rgba(255,255,255,0.25), transparent),
+        radial-gradient(1px 1px at 40% 15%, rgba(255,255,255,0.5), transparent),
+        radial-gradient(2px 2px at 55% 60%, rgba(255,255,255,0.15), transparent),
+        radial-gradient(1px 1px at 70% 30%, rgba(255,255,255,0.35), transparent),
+        radial-gradient(1.5px 1.5px at 85% 55%, rgba(255,255,255,0.25), transparent),
+        radial-gradient(1px 1px at 15% 70%, rgba(255,255,255,0.2), transparent),
+        radial-gradient(2px 2px at 42% 85%, rgba(255,255,255,0.3), transparent),
+        radial-gradient(1px 1px at 60% 80%, rgba(255,255,255,0.2), transparent),
+        radial-gradient(1.5px 1.5px at 80% 20%, rgba(255,255,255,0.4), transparent);
+      pointer-events: none;
+    }
+    .constellation-label {
+      font-size: 11px;
+      color: rgba(100,160,230,0.35);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .constellation-label::before,
+    .constellation-label::after {
+      content: "";
+      width: 24px;
+      height: 1px;
+    }
+    .constellation-label::before {
+      background: linear-gradient(90deg, transparent, rgba(100,160,230,0.4));
+    }
+    .constellation-label::after {
+      background: linear-gradient(90deg, rgba(100,160,230,0.4), transparent);
+    }
+    .constellation-canvas {
+      position: relative;
+      min-height: 260px;
+    }
+
+    /* 虚线星座轮廓 */
+    .ghost-constellation {
+      position: absolute;
+      border: 1px dashed rgba(60,120,200,0.1);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: ghostFloat 8s ease-in-out infinite;
+    }
+    @keyframes ghostFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    .ghost-constellation::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      color: rgba(80,140,220,0.18);
+      white-space: nowrap;
+    }
+
+    /* 分子节点 */
+    .molecule-node {
+      position: absolute;
+      padding: 5px 12px;
+      border-radius: 14px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+      user-select: none;
+      letter-spacing: 0.3px;
+    }
+    .molecule-node.ghost {
+      border: 1px dashed rgba(60,120,200,0.12);
+      background: transparent;
+      color: rgba(80,140,220,0.18);
+      box-shadow: none;
+    }
+    .molecule-node.active {
+      border: 1px solid rgba(100,200,255,0.4);
+      background: rgba(25,60,120,0.4);
+      color: #bfdbfe;
+      box-shadow: 0 0 14px rgba(80,180,255,0.2), 0 0 40px rgba(80,180,255,0.06), inset 0 1px 0 rgba(255,255,255,0.08);
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+    .molecule-node.active:hover {
+      transform: scale(1.12);
+      box-shadow: 0 0 22px rgba(100,200,255,0.3), 0 0 60px rgba(100,200,255,0.1), inset 0 1px 0 rgba(255,255,255,0.12);
+      z-index: 10;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 14px rgba(80,180,255,0.2), 0 0 40px rgba(80,180,255,0.06), inset 0 1px 0 rgba(255,255,255,0.08); }
+      50% { box-shadow: 0 0 20px rgba(80,180,255,0.3), 0 0 55px rgba(80,180,255,0.1), inset 0 1px 0 rgba(255,255,255,0.12); }
+    }
+
+    /* 星座连线 */
+    .constellation-line {
+      position: absolute;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(60,120,200,0.08), rgba(60,120,200,0.02));
+      transform-origin: left center;
+      pointer-events: none;
+      transition: all 0.5s ease;
+    }
+    .constellation-line.active {
+      background: linear-gradient(90deg, rgba(100,200,255,0.22), rgba(100,200,255,0.05));
+      box-shadow: 0 0 6px rgba(100,200,255,0.12);
+    }
+
+    /* 升腾粒子 */
+    .ascending-particles {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .ascend-dot {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(120,200,255,0.7);
+      box-shadow: 0 0 10px rgba(120,200,255,0.4);
+      animation: ascendUp 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    @keyframes ascendUp {
+      0% { opacity: 0; transform: translateY(0) scale(0.3); }
+      15% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-220px) scale(0.1); }
+    }
+
+    /* ===== 底部分子大海 — 海浪流动效果 ===== */
+    .ocean-area {
+      position: relative;
+      height: 220px;
+      background: linear-gradient(180deg, #060c18 0%, #03060e 40%, #010308 100%);
+      overflow: hidden;
+      border-top: 1px solid rgba(40,80,150,0.06);
+    }
+    .ocean-label {
+      position: absolute;
+      top: 10px;
+      left: 30px;
+      font-size: 10px;
+      color: rgba(50,100,180,0.3);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      z-index: 2;
+    }
+
+    /* 海浪层 */
+    .wave-layer {
+      position: absolute;
+      width: 200%;
+      height: 100%;
+      left: -50%;
+    }
+    .wave-dots {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+    .wave-dot {
+      position: absolute;
+      border-radius: 50%;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* 三层海浪，不同速度和方向 */
+    .wave-1 { animation: waveFlow1 20s linear infinite; }
+    .wave-2 { animation: waveFlow2 28s linear infinite; }
+    .wave-3 { animation: waveFlow3 35s linear infinite; }
+
+    @keyframes waveFlow1 {
+      0% { transform: translateX(-5%); }
+      50% { transform: translateX(5%); }
+      100% { transform: translateX(-5%); }
+    }
+    @keyframes waveFlow2 {
+      0% { transform: translateX(3%); }
+      50% { transform: translateX(-7%); }
+      100% { transform: translateX(3%); }
+    }
+    @keyframes waveFlow3 {
+      0% { transform: translateX(-8%); }
+      50% { transform: translateX(2%); }
+      100% { transform: translateX(-8%); }
+    }
+
+    /* 单个光点的波浪运动 */
+    .wave-dot {
+      animation: dotWave var(--wave-dur) ease-in-out infinite;
+      animation-delay: var(--wave-delay);
+    }
+    @keyframes dotWave {
+      0%, 100% { transform: translateY(0) scale(1); opacity: var(--op-min); }
+      25% { transform: translateY(var(--wave-y)) scale(1.2); opacity: var(--op-max); }
+      50% { transform: translateY(0) scale(1); opacity: var(--op-min); }
+      75% { transform: translateY(calc(var(--wave-y) * -0.6)) scale(1.1); opacity: calc((var(--op-min) + var(--op-max)) / 2); }
+    }
+
+    .wave-dot.dimmed {
+      opacity: 0.04 !important;
+      transform: scale(0.6) !important;
+      animation: none;
+    }
+    .wave-dot.matched {
+      background: rgba(100,200,255,0.8) !important;
+      box-shadow: 0 0 10px rgba(100,200,255,0.4), 0 0 25px rgba(100,200,255,0.1) !important;
+      animation: dotWaveMatched 2s ease-in-out infinite, dotWave var(--wave-dur) ease-in-out infinite !important;
+      animation-delay: 0s, var(--wave-delay) !important;
+    }
+    @keyframes dotWaveMatched {
+      0%, 100% { opacity: 0.9; }
+      50% { opacity: 0.45; }
+    }
+
+    /* ===== 底部问卷 + 信息区 ===== */
+    .footer {
+      background: #010308;
+      border-top: 1px solid rgba(30,60,120,0.06);
+      padding: 20px 30px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-    }
-    .molecule-count {
-      font-size: 14px;
-      color: rgba(150,190,255,0.6);
-    }
-    .molecule-count strong {
-      color: #7ec8ff;
-      font-size: 18px;
-      margin-right: 4px;
-    }
-    .status-badge {
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      background: rgba(10,30,70,0.6);
-      border: 1px solid rgba(100,180,255,0.2);
-      color: rgba(200,220,255,0.7);
-    }
-    .status-badge.has-filter {
-      background: rgba(30,80,150,0.3);
-      border-color: rgba(100,200,255,0.4);
-      color: #a8d8ff;
-    }
-
-    /* 分子大海 — 默认状态 */
-    .molecule-ocean {
-      position: relative;
-      min-height: 320px;
-      display: flex;
       flex-wrap: wrap;
-      align-content: flex-start;
       gap: 12px;
-      padding: 20px;
-      border-radius: 12px;
-      background: rgba(5,12,30,0.4);
-      border: 1px dashed rgba(100,180,255,0.1);
     }
-    .molecule-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: rgba(100,180,255,0.4);
-      box-shadow: 0 0 6px rgba(100,180,255,0.2);
-      transition: all 0.3s ease;
-      cursor: pointer;
+    .footer-info {
+      font-size: 11px;
+      color: rgba(60,110,180,0.3);
+      line-height: 1.6;
+      max-width: 500px;
     }
-    .molecule-dot:hover {
-      background: rgba(100,200,255,0.8);
-      box-shadow: 0 0 12px rgba(100,200,255,0.5);
-      transform: scale(1.8);
-    }
-    .molecule-dot.matched {
-      background: rgba(120,220,255,0.9);
-      box-shadow: 0 0 14px rgba(120,220,255,0.6), 0 0 30px rgba(120,220,255,0.2);
-      transform: scale(1.5);
-    }
-    .molecule-dot.dimmed {
-      opacity: 0.15;
-    }
-
-    /* 分子卡片 — 筛选后展示 */
-    .molecule-cards {
-      display: none;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 16px;
-      animation: fadeIn 0.4s ease;
-    }
-    .molecule-cards.active { display: grid; }
-    .molecule-card {
-      padding: 18px;
-      border-radius: 10px;
-      background: rgba(10,25,60,0.5);
-      border: 1px solid rgba(100,180,255,0.15);
-      transition: all 0.2s;
-      cursor: pointer;
-    }
-    .molecule-card:hover {
-      border-color: rgba(100,180,255,0.4);
-      background: rgba(15,40,80,0.5);
-      transform: translateY(-2px);
-    }
-    .molecule-card-name {
-      font-size: 15px;
-      font-weight: 600;
-      color: #c8e4ff;
-      margin-bottom: 6px;
-    }
-    .molecule-card-meta {
-      font-size: 12px;
-      color: rgba(150,190,255,0.6);
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .molecule-card-meta span {
-      padding: 2px 8px;
-      border-radius: 4px;
-      background: rgba(100,180,255,0.08);
-    }
-
-    /* 星座展示区 — 筛选后顶部出现 */
-    .constellation-area {
-      display: none;
-      margin-bottom: 24px;
-      padding: 20px;
-      border-radius: 12px;
-      background: rgba(8,20,50,0.4);
-      border: 1px solid rgba(100,180,255,0.15);
-      min-height: 120px;
-      animation: fadeIn 0.5s ease;
-    }
-    .constellation-area.active { display: block; }
-    .constellation-title {
-      font-size: 13px;
-      color: rgba(150,190,255,0.6);
-      margin-bottom: 14px;
-    }
-    .constellation-nodes {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .constellation-node {
-      padding: 8px 16px;
-      border-radius: 20px;
-      background: rgba(30,70,140,0.3);
-      border: 1px solid rgba(100,200,255,0.3);
-      color: #a8d8ff;
-      font-size: 13px;
-      box-shadow: 0 0 10px rgba(100,200,255,0.1);
-    }
-
-    /* ===== 问卷反馈入口 ===== */
-    .feedback-section {
-      padding: 20px 30px;
-      background: #040a18;
-      border-top: 1px solid rgba(100,180,255,0.1);
-      text-align: center;
-    }
-    .feedback-trigger {
+    .feedback-btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 10px 24px;
+      gap: 6px;
+      padding: 8px 18px;
       border-radius: 8px;
-      border: 1px solid rgba(100,180,255,0.2);
-      background: rgba(10,25,60,0.4);
-      color: rgba(200,220,255,0.8);
-      font-size: 14px;
+      border: 1px solid rgba(60,120,200,0.12);
+      background: rgba(5,14,35,0.4);
+      color: rgba(130,170,230,0.55);
+      font-size: 12px;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .feedback-trigger:hover {
-      border-color: rgba(100,180,255,0.5);
-      background: rgba(20,50,100,0.4);
-      color: #fff;
+    .feedback-btn:hover {
+      border-color: rgba(60,120,200,0.3);
+      color: rgba(210,230,255,0.85);
+      background: rgba(12,35,75,0.4);
     }
 
-    /* 问卷弹窗 */
+    /* ===== 弹窗 ===== */
     .modal-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.7);
+      background: rgba(2,4,10,0.8);
+      backdrop-filter: blur(4px);
       z-index: 100;
       align-items: center;
       justify-content: center;
@@ -387,189 +479,169 @@
     .modal-overlay.active { display: flex; }
     .modal {
       width: 90%;
-      max-width: 480px;
-      background: linear-gradient(180deg, #0d1f4a, #0a1630);
-      border: 1px solid rgba(100,180,255,0.25);
+      max-width: 460px;
+      background: linear-gradient(180deg, #0e1f3a, #0a1628);
+      border: 1px solid rgba(60,120,200,0.15);
       border-radius: 16px;
-      padding: 28px;
+      padding: 26px;
       animation: slideUp 0.3s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
     }
     .modal-title {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
       color: #fff;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .modal-field { margin-bottom: 16px; }
+    .modal-title::before {
+      content: "";
+      width: 4px;
+      height: 16px;
+      border-radius: 2px;
+      background: linear-gradient(180deg, #3b82f6, #1d4ed8);
+    }
+    .modal-field { margin-bottom: 14px; }
     .modal-field label {
       display: block;
-      font-size: 13px;
-      color: rgba(150,190,255,0.7);
-      margin-bottom: 6px;
+      font-size: 11px;
+      color: rgba(120,170,240,0.5);
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
     .modal-field input,
     .modal-field textarea,
     .modal-field select {
       width: 100%;
-      padding: 10px 14px;
+      padding: 10px 13px;
       border-radius: 8px;
-      border: 1px solid rgba(100,180,255,0.2);
-      background: rgba(10,20,50,0.5);
-      color: #e8eaf6;
-      font-size: 14px;
+      border: 1px solid rgba(60,120,200,0.1);
+      background: rgba(5,12,30,0.55);
+      color: #e2e8f0;
+      font-size: 13px;
       outline: none;
+      transition: border-color 0.2s;
     }
+    .modal-field input:focus,
+    .modal-field textarea:focus,
+    .modal-field select:focus { border-color: rgba(60,120,200,0.3); }
     .modal-field textarea { min-height: 80px; resize: vertical; }
     .modal-actions {
       display: flex;
       gap: 10px;
       justify-content: flex-end;
-      margin-top: 20px;
+      margin-top: 18px;
     }
     .modal-actions button {
-      padding: 10px 22px;
+      padding: 9px 20px;
       border-radius: 8px;
       border: none;
-      font-size: 14px;
+      font-size: 13px;
       cursor: pointer;
-      transition: opacity 0.2s;
+      transition: all 0.2s;
+      font-weight: 500;
     }
     .modal-actions .btn-primary {
-      background: linear-gradient(135deg, #2a5aa0, #1e3a6f);
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
       color: #fff;
     }
+    .modal-actions .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
     .modal-actions .btn-secondary {
       background: transparent;
-      border: 1px solid rgba(100,180,255,0.3);
+      border: 1px solid rgba(60,120,200,0.12);
+      color: rgba(130,170,230,0.55);
+    }
+    .modal-actions .btn-secondary:hover {
+      border-color: rgba(60,120,200,0.3);
       color: rgba(200,220,255,0.8);
     }
 
-    /* ===== 底部辅助信息 ===== */
-    .footer-section {
-      padding: 24px 30px;
-      background: #02050e;
-      border-top: 1px solid rgba(100,180,255,0.08);
-    }
-    .footer-content {
-      max-width: 900px;
-      margin: 0 auto;
-      text-align: center;
-    }
-    .footer-title {
-      font-size: 14px;
-      color: rgba(150,190,255,0.5);
-      margin-bottom: 8px;
-    }
-    .footer-text {
-      font-size: 12px;
-      color: rgba(150,190,255,0.35);
-      line-height: 1.8;
-    }
-
-    /* ===== 动画 ===== */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ===== 详情弹窗 ===== */
-    .detail-modal .modal { max-width: 520px; }
     .detail-row {
       display: flex;
       justify-content: space-between;
       padding: 10px 0;
-      border-bottom: 1px solid rgba(100,180,255,0.08);
-      font-size: 14px;
+      border-bottom: 1px solid rgba(60,120,200,0.05);
+      font-size: 13px;
     }
     .detail-row:last-child { border-bottom: none; }
-    .detail-row .label { color: rgba(150,190,255,0.6); }
-    .detail-row .value { color: #c8e4ff; text-align: right; max-width: 60%; }
+    .detail-row .label { color: rgba(110,160,230,0.4); }
+    .detail-row .value { color: #bfdbfe; text-align: right; max-width: 55%; font-weight: 500; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
   </style>
 </head>
 <body>
 
-  <!-- 顶部星空区 -->
-  <section class="hero-section">
-    <div class="brand-tag">STARRY OCEAN</div>
-    <h1 class="hero-title">Early-Stage Protein Discovery</h1>
-    <p class="hero-subtitle">Explore our comprehensive library of early-stage protein molecules across multiple therapeutic areas, designed for global R&D collaboration.</p>
-  </section>
+  <!-- 顶部星空标题 -->
+  <header class="hero">
+    <div class="hero-stars" id="heroStars"></div>
+    <h1>Starry Ocean Map</h1>
+    <p>Explore biomolecules via Therapeutic Areas &amp; Indications</p>
+  </header>
 
-  <!-- 检索功能区 -->
+  <!-- 核心检索与分类功能区（居中） -->
   <section class="search-section">
     <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search protein name, target, or keyword...">
+      <input type="text" id="searchInput" placeholder="Search protein name, target, or keyword..." autocomplete="off">
       <button onclick="applySearch()">Search</button>
       <button class="reset-btn" onclick="resetAll()">Reset</button>
     </div>
-
-    <div class="field-label">Research Field</div>
+    <div class="field-label" style="text-align:center;align-self:center;">Research Fields</div>
     <div class="field-tabs" id="fieldTabs"></div>
-
-    <div id="indicationContainer"></div>
-  </section>
-
-  <!-- 分子展示区 -->
-  <section class="molecule-section">
-    <div class="molecule-header">
-      <div class="molecule-count"><strong id="countNum">0</strong> proteins found</div>
-      <div class="status-badge" id="statusBadge">All Library — Unfiltered</div>
-    </div>
-
-    <!-- 星座展示区（筛选后） -->
-    <div class="constellation-area" id="constellationArea">
-      <div class="constellation-title">Constellation View — Matched Molecules</div>
-      <div class="constellation-nodes" id="constellationNodes"></div>
-    </div>
-
-    <!-- 分子大海（默认状态） -->
-    <div class="molecule-ocean" id="moleculeOcean"></div>
-
-    <!-- 分子卡片（筛选后） -->
-    <div class="molecule-cards" id="moleculeCards"></div>
-  </section>
-
-  <!-- 问卷反馈入口 -->
-  <section class="feedback-section">
-    <div class="feedback-trigger" onclick="openFeedback()">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      Share Your Feedback
+    <div class="indication-section" id="indicationSection">
+      <div class="indication-label">Indications</div>
+      <div class="indication-tabs" id="indicationTabs"></div>
     </div>
   </section>
 
-  <!-- 底部辅助信息 -->
-  <section class="footer-section">
-    <div class="footer-content">
-      <div class="footer-title">Platform Overview</div>
-      <div class="footer-text">
-        Starry Ocean Protein Discovery Platform provides a structured, multi-dimensional view of our early-stage protein pipeline.
-        Use the Research Field and Indication filters to explore molecules by therapeutic area, or search directly by target name.
-        All data is updated dynamically and maintained with ≥98% accuracy.
-      </div>
+  <!-- 星座展示区 -->
+  <section class="constellation-area">
+    <div class="constellation-label" id="canvasLabel">Default View — Popular Constellations</div>
+    <div class="constellation-canvas" id="constellationCanvas">
+      <div class="ascending-particles" id="ascendingParticles"></div>
     </div>
   </section>
 
-  <!-- 问卷弹窗 -->
+  <!-- 底部分子大海 — 海浪流动 -->
+  <section class="ocean-area">
+    <div class="ocean-label">Molecule Ocean</div>
+    <div class="wave-layer wave-1" id="wave1"></div>
+    <div class="wave-layer wave-2" id="wave2"></div>
+    <div class="wave-layer wave-3" id="wave3"></div>
+  </section>
+
+  <!-- 底部 -->
+  <footer class="footer">
+    <div class="footer-info">
+      Starry Ocean Protein Discovery Platform — Early-stage protein pipeline for global R&amp;D collaboration. Data accuracy ≥98%.
+    </div>
+    <button class="feedback-btn" onclick="openFeedback()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Feedback
+    </button>
+  </footer>
+
+  <!-- 反馈弹窗 -->
   <div class="modal-overlay" id="feedbackModal">
     <div class="modal">
-      <div class="modal-title">Your Feedback Matters</div>
+      <div class="modal-title">Your Feedback</div>
       <div class="modal-field">
-        <label>How would you rate your experience?</label>
-        <select id="rating">
-          <option value="5">Excellent</option>
-          <option value="4">Good</option>
-          <option value="3">Average</option>
-          <option value="2">Below Average</option>
-          <option value="1">Poor</option>
-        </select>
+        <label>Experience Rating</label>
+        <select id="rating"><option value="5">Excellent — 5</option><option value="4">Good — 4</option><option value="3">Average — 3</option><option value="2">Below Average — 2</option><option value="1">Poor — 1</option></select>
       </div>
       <div class="modal-field">
-        <label>What can we improve? (Optional)</label>
-        <textarea id="feedbackText" placeholder="Share your suggestions..."></textarea>
+        <label>Suggestions</label>
+        <textarea id="feedbackText" placeholder="What can we improve?"></textarea>
       </div>
       <div class="modal-actions">
         <button class="btn-secondary" onclick="closeFeedback()">Cancel</button>
@@ -579,7 +651,7 @@
   </div>
 
   <!-- 详情弹窗 -->
-  <div class="modal-overlay detail-modal" id="detailModal">
+  <div class="modal-overlay" id="detailModal">
     <div class="modal">
       <div class="modal-title" id="detailTitle">Protein Details</div>
       <div id="detailContent"></div>
@@ -590,32 +662,22 @@
   </div>
 
   <script>
-    // ===== 模拟数据 =====
+    // ===== 数据 =====
     const fields = {
-      "Oncology": ["Lung Cancer", "Breast Cancer", "Colorectal Cancer", "Gastric Cancer", "Liver Cancer", "Pancreatic Cancer"],
-      "Immunology": ["Rheumatoid Arthritis", "Psoriasis", "Lupus", "Multiple Sclerosis", "Type 1 Diabetes"],
-      "Neurology": ["Alzheimer's Disease", "Parkinson's Disease", "Epilepsy", "Migraine", "ALS"],
-      "Metabolism": ["Type 2 Diabetes", "Obesity", "NASH", "Dyslipidemia", "Gout"],
-      "Cardiovascular": ["Atherosclerosis", "Heart Failure", "Atrial Fibrillation", "Hypertension", "Thrombosis"],
-      "Infectious Disease": ["COVID-19", "Influenza", "HBV", "HIV", "RSV"]
+      "Oncology": ["Lung Cancer","Breast Cancer","Colorectal Cancer","Gastric Cancer","Liver Cancer","Pancreatic Cancer"],
+      "Immunology": ["Rheumatoid Arthritis","Psoriasis","Lupus","Multiple Sclerosis","Type 1 Diabetes"],
+      "Neurology": ["Alzheimer's Disease","Parkinson's Disease","Epilepsy","Migraine","ALS"],
+      "Metabolism": ["Type 2 Diabetes","Obesity","NASH","Dyslipidemia","Gout"],
+      "Cardiovascular": ["Atherosclerosis","Heart Failure","Atrial Fibrillation","Hypertension","Thrombosis"],
+      "Infectious Disease": ["COVID-19","Influenza","HBV","HIV","RSV"]
     };
 
-    const fieldColors = {
-      "Oncology": "#ff6b6b",
-      "Immunology": "#4ecdc4",
-      "Neurology": "#a78bfa",
-      "Metabolism": "#f9ca24",
-      "Cardiovascular": "#ff7979",
-      "Infectious Disease": "#7bed9f"
-    };
-
-    // 生成 120 个模拟蛋白分子
     const proteins = [];
-    const prefixes = ["AB", "CD", "EF", "GH", "IJ", "KL", "MN", "OP", "QR", "ST", "UV", "WX", "YZ"];
-    const suffixes = ["mab", "cept", " nib", "tinib", "zumab", "ximab", "limab", "tide", "stat", "vatinib"];
+    const prefixes = ["AB","CD","EF","GH","IJ","KL","MN","OP","QR","ST","UV","WX","YZ"];
+    const suffixes = ["mab","cept","nib","tinib","zumab","ximab","limab","tide","stat","vatinib"];
     let id = 1;
     for (const [field, indications] of Object.entries(fields)) {
-      const count = 18 + Math.floor(Math.random() * 12);
+      const count = 16 + Math.floor(Math.random() * 10);
       for (let i = 0; i < count; i++) {
         const indication = indications[Math.floor(Math.random() * indications.length)];
         const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
@@ -626,23 +688,49 @@
           name: `${prefix}-${num}${suffix}`,
           field: field,
           indication: indication,
-          target: `Target-${String.fromCharCode(65 + Math.floor(Math.random() * 26))}${Math.floor(Math.random() * 99)}`,
-          phase: ["Discovery", "Preclinical", "IND-enabling", "Phase I"][Math.floor(Math.random() * 4)],
-          format: ["Monoclonal Antibody", "Bispecific", "Small Molecule", "Peptide", "Fusion Protein"][Math.floor(Math.random() * 5)]
+          target: `Target-${String.fromCharCode(65 + Math.floor(Math.random()*26))}${Math.floor(Math.random()*99)}`,
+          phase: ["Discovery","Preclinical","IND-enabling","Phase I"][Math.floor(Math.random()*4)],
+          format: ["Monoclonal Antibody","Bispecific","Small Molecule","Peptide","Fusion Protein"][Math.floor(Math.random()*5)]
         });
       }
     }
 
-    // ===== 状态 =====
+    const ghostConstellations = {};
+    Object.keys(fields).forEach(field => {
+      ghostConstellations[field] = proteins.filter(p => p.field === field).slice(0, 4 + Math.floor(Math.random() * 4));
+    });
+
     let activeField = null;
     let activeIndication = null;
     let searchQuery = "";
 
+    // ===== 初始化顶部星星 =====
+    function initHeroStars() {
+      const container = document.getElementById('heroStars');
+      for (let i = 0; i < 45; i++) {
+        const star = document.createElement('div');
+        star.className = 'hero-star';
+        star.style.left = (Math.random() * 100) + '%';
+        star.style.top = (Math.random() * 100) + '%';
+        const size = 1 + Math.random() * 2.5;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
+        star.style.setProperty('--min-op', 0.15 + Math.random() * 0.3);
+        star.style.setProperty('--max-op', 0.5 + Math.random() * 0.5);
+        star.style.setProperty('--min-s', 0.7);
+        star.style.setProperty('--max-s', 1 + Math.random() * 0.7);
+        star.style.setProperty('--dur', (2.5 + Math.random() * 4) + 's');
+        star.style.setProperty('--delay', (Math.random() * 4) + 's');
+        container.appendChild(star);
+      }
+    }
+
     // ===== 初始化 =====
     function init() {
+      initHeroStars();
       renderFieldTabs();
       renderOcean();
-      updateCount(proteins.length);
+      setTimeout(showGhostConstellations, 150);
     }
 
     // ===== 渲染领域Tab =====
@@ -658,31 +746,6 @@
       });
     }
 
-    // ===== 渲染适应症Tab =====
-    function renderIndicationTabs(field) {
-      const container = document.getElementById('indicationContainer');
-      if (!field) {
-        container.innerHTML = '';
-        return;
-      }
-      const indications = fields[field];
-      container.innerHTML = `
-        <div class="indication-section active">
-          <div class="indication-label">Indication for ${field}</div>
-          <div class="indication-tabs" id="indicationTabs"></div>
-        </div>
-      `;
-      const tabs = document.getElementById('indicationTabs');
-      indications.forEach(ind => {
-        const btn = document.createElement('div');
-        btn.className = 'indication-tab';
-        btn.textContent = ind;
-        btn.onclick = () => selectIndication(ind);
-        tabs.appendChild(btn);
-      });
-    }
-
-    // ===== 选择领域 =====
     function selectField(field) {
       if (activeField === field) {
         activeField = null;
@@ -694,10 +757,200 @@
       refreshUI();
     }
 
-    // ===== 选择适应症 =====
     function selectIndication(indication) {
       activeIndication = activeIndication === indication ? null : indication;
       refreshUI();
+    }
+
+    // ===== 刷新UI =====
+    function refreshUI() {
+      document.querySelectorAll('.field-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.textContent === activeField);
+      });
+
+      // 适应症区域
+      const indSection = document.getElementById('indicationSection');
+      const indTabs = document.getElementById('indicationTabs');
+      if (activeField) {
+        indSection.classList.add('active');
+        const indications = fields[activeField];
+        indTabs.innerHTML = indications.map(ind =>
+          `<div class="indication-tab ${ind === activeIndication ? 'active' : ''}" onclick="selectIndication('${ind}')">${ind}</div>`
+        ).join('');
+      } else {
+        indSection.classList.remove('active');
+      }
+
+      const filtered = proteins.filter(p => {
+        if (activeField && p.field !== activeField) return false;
+        if (activeIndication && p.indication !== activeIndication) return false;
+        if (searchQuery) {
+          const q = searchQuery;
+          return p.name.toLowerCase().includes(q) || p.target.toLowerCase().includes(q) ||
+                 p.field.toLowerCase().includes(q) || p.indication.toLowerCase().includes(q);
+        }
+        return true;
+      });
+
+      if (activeField || activeIndication || searchQuery) {
+        showActiveConstellation(filtered);
+      } else {
+        showGhostConstellations();
+      }
+      updateOcean(filtered);
+    }
+
+    // ===== 虚线星座（未筛选） =====
+    function showGhostConstellations() {
+      const canvas = document.getElementById('constellationCanvas');
+      document.getElementById('canvasLabel').textContent = 'Default View — Popular Constellations';
+      canvas.querySelectorAll('.molecule-node, .constellation-line, .ghost-constellation').forEach(el => el.remove());
+
+      const fieldNames = Object.keys(fields);
+      const cx = canvas.offsetWidth / 2;
+      const cy = canvas.offsetHeight / 2;
+
+      fieldNames.forEach((field, idx) => {
+        const angle = (idx / fieldNames.length) * Math.PI * 2 - Math.PI / 2;
+        const radius = Math.min(cx, cy) * 0.55;
+        const gx = cx + Math.cos(angle) * radius - 50;
+        const gy = cy + Math.sin(angle) * radius - 25;
+
+        const ghost = document.createElement('div');
+        ghost.className = 'ghost-constellation';
+        ghost.style.left = gx + 'px';
+        ghost.style.top = gy + 'px';
+        ghost.style.width = '100px';
+        ghost.style.height = '50px';
+        ghost.dataset.label = field;
+        ghost.style.animationDelay = (idx * 0.4) + 's';
+        canvas.appendChild(ghost);
+
+        const ghostProteins = ghostConstellations[field];
+        ghostProteins.forEach((p, i) => {
+          const sa = angle + (i / ghostProteins.length) * Math.PI * 0.7 - Math.PI * 0.35;
+          const sr = 30 + (i % 2) * 22;
+          const nx = cx + Math.cos(sa) * sr + Math.cos(angle) * radius * 0.25;
+          const ny = cy + Math.sin(sa) * sr * 0.6 + Math.sin(angle) * radius * 0.25;
+          const node = document.createElement('div');
+          node.className = 'molecule-node ghost';
+          node.style.left = nx + 'px';
+          node.style.top = ny + 'px';
+          node.textContent = p.name;
+          canvas.appendChild(node);
+        });
+      });
+    }
+
+    // ===== 活跃星座（筛选后） =====
+    function showActiveConstellation(filtered) {
+      const canvas = document.getElementById('constellationCanvas');
+      canvas.querySelectorAll('.molecule-node, .constellation-line, .ghost-constellation').forEach(el => el.remove());
+
+      const label = activeIndication ? `${activeField}  >  ${activeIndication}` :
+                    activeField ? `${activeField} — All Indications` :
+                    `Search: "${searchQuery}" — ${filtered.length} results`;
+      document.getElementById('canvasLabel').textContent = label;
+
+      triggerAscendEffect();
+
+      const cx = canvas.offsetWidth / 2;
+      const cy = canvas.offsetHeight / 2;
+      const count = Math.min(filtered.length, 22);
+      const nodes = [];
+
+      for (let i = 0; i < count; i++) {
+        const t = i * 2.4;
+        const r = 28 + t * 7;
+        const x = cx + Math.cos(t) * r;
+        const y = cy + Math.sin(t) * r * 0.6;
+        const node = document.createElement('div');
+        node.className = 'molecule-node active';
+        node.style.left = x + 'px';
+        node.style.top = y + 'px';
+        node.textContent = filtered[i].name;
+        node.onclick = () => showDetail(filtered[i]);
+        canvas.appendChild(node);
+        nodes.push({x, y});
+      }
+
+      // 邻近连线
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[j].x - nodes[i].x;
+          const dy = nodes[j].y - nodes[i].y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < 110) {
+            const line = document.createElement('div');
+            line.className = 'constellation-line active';
+            line.style.left = nodes[i].x + 'px';
+            line.style.top = nodes[i].y + 'px';
+            line.style.width = dist + 'px';
+            line.style.transform = `rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;
+            canvas.appendChild(line);
+          }
+        }
+      }
+    }
+
+    function triggerAscendEffect() {
+      const container = document.getElementById('ascendingParticles');
+      for (let i = 0; i < 28; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'ascend-dot';
+        const size = 3 + Math.random() * 5;
+        dot.style.width = size + 'px';
+        dot.style.height = size + 'px';
+        dot.style.left = (20 + Math.random() * 60) + '%';
+        dot.style.bottom = (5 + Math.random() * 12) + '%';
+        dot.style.animationDelay = (Math.random() * 0.7) + 's';
+        container.appendChild(dot);
+        setTimeout(() => dot.remove(), 2000);
+      }
+    }
+
+    // ===== 分子大海 — 海浪流动 =====
+    function renderOcean() {
+      const colors = [
+        'rgba(40,100,180,0.25)',
+        'rgba(60,130,200,0.2)',
+        'rgba(80,160,220,0.15)'
+      ];
+      [1, 2, 3].forEach(layerIdx => {
+        const layer = document.getElementById('wave' + layerIdx);
+        const dotCount = 50 + layerIdx * 20;
+        for (let i = 0; i < dotCount; i++) {
+          const dot = document.createElement('div');
+          dot.className = 'wave-dot';
+          const size = 3 + Math.random() * 4 + (3 - layerIdx);
+          dot.style.width = size + 'px';
+          dot.style.height = size + 'px';
+          dot.style.left = (Math.random() * 100) + '%';
+          dot.style.top = (20 + Math.random() * 70) + '%';
+          dot.style.background = colors[layerIdx - 1];
+          dot.style.boxShadow = `0 0 ${size * 1.5}px ${colors[layerIdx - 1]}`;
+          dot.style.setProperty('--wave-dur', (5 + Math.random() * 4) + 's');
+          dot.style.setProperty('--wave-delay', (Math.random() * 5) + 's');
+          dot.style.setProperty('--wave-y', -(4 + Math.random() * 8) + 'px');
+          dot.style.setProperty('--op-min', 0.1 + Math.random() * 0.2);
+          dot.style.setProperty('--op-max', 0.3 + Math.random() * 0.4);
+          layer.appendChild(dot);
+        }
+      });
+    }
+
+    function updateOcean(filtered) {
+      const dots = document.querySelectorAll('.wave-dot');
+      if (!activeField && !activeIndication && !searchQuery) {
+        dots.forEach(d => d.classList.remove('dimmed', 'matched'));
+        return;
+      }
+      dots.forEach(d => d.classList.add('dimmed'));
+      const matched = Math.min(filtered.length, dots.length);
+      for (let i = 0; i < matched; i++) {
+        dots[i].classList.remove('dimmed');
+        dots[i].classList.add('matched');
+      }
     }
 
     // ===== 搜索 =====
@@ -715,132 +968,6 @@
       refreshUI();
     }
 
-    // ===== 刷新UI =====
-    function refreshUI() {
-      // 更新领域tab样式
-      document.querySelectorAll('.field-tab').forEach(tab => {
-        tab.classList.toggle('active', tab.textContent === activeField);
-      });
-
-      // 更新适应症区域
-      renderIndicationTabs(activeField);
-      if (activeField && activeIndication) {
-        document.querySelectorAll('.indication-tab').forEach(tab => {
-          tab.classList.toggle('active', tab.textContent === activeIndication);
-        });
-      }
-
-      // 筛选数据
-      const filtered = proteins.filter(p => {
-        if (activeField && p.field !== activeField) return false;
-        if (activeIndication && p.indication !== activeIndication) return false;
-        if (searchQuery) {
-          const q = searchQuery;
-          return p.name.toLowerCase().includes(q) ||
-                 p.target.toLowerCase().includes(q) ||
-                 p.field.toLowerCase().includes(q) ||
-                 p.indication.toLowerCase().includes(q);
-        }
-        return true;
-      });
-
-      updateCount(filtered.length);
-      updateStatusBadge();
-
-      if (activeField || activeIndication || searchQuery) {
-        showFilteredView(filtered);
-      } else {
-        showDefaultView();
-      }
-    }
-
-    // ===== 更新计数 =====
-    function updateCount(n) {
-      document.getElementById('countNum').textContent = n;
-    }
-
-    // ===== 更新状态标签 =====
-    function updateStatusBadge() {
-      const badge = document.getElementById('statusBadge');
-      if (!activeField && !activeIndication && !searchQuery) {
-        badge.textContent = "All Library — Unfiltered";
-        badge.className = "status-badge";
-      } else {
-        const parts = [];
-        if (activeField) parts.push(activeField);
-        if (activeIndication) parts.push(activeIndication);
-        if (searchQuery) parts.push(`Search: "${searchQuery}"`);
-        badge.textContent = parts.join(" > ");
-        badge.className = "status-badge has-filter";
-      }
-    }
-
-    // ===== 默认视图：分子大海 =====
-    function showDefaultView() {
-      document.getElementById('constellationArea').classList.remove('active');
-      document.getElementById('moleculeOcean').style.display = 'flex';
-      document.getElementById('moleculeCards').classList.remove('active');
-      renderOcean();
-    }
-
-    // ===== 筛选视图 =====
-    function showFilteredView(filtered) {
-      document.getElementById('constellationArea').classList.add('active');
-      document.getElementById('moleculeOcean').style.display = 'none';
-      document.getElementById('moleculeCards').classList.add('active');
-
-      // 星座节点
-      const nodes = document.getElementById('constellationNodes');
-      nodes.innerHTML = '';
-      filtered.slice(0, 16).forEach(p => {
-        const node = document.createElement('div');
-        node.className = 'constellation-node';
-        node.textContent = p.name;
-        node.onclick = () => showDetail(p);
-        nodes.appendChild(node);
-      });
-      if (filtered.length > 16) {
-        const more = document.createElement('div');
-        more.className = 'constellation-node';
-        more.style.opacity = '0.6';
-        more.textContent = `+${filtered.length - 16} more`;
-        nodes.appendChild(more);
-      }
-
-      // 分子卡片
-      const cards = document.getElementById('moleculeCards');
-      cards.innerHTML = '';
-      filtered.forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'molecule-card';
-        card.innerHTML = `
-          <div class="molecule-card-name">${p.name}</div>
-          <div class="molecule-card-meta">
-            <span>${p.field}</span>
-            <span>${p.indication}</span>
-            <span>${p.phase}</span>
-          </div>
-        `;
-        card.onclick = () => showDetail(p);
-        cards.appendChild(card);
-      });
-    }
-
-    // ===== 渲染分子大海 =====
-    function renderOcean() {
-      const ocean = document.getElementById('moleculeOcean');
-      ocean.innerHTML = '';
-      for (let i = 0; i < 180; i++) {
-        const dot = document.createElement('div');
-        dot.className = 'molecule-dot';
-        dot.style.opacity = 0.3 + Math.random() * 0.7;
-        dot.style.width = (6 + Math.random() * 6) + 'px';
-        dot.style.height = dot.style.width;
-        dot.title = proteins[i % proteins.length]?.name || '';
-        ocean.appendChild(dot);
-      }
-    }
-
     // ===== 详情弹窗 =====
     function showDetail(p) {
       document.getElementById('detailTitle').textContent = p.name;
@@ -848,13 +975,12 @@
         <div class="detail-row"><span class="label">Research Field</span><span class="value">${p.field}</span></div>
         <div class="detail-row"><span class="label">Indication</span><span class="value">${p.indication}</span></div>
         <div class="detail-row"><span class="label">Target</span><span class="value">${p.target}</span></div>
-        <div class="detail-row"><span class="label">Development Phase</span><span class="value">${p.phase}</span></div>
-        <div class="detail-row"><span class="label">Molecule Format</span><span class="value">${p.format}</span></div>
-        <div class="detail-row"><span class="label">Molecule ID</span><span class="value">#${String(p.id).padStart(4, '0')}</span></div>
+        <div class="detail-row"><span class="label">Phase</span><span class="value">${p.phase}</span></div>
+        <div class="detail-row"><span class="label">Format</span><span class="value">${p.format}</span></div>
+        <div class="detail-row"><span class="label">Molecule ID</span><span class="value">#${String(p.id).padStart(4,'0')}</span></div>
       `;
       document.getElementById('detailModal').classList.add('active');
     }
-
     function closeDetail() {
       document.getElementById('detailModal').classList.remove('active');
     }
@@ -867,27 +993,23 @@
       document.getElementById('feedbackModal').classList.remove('active');
     }
     function submitFeedback() {
-      const rating = document.getElementById('rating').value;
-      const text = document.getElementById('feedbackText').value;
-      alert(`Thank you for your feedback!\nRating: ${rating}/5\n${text ? 'Comment: ' + text : ''}`);
+      alert('Thank you for your feedback!');
       closeFeedback();
       document.getElementById('rating').value = '5';
       document.getElementById('feedbackText').value = '';
     }
 
-    // ===== 键盘与点击事件 =====
     document.getElementById('searchInput').addEventListener('keypress', e => {
       if (e.key === 'Enter') applySearch();
     });
-
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-      overlay.addEventListener('click', e => {
-        if (e.target === overlay) overlay.classList.remove('active');
-      });
+    document.querySelectorAll('.modal-overlay').forEach(o => {
+      o.addEventListener('click', e => { if (e.target === o) o.classList.remove('active'); });
     });
 
-    // 启动
     init();
+    window.addEventListener('resize', () => {
+      if (!activeField && !activeIndication && !searchQuery) showGhostConstellations();
+    });
   </script>
 </body>
 </html>
