@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Starry Ocean Map — Protein Discovery</title>
+  <title>Starry Ocean Map â Protein Discovery</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -14,7 +14,6 @@
       overflow-x: hidden;
     }
 
-    /* ===== 顶部标题区（简洁白底） ===== */
     .hero {
       background: #ffffff;
       border-bottom: 1px solid #eceef1;
@@ -41,7 +40,6 @@
       border-radius: 1px;
     }
 
-    /* ===== 检索功能区（居中） ===== */
     .search-section {
       background: #fafbfc;
       padding: 24px 30px 18px;
@@ -89,23 +87,44 @@
     }
     .search-bar .reset-btn:hover { background: #f5f5f5; color: #2d3436; }
 
-    .field-label {
-      font-size: 11px;
-      color: #a0a0a0;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 10px;
-      font-weight: 500;
-    }
-    .field-tabs {
+    /* ===== Field Navigation (Horizontal Scroll) ===== */
+    .field-nav-wrapper {
+      position: relative;
       display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      justify-content: center;
-      max-width: 900px;
+      align-items: center;
+      max-width: 960px;
       width: 100%;
-      margin-bottom: 12px;
+      margin: 0 auto;
     }
+    .field-nav {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding: 4px 2px;
+      width: 100%;
+    }
+    .field-nav::-webkit-scrollbar { display: none; }
+    .nav-arrow {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid #d1d5db;
+      background: #fff;
+      color: #636e72;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .nav-arrow:hover { border-color: #e74c3c; color: #e74c3c; }
+
     .field-tab {
       padding: 8px 16px;
       border-radius: 16px;
@@ -116,11 +135,9 @@
       cursor: pointer;
       transition: all 0.2s;
       white-space: nowrap;
+      flex-shrink: 0;
     }
-    .field-tab:hover {
-      border-color: #e74c3c;
-      color: #e74c3c;
-    }
+    .field-tab:hover { border-color: #e74c3c; color: #e74c3c; }
     .field-tab.active {
       border-color: #e74c3c;
       background: #fdf2f2;
@@ -128,14 +145,17 @@
       font-weight: 600;
     }
 
-    .indication-section {
+    /* ===== Level-1 Indications ===== */
+    .l1-section {
       display: none;
       animation: fadeIn 0.25s ease;
-      max-width: 900px;
+      max-width: 960px;
       width: 100%;
+      margin: 0 auto;
+      padding: 16px 0 8px;
     }
-    .indication-section.active { display: block; }
-    .indication-label {
+    .l1-section.active { display: block; }
+    .l1-label {
       font-size: 11px;
       color: #a0a0a0;
       text-transform: uppercase;
@@ -143,13 +163,13 @@
       margin-bottom: 10px;
       font-weight: 500;
     }
-    .indication-tabs {
+    .l1-grid {
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
       justify-content: center;
     }
-    .indication-tab {
+    .l1-tab {
       padding: 6px 14px;
       border-radius: 14px;
       border: 1px solid #e0e0e0;
@@ -160,20 +180,22 @@
       transition: all 0.2s;
       white-space: nowrap;
     }
-    .indication-tab:hover {
-      border-color: #e74c3c;
-      color: #e74c3c;
-    }
-    .indication-tab.active {
+    .l1-tab:hover { border-color: #e74c3c; color: #e74c3c; }
+    .l1-tab.active {
       border-color: #e74c3c;
       background: #fdf2f2;
       color: #e74c3c;
     }
 
-    /* ===== 星座展示区 ===== */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== Constellation Area ===== */
     .constellation-area {
       position: relative;
-      min-height: 340px;
+      min-height: 380px;
       background: #ffffff;
       overflow: hidden;
       padding: 24px 30px;
@@ -187,36 +209,28 @@
       margin-bottom: 16px;
       text-align: center;
       font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .constellation-label::before,
+    .constellation-label::after {
+      content: "";
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: #e0e0e0;
     }
     .constellation-canvas {
       position: relative;
-      min-height: 280px;
+      min-height: 300px;
     }
 
-    /* 虚线星座轮廓 */
-    .ghost-constellation {
-      position: absolute;
-      border: 1px dashed #e0e0e0;
-      border-radius: 50%;
-      pointer-events: none;
-    }
-    .ghost-constellation::after {
-      content: attr(data-label);
-      position: absolute;
-      bottom: -18px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 10px;
-      color: #c0c0c0;
-      white-space: nowrap;
-      letter-spacing: 0.3px;
-    }
-
-    /* 分子节点 */
     .molecule-node {
       position: absolute;
-      padding: 4px 10px;
-      border-radius: 12px;
+      padding: 5px 12px;
+      border-radius: 14px;
       font-size: 11px;
       font-weight: 500;
       cursor: pointer;
@@ -224,24 +238,24 @@
       white-space: nowrap;
       user-select: none;
       letter-spacing: 0.2px;
-    }
-    .molecule-node.ghost {
-      border: 1px dashed #e0e0e0;
-      background: transparent;
-      color: #c0c0c0;
-    }
-    .molecule-node.active {
-      border: 1px solid #e74c3c;
+      border: 1px solid #d1d5db;
       background: #ffffff;
-      color: #e74c3c;
+      color: #555555;
+      z-index: 2;
     }
-    .molecule-node.active:hover {
-      background: #fdf2f2;
+    .molecule-node:hover {
+      border-color: #e74c3c;
+      color: #e74c3c;
       transform: scale(1.08);
       z-index: 10;
+      box-shadow: 0 2px 8px rgba(231,76,60,0.12);
+    }
+    .molecule-node.active-node {
+      border-color: #e74c3c;
+      background: #fdf2f2;
+      color: #e74c3c;
     }
 
-    /* 星座连线 */
     .constellation-line {
       position: absolute;
       height: 1px;
@@ -249,33 +263,10 @@
       transform-origin: left center;
       pointer-events: none;
       transition: all 0.4s ease;
-    }
-    .constellation-line.active {
-      background: #e74c3c;
-      opacity: 0.4;
+      z-index: 1;
     }
 
-    /* 升腾粒子 */
-    .ascending-particles {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-    .ascend-dot {
-      position: absolute;
-      border-radius: 50%;
-      background: #e74c3c;
-      opacity: 0.5;
-      animation: ascendUp 1.2s ease-out forwards;
-    }
-    @keyframes ascendUp {
-      0% { opacity: 0; transform: translateY(0) scale(0.3); }
-      20% { opacity: 0.5; }
-      100% { opacity: 0; transform: translateY(-200px) scale(0.1); }
-    }
-
-    /* ===== 底部分子大海 — 散点图风格 ===== */
+    /* ===== Ocean Area ===== */
     .ocean-area {
       position: relative;
       min-height: 200px;
@@ -295,571 +286,323 @@
     .ocean-canvas {
       position: relative;
       min-height: 160px;
-      display: flex;
-      flex-wrap: wrap;
-      align-content: flex-start;
-      gap: 10px;
-      justify-content: center;
     }
     .ocean-dot {
-      width: 7px;
-      height: 7px;
+      position: absolute;
       border-radius: 50%;
-      transition: all 0.4s ease;
-      cursor: pointer;
+      opacity: 0.7;
+      transition: transform 0.3s ease;
     }
     .ocean-dot:hover {
-      transform: scale(1.6);
+      transform: scale(1.5);
+      opacity: 1;
       z-index: 5;
     }
-    .ocean-dot.dimmed {
-      opacity: 0.08;
-      transform: scale(0.6);
-    }
-    .ocean-dot.matched {
-      animation: matchPulse 1.5s ease-in-out infinite;
-    }
-    @keyframes matchPulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(1.2); }
-    }
 
-    /* ===== 底部信息区 ===== */
-    .footer {
-      background: #fafbfc;
-      border-top: 1px solid #eceef1;
-      padding: 18px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .footer-info {
-      font-size: 12px;
-      color: #a0a0a0;
-      line-height: 1.6;
-      max-width: 500px;
-    }
-    .feedback-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      border-radius: 6px;
-      border: 1px solid #d1d5db;
-      background: #ffffff;
-      color: #636e72;
-      font-size: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .feedback-btn:hover {
-      border-color: #e74c3c;
-      color: #e74c3c;
-    }
-
-    /* ===== 弹窗 ===== */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-    }
-    .modal-overlay.active { display: flex; }
-    .modal {
-      width: 90%;
-      max-width: 440px;
-      background: #ffffff;
-      border: 1px solid #eceef1;
-      border-radius: 12px;
-      padding: 24px;
-      animation: slideUp 0.25s ease;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-    }
-    .modal-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #1a1a2e;
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #eceef1;
-    }
-    .modal-field { margin-bottom: 12px; }
-    .modal-field label {
-      display: block;
-      font-size: 12px;
-      color: #888888;
-      margin-bottom: 5px;
-      font-weight: 500;
-    }
-    .modal-field input,
-    .modal-field textarea,
-    .modal-field select {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 6px;
-      border: 1px solid #d1d5db;
-      background: #ffffff;
-      color: #2d3436;
+    .empty-hint {
+      text-align: center;
+      color: #b0b0b0;
       font-size: 13px;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .modal-field input:focus,
-    .modal-field textarea:focus,
-    .modal-field select:focus { border-color: #e74c3c; }
-    .modal-field textarea { min-height: 70px; resize: vertical; }
-    .modal-actions {
-      display: flex;
-      gap: 8px;
-      justify-content: flex-end;
-      margin-top: 16px;
-    }
-    .modal-actions button {
-      padding: 9px 18px;
-      border-radius: 6px;
-      border: none;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-weight: 500;
-    }
-    .modal-actions .btn-primary {
-      background: #e74c3c;
-      color: #fff;
-    }
-    .modal-actions .btn-primary:hover { background: #c0392b; }
-    .modal-actions .btn-secondary {
-      background: #ffffff;
-      border: 1px solid #d1d5db;
-      color: #636e72;
-    }
-    .modal-actions .btn-secondary:hover { background: #f5f5f5; }
-
-    .detail-row {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid #f0f0f0;
-      font-size: 13px;
-    }
-    .detail-row:last-child { border-bottom: none; }
-    .detail-row .label { color: #a0a0a0; }
-    .detail-row .value { color: #2d3436; text-align: right; max-width: 55%; font-weight: 500; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to { opacity: 1; transform: translateY(0); }
+      padding: 40px 0;
     }
   </style>
 </head>
 <body>
 
-  <!-- 顶部标题 -->
-  <header class="hero">
+  <div class="hero">
     <h1>Starry Ocean Map</h1>
-    <p>Explore biomolecules via Therapeutic Areas &amp; Indications</p>
+    <p>Explore protein targets across therapeutic areas & indications</p>
     <div class="hero-divider"></div>
-  </header>
+  </div>
 
-  <!-- 检索功能区 -->
-  <section class="search-section">
+  <div class="search-section">
     <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Search protein name, target, or keyword..." autocomplete="off">
-      <button onclick="applySearch()">Search</button>
+      <input type="text" id="searchInput" placeholder="Search indication, target, or moleculeâ¦">
+      <button onclick="handleSearch()">Search</button>
       <button class="reset-btn" onclick="resetAll()">Reset</button>
     </div>
-    <div class="field-label">Research Fields</div>
-    <div class="field-tabs" id="fieldTabs"></div>
-    <div class="indication-section" id="indicationSection">
-      <div class="indication-label">Indications</div>
-      <div class="indication-tabs" id="indicationTabs"></div>
+    <div class="field-nav-wrapper">
+      <button class="nav-arrow" onclick="scrollNav(-1)">&#8249;</button>
+      <div class="field-nav" id="fieldNav"></div>
+      <button class="nav-arrow" onclick="scrollNav(1)">&#8250;</button>
     </div>
-  </section>
+    <div class="l1-section" id="l1Section">
+      <div class="l1-label" id="l1Label">Indications</div>
+      <div class="l1-grid" id="l1Grid"></div>
+    </div>
+  </div>
 
-  <!-- 星座展示区 -->
-  <section class="constellation-area">
-    <div class="constellation-label" id="canvasLabel">Default View — Popular Constellations</div>
+  <div class="constellation-area">
+    <div class="constellation-label" id="constellationLabel">Select a therapeutic area to explore</div>
     <div class="constellation-canvas" id="constellationCanvas">
-      <div class="ascending-particles" id="ascendingParticles"></div>
+      <div class="empty-hint" id="emptyHint">Choose a field above to view its constellation</div>
     </div>
-  </section>
+  </div>
 
-  <!-- 分子大海 — 散点图 -->
-  <section class="ocean-area">
-    <div class="ocean-label">Molecule Ocean — All Early-Stage Proteins</div>
+  <div class="ocean-area">
+    <div class="ocean-label">Molecule Ocean â All Fields</div>
     <div class="ocean-canvas" id="oceanCanvas"></div>
-  </section>
-
-  <!-- 底部 -->
-  <footer class="footer">
-    <div class="footer-info">
-      Starry Ocean Protein Discovery Platform — Early-stage protein pipeline for global R&amp;D collaboration. Data accuracy ≥98%.
-    </div>
-    <button class="feedback-btn" onclick="openFeedback()">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      Feedback
-    </button>
-  </footer>
-
-  <!-- 反馈弹窗 -->
-  <div class="modal-overlay" id="feedbackModal">
-    <div class="modal">
-      <div class="modal-title">Your Feedback</div>
-      <div class="modal-field">
-        <label>Experience Rating</label>
-        <select id="rating"><option value="5">Excellent — 5</option><option value="4">Good — 4</option><option value="3">Average — 3</option><option value="2">Below Average — 2</option><option value="1">Poor — 1</option></select>
-      </div>
-      <div class="modal-field">
-        <label>Suggestions</label>
-        <textarea id="feedbackText" placeholder="What can we improve?"></textarea>
-      </div>
-      <div class="modal-actions">
-        <button class="btn-secondary" onclick="closeFeedback()">Cancel</button>
-        <button class="btn-primary" onclick="submitFeedback()">Submit</button>
-      </div>
-    </div>
   </div>
 
-  <!-- 详情弹窗 -->
-  <div class="modal-overlay" id="detailModal">
-    <div class="modal">
-      <div class="modal-title" id="detailTitle">Protein Details</div>
-      <div id="detailContent"></div>
-      <div class="modal-actions">
-        <button class="btn-secondary" onclick="closeDetail()">Close</button>
-      </div>
-    </div>
-  </div>
+<script>
+const HIERARCHY = {"Hormonal Disorders":{"children":[{"name":"Addison's Disease (Primary or Chronic Adrenal Insufficiency)","children":[{"name":"Congenital Adrenal Hyperplasia (Adrenogenital Syndrome)","children":[]},{"name":"Hyperaldosteronism","children":[]},{"children":[],"name":"Hypopituitarism"},{"children":[],"name":"Primary Hyperaldosteronism"},{"children":[],"name":"Secondary Hyperaldosteronism"},{"name":"Hyperandrogenism","children":[]},{"name":"Facial Hirsutism","children":[]},{"name":"Lumbar Hernia/Bleichner's Hernia","children":[]},{"children":[],"name":"Gonadal Diseases"},{"name":"Postherpetic Neuralgia","children":[]}]},{"children":[{"name":"Ocular Hypertension","children":[]},{"name":"Mitochondrial Diseases","children":[]}],"name":"Primary Biliary Cholangitis (Primary Biliary Cirrhosis)"},{"children":[{"name":"Acinetobacter Infections","children":[]},{"children":[],"name":"Torticollis"},{"name":"Testicular (Primary) Hypogonadism","children":[]},{"children":[],"name":"Erythromelalgia"}],"name":"Laron Syndrome (Laron-Type Dwarfism)"},{"children":[{"name":"Thyroid Gland Disorders","children":[]},{"name":"Hormone Replacement Therapy (HRT)","children":[]},{"children":[],"name":"Noonan Syndrome"},{"children":[],"name":"HIV-Associated Lipodystrophy Syndrome"}],"name":"Hirsutism"},{"name":"Anovulation","children":[]},{"children":[{"children":[],"name":"Hypoestrogenism"}],"name":"Post-Menopausal Hormone Replacement Therapy"},{"children":[{"children":[],"name":"Hepatitis E"},{"children":[],"name":"PASLI Disease (Activated PI3K Delta Syndrome (APDS))"}],"name":"Algodystrophy (Reflex Sympathetic Dystrophy Syndrome)"},{"children":[],"name":"Autosomal Dominant Hypocalcemia"},{"name":"Lead Poisoning","children":[{"children":[],"name":"Pseudohypoparathyroidism"},{"name":"Nelson Syndrome","children":[]}]},{"children":[],"name":"Galactorrhea"},{"name":"Dysfibrinogenemia","children":[{"name":"Hypereosinophilic Syndrome","children":[]},{"children":[],"name":"Gigantism"},{"name":"Inappropriate ADH Syndrome (Syndrome Of Inappropriate Antidiuretic Hormone Hypersecretion)","children":[]},{"name":"Primary Sjogren's Syndrome","children":[]},{"children":[],"name":"Growth Failure In Children With Kidney Disease"},{"children":[],"name":"Colorectal Tumor"},{"children":[],"name":"Choroiditis"},{"children":[],"name":"Secondary Adrenal Insufficiency"},{"name":"Pseudohypoaldosteronism","children":[]}]},{"children":[{"name":"Bone Degeneration","children":[]}],"name":"Hormone Refractory Breast Cancer"},{"children":[],"name":"Euthyroid Sick Syndrome"},{"name":"Arteriovenous Fistula","children":[{"children":[],"name":"Goiter"},{"children":[],"name":"Hypothyroidism"},{"children":[],"name":"Peripheral Arterial Disease (PAD)/ Peripheral Vascular Disease (PVD)"},{"children":[],"name":"Cerebrovascular Disease"},{"children":[],"name":"Thyroiditis"},{"name":"Subacture (Nonsuppurative) Thyroiditis","children":[]},{"children":[],"name":"Polyarticular Juvenile Idiopathic Arthritis (PJIA)"},{"children":[],"name":"Angioedema"}]}]},"Respiratory":{"children":[{"name":"Stuart Prower Factor Deficiency (Factor X Deficiency)","children":[{"name":"Abdominal Aortic Aneurysm","children":[]},{"name":"Altitude Sickness (Acute Mountain Sickness)","children":[]},{"name":"Typhoid Fever","children":[]}]},{"children":[],"name":"Apnea"},{"children":[{"name":"Episodic Apnea (Breath Holding Spells)","children":[]},{"name":"Sleep Apnea","children":[]},{"children":[],"name":"Central Sleep Apnea"},{"name":"Mixed Sleep Apnea","children":[]},{"children":[],"name":"Atelectasis"},{"name":"Colitis","children":[]}],"name":"Apnea of Prematurity"},{"name":"Breathing Disorders","children":[]},{"children":[{"name":"Hiccups","children":[]},{"name":"Snoring","children":[]},{"name":"Wheezing","children":[]},{"children":[],"name":"Congenital Lung Diseases"}],"name":"Dyspnea"},{"name":"Clostridioides difficile Infections (Clostridium difficile Associated Disease)","children":[]},{"name":"Hypertrophic Scars","children":[]},{"children":[],"name":"Labor And Delivery"},{"children":[{"children":[],"name":"Pulmonary Hypoplasia"},{"children":[],"name":"Diaphragmatic Hernia"}],"name":"Congenital Lobar Emphysema"},{"name":"Cystic Fibrosis","children":[]},{"name":"Congenital Diaphragmatic Hernia","children":[{"children":[],"name":"Exercise-Induced Bronchoconstriction (EBI)"}]},{"name":"Hemosiderosis","children":[]},{"children":[{"children":[],"name":"Loeffler Syndrome (Pulmonary Eosinophilia)"}],"name":"Transfusion Hemosiderosis"},{"name":"Retinal Vascular Occlusion","children":[]},{"children":[],"name":"Hemorrhagic Shock"},{"name":"Chronic Lung Injury","children":[]},{"children":[{"children":[],"name":"Alpha-1 Antitrypsin Deficiency (A1AD)"},{"name":"Wolff-Parkinson-White Syndrome","children":[]}],"name":"Spinocerebellar Ataxia (SCA)"},{"children":[{"name":"Perennial Allergic Rhinitis","children":[]},{"children":[],"name":"Meconium Aspiration Syndrome (MAS)"}],"name":"Prosthetic Joint infections"},{"children":[],"name":"Panacinar Emphysema"},{"children":[{"name":"Anti-Neutrophil Cytoplasmic Antibody-Associated Vasculitis (ANCA Vasculitis)","children":[]},{"name":"Alpha-1 Antitrypsin Deficiency (A1AD)","children":[]},{"name":"Pleural Disease","children":[]}],"name":"Klebsiella Infections"},{"children":[{"name":"Berylliosis (Chronic Beryllium Disease)","children":[]},{"children":[],"name":"Pleural Effusion"},{"name":"Pleurisy","children":[]},{"name":"Leprosy","children":[]},{"name":"Plural Pneumothoraces","children":[]},{"children":[],"name":"Pneumoconiosis"},{"children":[],"name":"Silicosis"},{"name":"Interstitial Lung Fibrosis","children":[]}],"name":"Asbestosis"},{"name":"Primary Ciliary Dyskinesia","children":[]},{"name":"Pulmonary Fibrosis","children":[{"children":[],"name":"Respiratory Depression (Hypoventilation)"},{"children":[],"name":"Idiopathic Pulmonary Fibrosis"},{"children":[],"name":"Community-Acquired Bacterial Pneumonia"}]},{"name":"Neonatal Respiratory Distress Syndrome","children":[]},{"children":[{"name":"Basal Cell Carcinoma (Basal Cell Epithelioma)","children":[]},{"name":"Hyperbilirubinemia","children":[]},{"name":"Respiratory Failure","children":[]}],"name":"Thrombophilia"},{"children":[{"children":[],"name":"Muscle Wasting Disorders"},{"name":"Furunculosis","children":[]},{"name":"Respiratory Hypersensitivity","children":[]}],"name":"Hypoxemic Respiratory Failure (Type I)"},{"name":"Respiratory Insufficiency","children":[]},{"children":[],"name":"Fungal Respiratory Tract Infections"},{"children":[{"children":[],"name":"Acute Bacterial Sinusitis"},{"name":"Lower Respiratory Tract Infections by Klebsiella Pneumoniae","children":[]},{"name":"Stress Urinary Incontinence","children":[]},{"name":"Lower Respiratory Tract Infections by Streptococcus Pneumoniae","children":[]},{"children":[],"name":"Lower Respiratory Tract Infections by Streptococcus Pyogenes"},{"name":"Acute Lung Infection","children":[]},{"children":[],"name":"Acute Liver Failure"},{"children":[],"name":"Chronic Lung Infection"},{"name":"Chlamydia trachomatis Pneumonia","children":[]},{"children":[],"name":"Respiratory Tract Infections"},{"name":"Diabetic Nephropathy","children":[]},{"name":"Idiopathic Eosinophilic Pneumonia","children":[]},{"children":[],"name":"Tuberculous Pneumonia"},{"name":"Carotid Artery Stenosis","children":[]},{"name":"Premature Ovarian Failure","children":[]},{"name":"Acute Upper Respiratory Tract Infections","children":[]},{"children":[],"name":"Macular Degeneration"},{"children":[],"name":"Bacterial Infections"},{"children":[],"name":"Hyperlipidemia"},{"children":[],"name":"Schistosomiasis"},{"children":[],"name":"Sporadic Inclusion Body Myositis (s-IBM)"},{"children":[],"name":"Dental Plaque"},{"name":"Croup","children":[]},{"children":[],"name":"Upper Respiratory Tract Infections by Streptococcus Pyogenes"},{"name":"Alveolitis","children":[]},{"name":"Male Sexual Dysfunction","children":[]}],"name":"Dental Caries"},{"name":"Hirschsprung Diseases (Congenital Aganglionic Megacolon)","children":[{"name":"Aspiration Pneumonitis","children":[]},{"children":[],"name":"Perennial Allergic Asthma"},{"children":[],"name":"Asthma"},{"name":"Miscarriage","children":[]},{"children":[],"name":"Allergic Asthma"},{"name":"Seasonal Allergic Asthma","children":[]},{"children":[],"name":"Non- Allergic Asthma"},{"name":"Irritable Bowel Syndrome","children":[]},{"children":[],"name":"Mucocutaneous Lymph Node Syndrome (Kawasaki Disease)"},{"name":"Status Asthmaticus","children":[]},{"name":"Tracheobronchial Amyloidosis","children":[]},{"name":"Hypoalbuminemia","children":[]},{"children":[],"name":"Dyspepsia (Indigestion)"},{"name":"Meningitis","children":[]},{"name":"Polyneuropathies","children":[]},{"children":[],"name":"Arthritis Pain"},{"children":[],"name":"Diabetes Insipidus"},{"children":[],"name":"Nasopharyngitis (Common Cold)"},{"children":[],"name":"Dermal Ulcers"},{"children":[],"name":"Acquired Generalized Lipodystrophy (Lawrence Syndrome)"},{"name":"Acute Pharyngitis","children":[]},{"children":[],"name":"Unspecified Rare Disease"}]},{"children":[],"name":"Cough"},{"name":"Inclusion Body Myositis (IBM)","children":[]},{"name":"Pollen Allergy","children":[{"children":[],"name":"Nasal Congestion"},{"children":[],"name":"Chemotherapy Induced Acral Erythema (Hand-Foot Syndrome)"}]}]},"Mouth and Dental Disorders":{"children":[{"children":[{"name":"Glossitis (Tongue Inflammation)","children":[]}],"name":"Gingivitis"},{"children":[],"name":"Bronchitis"},{"children":[],"name":"Cryoglobulinemia"},{"children":[],"name":"Mouth Sores"},{"name":"Aphthous Ulcers (Canker Sores)","children":[]},{"name":"Chronic Pharyngitis","children":[{"children":[],"name":"Ankylosis"}]},{"name":"Spindle Cell Squamous Cell Carcinoma","children":[]},{"children":[{"children":[],"name":"Aromatic l-Amino Acid Decarboxylase (AADC) Deficiency"},{"children":[],"name":"Intermittent Claudication"}],"name":"Demyelinating Diseases"},{"children":[],"name":"Dystonia"},{"name":"Mild Cognitive Impairment","children":[]},{"name":"Peritumoral Brain Edema","children":[]}]},"Ophthalmology":{"children":[{"children":[],"name":"Asthenopia (Eye Strain)"},{"name":"Age-Related Cataract","children":[]},{"name":"Strabismus","children":[]},{"name":"Cataract","children":[{"name":"Congenital Cataract","children":[]},{"children":[],"name":"Diabetic Cataract"},{"children":[],"name":"Nuclear Sclerotic Cataract"},{"name":"Pediatric Cataract","children":[]},{"children":[],"name":"Secondary Cataracts"},{"name":"Traumatic Cataract","children":[]},{"children":[],"name":"Choroidal Disease"}]},{"name":"Classic Choroidal Neovascularization","children":[{"children":[],"name":"Epithelial Ovarian Cancer"},{"children":[],"name":"Occult Choroidal Neovascularization"},{"name":"Chlamydial Conjunctivitis","children":[]},{"name":"Ageing","children":[]},{"name":"Iritis","children":[]}]},{"children":[{"name":"Closed-Angle Glaucoma","children":[]},{"children":[],"name":"Bacterial Endocarditis"},{"children":[],"name":"Chemical Conjunctivitis"},{"children":[],"name":"Giant Papillary Conjunctivitis"},{"children":[],"name":"Gonococcal Conjunctivitis"},{"name":"Neonatal Conjunctivitis (Ophthalmia Neonatorum)","children":[]},{"children":[],"name":"Chlamydia Neonatal Conjunctivitis"},{"name":"Klebsiella Neonatal Conjunctivitis","children":[]},{"name":"Neisseria Neonatal Conjunctivitis","children":[]},{"name":"Rhino-Conjunctivitis","children":[]},{"name":"Herpes Labialis (Oral Herpes)","children":[]},{"name":"Viral Conjunctivitis","children":[]},{"children":[],"name":"Allergic Rhinitis"},{"name":"Keratoconus","children":[]}],"name":"Central Retinal Vein Occlusion"},{"children":[{"children":[],"name":"Allergic Corneal Marginal Ulcers"}],"name":"Lipid Disorders"},{"children":[{"name":"Becker Muscular Dystrophy","children":[]},{"children":[],"name":"Pneumonia"}],"name":"Periodontitis"},{"children":[],"name":"Arteriosclerosis"},{"children":[],"name":"Vision Disorders"},{"name":"Hemolysis","children":[{"name":"Corneal Ulcers Due To Injury","children":[]},{"children":[],"name":"Surgical Wound Infections"},{"name":"Fungal Corneal Ulcers","children":[]},{"name":"Parasitic (Acanthamoeba) Corneal Ulcers","children":[]},{"children":[],"name":"Cycloplegia"}]},{"children":[],"name":"Anterior Blepharitis"},{"name":"Chronic Idiopathic Myelofibrosis (Primary Myelofibrosis)","children":[{"children":[],"name":"Meibomian Blepharitis"},{"name":"Demodex Blepharitis","children":[]},{"name":"Posterior Blepharitis","children":[]},{"children":[],"name":"Benign Mucous Membrane Pemphigoid (Oral Cicatricial Pemphigoid)"},{"children":[],"name":"Staphylococcal Blepharitis"},{"name":"Acute Blepharoconjunctivitis","children":[]},{"children":[],"name":"Cat Allergy"},{"children":[],"name":"Bacterial Blepharoconjunctivitis"},{"name":"Chronic Blepharoconjunctivitis","children":[]},{"children":[],"name":"Infectious Endophthalmitis"},{"children":[],"name":"Bacterial (Pyogenic) Meningitis"},{"children":[],"name":"Bacterial Keratitis"},{"children":[],"name":"Diabetic Foot Infection (DFI)"},{"name":"Exposure Keratitis","children":[]},{"name":"Erythroblastopenia (RBC Anemia)","children":[]},{"name":"Fungal Keratitis","children":[]},{"children":[],"name":"Peripheral Ulcerative Keratitis"},{"name":"Overweight","children":[]},{"children":[],"name":"Viral Keratitis"},{"name":"Acute Glaucoma","children":[]},{"name":"Persistent Corneal Epithelial Defects","children":[]}]},{"children":[{"name":"Congenital Glaucoma","children":[]},{"name":"Retinal Artery Occlusion","children":[]},{"name":"Irido Corneal Endothelial Syndrome (ICE)","children":[]},{"children":[],"name":"Juvenile Glaucoma"},{"name":"Neovascular Glaucoma","children":[]},{"children":[],"name":"Pigment Glaucoma"},{"children":[],"name":"Constipation"},{"name":"Inherited Mitochondrial Disorders","children":[]},{"children":[],"name":"Pseudoexfoliation Syndrome"},{"name":"Juxtafoveolar Retinal Telangiectasis (JRT)","children":[]}],"name":"Glaucoma"},{"children":[],"name":"Pancreatic Ductal Adenocarcinoma"},{"children":[{"children":[],"name":"Gastrointestinal Fistula"}],"name":"Kearns-Sayre Syndrome (KSS)"},{"children":[],"name":"Keratoconjunctivitis"},{"children":[{"name":"Vernal Keratoconjunctivitis","children":[]},{"children":[],"name":"Guillain-Barre Syndrome"},{"children":[],"name":"Diffuse Diabetic Macular Edema"}],"name":"Atopic Keratoconjunctivitis"},{"children":[],"name":"Limbal Stem Cell Deficiency (LSCD)"},{"name":"Bacterial Pneumonia","children":[{"children":[],"name":"Neuromyelitis Optica (Devic's Syndrome)"},{"name":"Mucopolysaccharidosis IV (MPS IV) (Morquio Syndrome )","children":[]},{"children":[],"name":"Geographic Atrophy"},{"name":"Anaplastic Astrocytoma","children":[]},{"children":[],"name":"Hypertrophic Cardiomyopathy"}]},{"children":[{"children":[],"name":"Skin Ulcers"},{"name":"Diabetic Macular Edema","children":[]},{"name":"Miosis","children":[]}],"name":"Neuroendocrine Tumors"},{"children":[{"children":[],"name":"Mydriasis"}],"name":"Intraoperative Miosis"},{"name":"Intra-Operative Mydriasis","children":[{"children":[],"name":"Nystagmus"}]},{"children":[{"name":"Congenital Idiopathic Nystagmus","children":[]},{"children":[],"name":"Anterior Segment Inflammation"}],"name":"Acquired Nystagmus"},{"name":"Methylmalonic Acidemia","children":[]},{"name":"Dementia Associated With Alzheimer's Disease","children":[{"children":[],"name":"Intermediate Ocular Inflammation"},{"name":"Panophthalmia","children":[]},{"children":[],"name":"Optic Neuritis"},{"children":[],"name":"Papilloedema"},{"name":"Bilateral Papilloedema","children":[]},{"children":[],"name":"Scleritis"},{"children":[],"name":"Chorioretinitis"},{"children":[],"name":"Uveitis"},{"children":[],"name":"Pustular Psoriasis"},{"name":"Diffuse Posterior Uveitis","children":[]},{"name":"Ischemic Optic Neuropathy","children":[]},{"children":[],"name":"Panuveitis"},{"name":"Sympathetic Ophthalmia","children":[]},{"children":[],"name":"Pericarditis"},{"name":"Posterior Uveitis","children":[]},{"children":[],"name":"Anterior Uveitis"},{"name":"Jaundice","children":[]}]},{"children":[],"name":"Thromboembolic Disease"},{"children":[{"name":"Proliferative Vitreoretinopathy (PVR)","children":[]},{"children":[],"name":"Obstructive Pulmonary Disease"}],"name":"Secondary (Hypogonadotropic) Hypogonadism"},{"children":[],"name":"Neuropathic Pain (Neuralgia)"},{"name":"Bronchiolitis","children":[]},{"children":[],"name":"Proptosis"},{"children":[],"name":"Ptosis"},{"name":"Desmoid Tumors","children":[]},{"children":[],"name":"Arteriosclerotic Retinopathy"},{"children":[{"children":[],"name":"Niemann-Pick Disease Type A (Acid Sphingomyelinase Deficiency)"},{"name":"Acute Inflammation","children":[]}],"name":"Skin And Soft Tissue Infections"},{"children":[],"name":"Pterygium"},{"name":"Klinefelter Syndrome","children":[{"children":[],"name":"Pulmonary Inflammation"},{"children":[],"name":"Mucopolysaccharidosis VII (MPS VII) (Sly Syndrome )"},{"name":"Hormone Deficiency Disorders","children":[]},{"name":"Actinic (Solar) Keratosis","children":[]}]},{"name":"Limb-Girdle Muscular Dystrophy","children":[]},{"children":[{"name":"Central Serous Chorioretinopathy","children":[]},{"children":[],"name":"Diabetic Retinal Dysplasia"},{"children":[],"name":"Diabetic Retinopathy"},{"children":[],"name":"Hypertensive Retinopathy"},{"children":[],"name":"Seasonal Allergic Rhinitis"},{"name":"Lower Limb Muscle Spasticity","children":[]},{"name":"Tropia","children":[]},{"name":"Recessive X Chromosome Disorders","children":[]}],"name":"X Chromosome Disorders"},{"children":[{"children":[],"name":"Spondyloarthritis (Spondyloarthropathy)"},{"name":"Esotropia","children":[]},{"children":[],"name":"Accommodative Esotropia"},{"name":"Hypermetropia","children":[]}],"name":"Muscle Spasm"},{"children":[],"name":"Alopecia Areata"},{"name":"Leber Congenital Amaurosis (LCA)","children":[{"children":[],"name":"Peripheral Neuropathic Pain"},{"name":"Vitreomacular Adhesion (VMA)","children":[]},{"children":[],"name":"Myopia"},{"children":[],"name":"Familial Amyloid Cardiomyopathy"},{"name":"Cyst","children":[]}]}]},"Central Nervous System":{"children":[{"children":[{"name":"Paranasal Sinus And Nasal Cavity Cancer","children":[]}],"name":"Metrorrhagia (Abnormal Uterine Bleeding)"},{"name":"Progressive Relapsing Multiple Sclerosis (PRMS)","children":[{"children":[],"name":"Aortic Valve Stenosis"}]},{"children":[{"name":"Phelan-McDermid Syndrome (22q13.3 Deletion Syndrome)","children":[]},{"name":"IgA Nephropathy (Berger's Disease)","children":[]},{"children":[],"name":"Focal Cortical Dysplasia"}],"name":"Dyskinesia"},{"name":"Central Nerve Injury","children":[]},{"children":[{"name":"Traumatic Nerve Injury","children":[]},{"children":[],"name":"Intracranial Hypertension"},{"children":[],"name":"Neuropathy"},{"children":[],"name":"Anesthetic Effect"}],"name":"Hyperalgesia"},{"name":"Neurology","children":[{"name":"Psychiatric Disorders","children":[]},{"children":[],"name":"General Anesthetic Effect"},{"name":"Local Anesthetic Effect","children":[]},{"children":[],"name":"Broca's Aphasia (Non-Fluent Aphasia)"},{"children":[],"name":"Frontotemporal Dementia (Pick Disease)"},{"children":[],"name":"Wernicke's Aphasia (Fluent Aphasia)"},{"name":"Ataxia","children":[]},{"name":"Cerebellar Ataxia","children":[]},{"children":[],"name":"Episodic Ataxia"},{"name":"Episodic Ataxia Type 2","children":[]},{"name":"Brachial Plexus Neuritis","children":[]},{"name":"Intracranial Hemorrhage","children":[]},{"name":"Cerebral Infarction (Brain Infarction)","children":[]},{"children":[],"name":"Chronic Fatigue Syndrome (Myalgic Encephalomyelitis)"},{"name":"Carotid Sinus Syncope","children":[]},{"name":"Skin And Skin Structure Infections (SSSI) Caused By Bacteria","children":[]},{"children":[],"name":"Cephalic Disorders"},{"children":[],"name":"Anencephaly"},{"children":[],"name":"Microcephaly"},{"children":[],"name":"Cerebral Hypoxia"},{"children":[],"name":"Athetoid Cerebral Palsy"},{"name":"Muscle Spasticity","children":[]},{"children":[],"name":"Infantile Cerebral Palsy"},{"name":"Spastic Diplegia Cerebral Palsy","children":[]},{"name":"Pituitary Dwarfism","children":[]},{"name":"Cerebrospinal Fluid Rhinorrhea","children":[]},{"children":[],"name":"Chronic Cerebrospinal Venous Insufficiency (CCSVI)"},{"children":[],"name":"Chronic Drooling"},{"children":[],"name":"Amnesia"},{"name":"Cognitive Impairment","children":[]},{"children":[],"name":"Retrograde Amnesia"},{"children":[],"name":"Wernicke-Korsakoff Syndrome"},{"name":"Cognitive Impairment Associated With Schizophrenia (CIAS)","children":[]},{"children":[],"name":"Ostealgia (Bone Pain)"},{"children":[],"name":"Delirium"},{"name":"Eosinophilic Granulomatosis with Polyangiitis (Churg-Strauss Syndrome)","children":[]},{"name":"AIDS Associated Dementia","children":[]},{"children":[],"name":"Fibrinogen Deficiency (Factor I Deficiency)"},{"children":[],"name":"Corticobasal Degeneration (CBD/CBGD/Cortical Basal Ganglionic Degeneration)"},{"children":[],"name":"Multi-Infarct Dementia"},{"children":[],"name":"Cardiac Arrest"},{"name":"Bacterial Sepsis","children":[]},{"children":[],"name":"Bullous Pemphigoid"},{"children":[],"name":"Respiratory Tract Inflammatory Disorders"},{"name":"Migraine","children":[]},{"name":"Senile Dementia","children":[]},{"children":[],"name":"Age Related Memory Impairment"},{"name":"Unspecified Influenza Virus Infections","children":[]},{"children":[],"name":"Partial Seizure"},{"name":"Alexander Disease","children":[]},{"name":"Clostridium Infections","children":[]},{"name":"Inflammatory Pain","children":[]},{"children":[],"name":"Polyradiculoneuropathy"},{"name":"Rett Syndrome","children":[]},{"name":"Opium (Opioid) Addiction","children":[]},{"name":"Multiple Sclerosis","children":[]},{"children":[],"name":"Peripheral Neuropathy (Sensory Neuropathy)"},{"name":"Alveolar Soft Part Sarcoma (ASPS)","children":[]},{"name":"Relapsing Remitting Multiple Sclerosis (RRMS)","children":[]},{"name":"Interstitial Cystitis (Painful Bladder Syndrome/Bladder Pain Syndrome)","children":[]},{"children":[],"name":"Essential Tremor"},{"children":[],"name":"Hypertension"},{"name":"Dysautonomia (Autonomic Dysfunction/Autonomic Neuropathy)","children":[]},{"children":[],"name":"Amyloid Cardiomyopathy"},{"children":[],"name":"Encephalitis"},{"name":"Familial Dysautonomia","children":[]},{"name":"Infectious Encephalitis","children":[]},{"children":[],"name":"Acute On Chronic Liver Failure (ACLF)"},{"name":"Toxoplasmosis Encephalitis","children":[]},{"children":[],"name":"Meningoencephalitis"},{"name":"Lennox-Gastaut Syndrome","children":[]},{"children":[],"name":"Chemotherapy Induced Oral Mucositis"},{"children":[],"name":"Epilepsy"},{"name":"Leukodystrophies","children":[]},{"children":[],"name":"Paraplegia"},{"children":[],"name":"Dravet Syndrome (Severe Myoclonic Epilepsy of Infancy)"},{"name":"Neonatal Seizures","children":[]},{"name":"PCDH19 Epilepsy","children":[]},{"children":[],"name":"Seizures"},{"name":"Marburgvirus Infections (Marburg Hemorrhagic Fever)","children":[]},{"children":[],"name":"Febrile Seizures"},{"name":"Generalized Seizures","children":[]},{"name":"Absence Seizure","children":[]},{"name":"Atonic (Akinetic) Seizure","children":[]},{"children":[],"name":"Myoclonic Seizure"},{"children":[],"name":"Lafora Disease (Unverricht Disease)"},{"name":"Tonic-Clonic (Grand Mal) Seizure","children":[]},{"name":"Complex Partial Seizure","children":[]},{"children":[],"name":"Generalized Anxiety Disorder (GAD)"},{"children":[],"name":"Simple Partial Seizure"},{"name":"Status Epilepticus","children":[]},{"children":[],"name":"Fatigue"},{"name":"Primary Lateral Sclerosis","children":[]},{"name":"EpsteinâBarr Virus (HHV-4) Infections","children":[]},{"name":"Batten Disease","children":[]},{"name":"Amyotrophic Lateral Sclerosis","children":[]},{"children":[],"name":"Progressive Bulbar Palsy"},{"children":[],"name":"Progressive Muscular Atrophy"},{"children":[],"name":"Akathisia"},{"children":[],"name":"Multiple Myeloma (Kahler Disease)"},{"name":"Fibroids And Abnormal Uterine Bleeding","children":[]},{"name":"Post-Operative Pain","children":[]},{"name":"Chorea","children":[]},{"name":"Dental Abscess","children":[]},{"children":[],"name":"Extrapyramidal Symptoms"},{"children":[],"name":"Vascular Dementias"},{"name":"Paralytic Strabismus","children":[]},{"children":[],"name":"Glucocorticoid-Induced Osteoporosis"},{"children":[],"name":"Aplastic Anemia"},{"name":"Hemangiosarcoma","children":[]},{"name":"Chronic Cutaneous Lupus Erythematosus (CCLE) / Discoid Lupus Erythematosus (DLE)","children":[]},{"name":"Gait Abnormality (Walking Difficulty)","children":[]},{"children":[],"name":"Hyperkinesia"},{"children":[],"name":"Hypokinesia"},{"children":[],"name":"Postencephalitic Parkinsonism"},{"children":[],"name":"Parkinson's Disease"},{"name":"Psychogenic Movement Disorders","children":[]},{"children":[],"name":"Restless Legs Syndrome"},{"name":"Ataxia-Telangiectasia (Louis-Bar Syndrome)","children":[]},{"children":[],"name":"Ventricular Tachycardia"},{"children":[],"name":"Traumatic Spinal Cord Injury"},{"children":[],"name":"Alzheimer's Disease"},{"children":[],"name":"Creutzfeldt Jakob Disease"},{"children":[],"name":"Childhood Epilepsy"},{"children":[],"name":"Drug-Induced Dyskinesia"},{"name":"Zika Virus Infections","children":[]},{"children":[],"name":"MELAS Syndrome (Mitochondrial Encephalomyopathy, Lactic Acidosis and Stroke-Like Episodes)"},{"name":"Neurodegenerative Diseases","children":[]},{"name":"Burkholderia Infections","children":[]},{"children":[],"name":"Coronavirus Disease 2019 (COVID-19) Associated Cytokine Release Syndrome"},{"name":"Multiple System Atrophy (MSA or Shy-Drager Syndrome or Multi-System Degeneration)","children":[]},{"children":[],"name":"Neuropathy, Ataxia, and Retinitis Pigmentosa (NARP) Syndrome"},{"name":"Autonomic Neuropathy","children":[]},{"name":"Diabetic Peripheral Neuropathy","children":[]},{"name":"Autoimmune Encephalitis (Post-Infectious)","children":[]},{"name":"Neuroinflammation","children":[]},{"children":[],"name":"Spinal Muscular Atrophy (SMA)"},{"name":"Respiratory Syncytial Virus (RSV) Infections","children":[]},{"name":"Rotavirus Infections","children":[]},{"children":[],"name":"Diabetic Autonomic Neuropathy"},{"name":"Unspecified Genito Urinary Disorders","children":[]},{"name":"Mononeuropathy","children":[]},{"name":"Chemotherapy Induced Peripheral Neuropathy","children":[]},{"name":"Morton Metatarsalgia","children":[]},{"children":[],"name":"Neuropathic Arthropathy (Charcot Arthropathy)"},{"name":"Idiopathic CD4 Lymphocytopenia","children":[]},{"name":"Anti-MAG Peripheral Neuropathy","children":[]},{"children":[],"name":"Unspecified Hematological Disorders"},{"children":[],"name":"Primary Hyperparathyroidism"},{"name":"Distal Symmetric Polyneuropathy","children":[]},{"name":"Pancreatitis","children":[]},{"name":"Neurotoxicity Syndromes","children":[]},{"children":[],"name":"Papillary Renal Cell Carcinoma"},{"name":"Reye Syndrome","children":[]},{"children":[],"name":"Barbiturate Sedation"},{"name":"Infectious Diarrhea","children":[]},{"children":[],"name":"Benzodiazepine Sedation"},{"name":"Circadian Rhythm Sleep Disorders","children":[]},{"children":[],"name":"Ebolavirus Infections (Ebola Hemorrhagic Fever)"},{"name":"Non-24-Hour Sleep-Wake Syndrome","children":[]},{"name":"Shift Work Sleep Disorder","children":[]},{"children":[],"name":"Hypersomnia"},{"name":"Cataplexy","children":[]},{"name":"Idiopathic Hypersomnia (IH)","children":[]},{"children":[],"name":"Insomnia"},{"children":[],"name":"Transient Insomnia"},{"name":"Narcolepsy","children":[]},{"children":[],"name":"Parasomnia"},{"name":"Type 2 Narcolepsy (Narcolepsy without Cataplexy)","children":[]},{"children":[],"name":"Schizophrenia"},{"children":[],"name":"Specific Developmental Disorders"},{"children":[],"name":"Phonological (Auditory) Dyslexia"},{"children":[],"name":"Visual Dyslexia"},{"name":"Stammering (Stuttering)","children":[]},{"children":[],"name":"Vasomotor Symptoms (Non-Menopausal)"},{"children":[],"name":"Aspergillosis"},{"children":[],"name":"Mixed Pain (Nociceptive Pain/Neuropathic Pain)"}]},{"children":[{"name":"Basilar Migraine","children":[]},{"name":"Tension -Type Headache","children":[]},{"name":"Endometrial Hyperplasia","children":[]},{"name":"Myocarditis","children":[]},{"children":[],"name":"Unspecified Mouth and Dental Disorders"},{"name":"Enterobacteriaceae Infections","children":[]},{"children":[],"name":"Traumatic Pain"},{"name":"Nematodal (Round Worm) Infections","children":[]},{"children":[],"name":"Chronic Traumatic Encephalopathy (CTE)"},{"name":"Carpal Tunnel Syndrome","children":[]},{"name":"Hashimoto Thyroiditis","children":[]},{"name":"Dermatosis","children":[]},{"name":"Tremor","children":[]},{"name":"Simplexvirus (HSV) Infections","children":[]},{"children":[],"name":"Tropical Spastic Paraparesis"},{"name":"Dental Pain (Toothache/Tooth Pain)","children":[]},{"name":"Male Hypogonadism","children":[]},{"name":"Autism Spectrum Disorder (ASD)","children":[]},{"children":[],"name":"Hemiplegic Migraine"},{"name":"Familial Hemiplegic Migraine","children":[]},{"children":[],"name":"Tarsal Tunnel Syndrome"},{"name":"Charcot-Marie-Tooth Disease","children":[]},{"name":"Secondary Progressive Multiple Sclerosis (SPMS)","children":[]},{"children":[],"name":"Uterine Leiomyoma (Uterine Fibroids)"},{"children":[],"name":"Cellulitis"},{"name":"Spontaneous Bacterial Peritonitis","children":[]},{"children":[],"name":"Toxic Headache"},{"children":[],"name":"Rheumatoid Arthritis Pain"},{"name":"Nociceptive Pain","children":[]},{"children":[],"name":"Somatic Pain"},{"children":[],"name":"Musculoskeletal Pain"},{"children":[],"name":"Encephalopathy"},{"name":"Bruise (Contusion)","children":[]},{"children":[],"name":"Bacterial Cystitis"},{"name":"Myofascial Pain Syndrome (Chronic Myofascial Pain)","children":[]},{"name":"Sciatica (Sciatic Pain)","children":[]},{"children":[],"name":"Spondylitis"},{"name":"Bladder Pain","children":[]},{"children":[],"name":"Flavivirus Infections"},{"children":[],"name":"Esophageal Cancer"},{"name":"Cognitive Disorders","children":[]},{"children":[],"name":"Hyperparathyroidism"},{"children":[],"name":"Primary Dysmenorrhea"},{"name":"Gram-Negative Bacterial Infections","children":[]},{"name":"Gram-Positive Bacterial Infections","children":[]},{"children":[],"name":"Motor Neuron Diseases"},{"name":"Infantile Colic (Baby Colic)","children":[]},{"name":"Canavan Disease","children":[]},{"children":[],"name":"Renal Pain (Kidney Pain)"},{"name":"Fatty Liver Disease","children":[]},{"children":[],"name":"Renal Colic"},{"children":[],"name":"Anal Fissure Pain"},{"name":"Pathological Gambling","children":[]},{"children":[],"name":"Orthopoxvirus Infections"}],"name":"Pain"},{"children":[{"children":[],"name":"Ichthyosis Vulgaris"},{"name":"Acute Stress Disorder","children":[]},{"children":[],"name":"Depression"},{"children":[],"name":"Body Dysmorphic Disorder"},{"children":[],"name":"Panic Disorders"},{"children":[],"name":"Leptospirosis"},{"children":[],"name":"Pancreatic Endocrine Tumor"},{"name":"Phobia","children":[]},{"name":"Acrophobia","children":[]},{"name":"Agoraphobia","children":[]},{"children":[],"name":"Specific Animal Phobia"},{"name":"Appetite (Eating) Disorders","children":[]},{"children":[],"name":"Substance (Drug) Abuse"},{"children":[],"name":"Progressive Pulmonary Fibrosis (PPF)"},{"children":[],"name":"Binge Eating Disorder"},{"name":"Fetal Alcohol Syndrome","children":[]},{"name":"Bulimia Nervosa","children":[]},{"name":"Bipolar I Disorder","children":[]},{"children":[],"name":"Post-Traumatic Stress Disorder (PTSD)"},{"children":[],"name":"Open-Angle Glaucoma"},{"children":[],"name":"Bipolar II Disorder"},{"children":[],"name":"Dysthymia"},{"children":[],"name":"Non-Psychotic Major Depression"},{"name":"Smallpox","children":[]},{"name":"Psychotic Major Depression","children":[]},{"name":"Seasonal Affective Disorder (SAD)","children":[]},{"children":[],"name":"Asperger Syndrome"},{"name":"Amoebic Infections","children":[]},{"name":"Hairy Cell Leukemia","children":[]},{"children":[],"name":"Frontotemporal Lobar Degeneration"},{"children":[],"name":"Disruptive Behavior Disorder"},{"name":"Encephalomyelitis","children":[]},{"children":[],"name":"Conduct Disorder"},{"children":[],"name":"Onychomycosis (Tinea Unguium)"},{"children":[],"name":"Male Hypoactive Sexual Desire Disorder"},{"name":"Male Health","children":[]},{"name":"Menorrhagia","children":[]},{"name":"Mania","children":[]},{"name":"Personality Disorder","children":[]},{"name":"Borderline Personality Disorder (BPD)","children":[]},{"children":[],"name":"Pseudobulbar Affect (PBA)"},{"name":"Presbyopia","children":[]},{"name":"Schizoaffective Disorder","children":[]},{"children":[],"name":"Chronic Cough"},{"name":"Schizophreniform Disorder","children":[]},{"name":"Cardiovascular Risk Factors","children":[]},{"name":"Alcohol Dependence","children":[]},{"children":[],"name":"Alcohol Use Disorder (AUD)"},{"children":[],"name":"Alcohol Withdrawal Syndrome"},{"children":[],"name":"Smoking Cessation"},{"children":[],"name":"Allergic Bronchopulmonary Aspergillosis"},{"children":[],"name":"Hormone-Sensitive Prostate Cancer"},{"children":[],"name":"Tic Disorder"},{"name":"Tourette Syndrome","children":[]},{"children":[],"name":"Trichotillomania"},{"name":"Traumatic Brain Injury","children":[]},{"name":"Sensory Disorders","children":[]},{"children":[],"name":"Clostridium botulinum Infections"}],"name":"Pulmonary Embolism"},{"name":"Dysgeusia (Taste Disorders)","children":[{"children":[],"name":"Olfactory Disorders"},{"children":[],"name":"Anosmia"},{"name":"Hyposmia","children":[]},{"name":"Somatosensory Disorder","children":[]},{"children":[],"name":"Paralysis"},{"name":"Carcinoid Syndrome (Malignant Carcinoid Syndrome)","children":[]}]},{"name":"Unspecified Spinal Cord Disorders","children":[{"children":[],"name":"Flaccid Paralysis"},{"children":[],"name":"Hemiplegia"},{"name":"Periodic Paralysis (Myoplegia Paroxysmalis Familiaris/Familial Periodic Paralysis)","children":[]},{"name":"Dengue Fever","children":[]},{"name":"Hyperkalemic Periodic Paralysis (Primary Hyperkalemic Periodic Paralysis)","children":[]},{"name":"Hypokalemic Periodic Paralysis (Primary Hypokalemic Periodic Paralysis)","children":[]},{"name":"Quadriplegia / Tetraplegia","children":[]},{"children":[],"name":"Spastic Paralysis"},{"children":[],"name":"Spina Bifida"},{"children":[],"name":"Spinal Deformity"},{"children":[],"name":"Spinal Cord Injury"},{"name":"Castration-Resistant Prostate Cancer (CRPC)","children":[]},{"name":"Osteonecrosis","children":[]},{"children":[],"name":"Aphasia"},{"children":[],"name":"Spinal Stenosis"},{"name":"Cervical Stenosis","children":[]},{"name":"Transverse Myelitis (TM)","children":[]},{"children":[],"name":"Spinal Cord Disorders"},{"name":"Acne And Related Disorders","children":[]},{"children":[],"name":"Cancer Anorexia-Cachexia Syndrome"}]},{"children":[],"name":"Antiphospholipid Syndrome"}]},"Other Diseases":{"children":[{"name":"Injury","children":[]},{"name":"Grass Pollen Allergy","children":[]},{"children":[],"name":"Bordetella pertussis Infections"},{"children":[{"children":[],"name":"Chronic Injury"},{"name":"Other Disease","children":[]}],"name":"Acute Injury"},{"children":[],"name":"Pontine Glioma"},{"name":"Traumatic Lesions","children":[]},{"name":"Malignant Pleural Effusion","children":[{"children":[],"name":"Aicardi-Goutieres Syndrome (AGS)"}]},{"name":"Persistant Allergic Rhinitis","children":[]}]},"Ear Nose Throat Disorders":{"children":[{"name":"Auditory Perceptual Disorders","children":[]},{"name":"Communication Disorders","children":[]},{"name":"Ear Infections","children":[]},{"children":[],"name":"Arrhythmias"},{"children":[],"name":"Acute Epiglottitis"},{"name":"Secondary Humoral Immune Deficiencies","children":[{"children":[],"name":"Epistaxis"}]},{"children":[],"name":"Eustachian Tube Congestion"},{"children":[],"name":"Hyperacusis"},{"children":[{"name":"Neurogenic Bladder Dysfunction","children":[]},{"children":[],"name":"Dermatofibrosarcoma Protuberans (DFSP)"},{"name":"Labyrinth Disorders","children":[]}],"name":"Hearing Disorders"},{"name":"Laryngeal Edema","children":[]},{"name":"Acute Laryngitis","children":[]},{"name":"Mastalgia (Breast Pain)","children":[{"children":[],"name":"Chronic Laryngitis"},{"children":[],"name":"Laryngostenosis"}]},{"name":"Meniere Disease","children":[]},{"name":"Lupus Erythematosus","children":[]},{"children":[],"name":"Nasal Obstruction"},{"children":[],"name":"Acute Nasopharyngitis"},{"name":"Rhinosinusitis","children":[]},{"name":"Subacute Sclerosing Panencephalitis","children":[{"name":"Otosclerosis","children":[]}]},{"children":[],"name":"Otitis Media"},{"name":"Brucellosis","children":[]},{"children":[],"name":"Infectious Rhinitis"},{"children":[],"name":"Farber Disease"},{"children":[{"name":"Acute Infectious Rhinitis","children":[]},{"children":[],"name":"Chronic Infective Rhinitis"},{"name":"Non Allergic Rhinitis","children":[]},{"children":[],"name":"Vasomotor Rhinitis"},{"name":"Maxillary Sinusitis","children":[]}],"name":"Rhinitis"},{"children":[{"name":"Septic Arthritis","children":[]},{"children":[],"name":"Throat Infection"},{"name":"Acute Renal Failure (ARF) (Acute Kidney Injury)","children":[]}],"name":"Head And Neck Carcinoma"},{"name":"Acute Tonsillitis","children":[]},{"name":"Pulmonary Hypertension","children":[]},{"name":"Ovulatory Dysfunction","children":[{"name":"Chronic Tonsillitis","children":[]},{"children":[],"name":"Vertigo"}]},{"name":"Chronic Lymphoblastic Lymphoma","children":[]},{"name":"Birch Pollen Allergy","children":[]},{"children":[],"name":"Vestibular Neuronitis"},{"children":[],"name":"Hypoxia"},{"name":"Vestibulocochlear Diseases","children":[]},{"name":"Voice Disorders","children":[]},{"name":"Hoarseness","children":[{"children":[],"name":"Achlorhydria"}]}]},"Gastrointestinal":{"children":[{"name":"Acidity","children":[]},{"children":[],"name":"Anal Fissure"},{"name":"Cutaneous Angiosarcoma","children":[]},{"name":"Anal Pressure","children":[]},{"name":"Anorectal Disease","children":[]},{"name":"Anorectal Inflammation","children":[]},{"children":[],"name":"Appendicitis"},{"children":[],"name":"Biliary Dyskinesia"},{"children":[],"name":"Hypervolemia (Fluid Overload)"},{"children":[],"name":"Biliary Tract Disease"},{"name":"Biliary Atresia","children":[{"children":[],"name":"Cholangitis"},{"children":[],"name":"Cholestasis"},{"name":"Hyperemesis Gravidarum","children":[]},{"children":[],"name":"Biliary Tract Infection"},{"name":"Cachexia","children":[]}]},{"name":"Cholecystitis","children":[]},{"children":[],"name":"Collagenous Colitis"},{"children":[{"name":"Lymphocytic Colitis","children":[]},{"name":"Pseudomembranous Colitis","children":[]},{"name":"Diverticulitis","children":[]}],"name":"Corneal Dystrophy"},{"name":"Charcot-Marie-Tooth Disease Type I A","children":[]},{"children":[{"children":[],"name":"Secondary Acute Myeloid Leukemia"},{"children":[],"name":"Idiopathic (Essential) Hypertension"}],"name":"Overactive Bladder"},{"children":[],"name":"Dumping Syndrome"},{"name":"Duodenitis","children":[]},{"children":[],"name":"Motility Dyspepsia"},{"children":[{"children":[],"name":"WHIM Syndrome (Warts, Hypogammaglobulinemia, Infections and Myelokathexis)"},{"children":[],"name":"Reflux Dyspepsia"},{"children":[],"name":"Ulcer Dyspepsia"},{"children":[],"name":"Dysphagia"}],"name":"Gestational Diabetes"},{"children":[],"name":"Hematemesis"},{"children":[{"children":[],"name":"Esophageal Diseases"}],"name":"Metachromatic Leukodystrophy (MLD)"},{"children":[{"children":[],"name":"Critical Limb Ischemia"}],"name":"Retinopathy"},{"children":[{"name":"Esophageal Motility Disorders","children":[]},{"name":"Esophageal Achalasia","children":[]},{"name":"Spastic Esophageal Motility Disorders","children":[]},{"name":"Diffuse Esophageal Spasm (DES)","children":[]},{"name":"Esophageal Stenosis","children":[]},{"name":"Esophagitis","children":[]},{"name":"Duodenal Ulcer","children":[]},{"name":"Intrauterine Growth Restriction","children":[]},{"children":[],"name":"Acid Indigestion (Heartburn/Pyrosis)"},{"name":"Nonerosive Reflux Disease (NERD)","children":[]},{"children":[],"name":"Cutaneous Lupus Erythematosus"},{"name":"Helicobacter pylori Infections","children":[]},{"name":"Barretts Esophagus","children":[]},{"children":[],"name":"Nocturnal Heartburn"},{"name":"Gall Stone","children":[]},{"name":"Allan-Herndon-Dudley Syndrome (Monocarboxylate Transporter-8 Deficiency)","children":[]}],"name":"Esophageal Atresia"},{"name":"Fecal Incontinence","children":[]},{"children":[],"name":"POEMS Syndrome (Crow-Fukase Syndrome)"},{"name":"Choledocholithiasis","children":[{"name":"Cholelithiasis","children":[]},{"name":"Gastric Injury","children":[]}]},{"children":[{"name":"Chronic Gastric Injury","children":[]},{"name":"Gastric Motility Disorder","children":[]}],"name":"Acute Gastric Injury"},{"children":[],"name":"Atrophic Gastritis"},{"name":"Peptic Ulcers","children":[{"name":"Diabetic Gastroparesis","children":[]}]},{"name":"Otitis Externa","children":[]},{"children":[],"name":"Acute Promyelocytic Leukemia"},{"name":"Gastric Ulcers","children":[{"children":[],"name":"Liver Transplant Rejection"},{"children":[],"name":"Diabetic Ketoacidosis"},{"name":"Hemorrhagic Fever","children":[]}]},{"children":[{"name":"Typical Hemolytic Uremic Syndrome (Shiga-Toxin Associated Hemolytic Uremic Syndrome)","children":[]}],"name":"Social Anxiety Disorder (SAD/Social Phobia)"},{"children":[{"name":"Age Related Macular Degeneration","children":[]},{"name":"Hepatic Encephalopathy","children":[]}],"name":"Cerebral Palsy"},{"name":"Lichen Simplex Chronicus (Neurodermatitis)","children":[]},{"children":[],"name":"Hepatobiliary Disease"},{"children":[],"name":"Hepatorenal Syndrome"},{"name":"Hernia","children":[]},{"name":"Femoral Hernia","children":[{"name":"Hiatal Hernia","children":[]},{"name":"Inguinal Hernia","children":[]},{"name":"Pulmonary Sarcoidosis","children":[]},{"children":[],"name":"Hypersecretory Conditions"},{"children":[],"name":"Systemic Juvenile Rheumatoid Arthritis"}]},{"name":"Non-Arteritic Anterior Ischemic Optic Neuropathy","children":[]},{"name":"Ileus (Intestinal Obstruction)","children":[{"name":"Acne Vulgaris","children":[]}]},{"children":[],"name":"Hemorrhage"},{"name":"Opiate Induced Ileus","children":[{"name":"Paralytic Ileus","children":[]},{"name":"Postoperative Ileus","children":[]},{"children":[],"name":"Limited/Distal Colitis"}]},{"children":[{"name":"Celiac Disease","children":[]},{"name":"Chronic Myelocytic Leukemia (CML, Chronic Myeloid Leukemia)","children":[]},{"children":[],"name":"Marginal Zone B-Cell Lymphoma"},{"children":[],"name":"Mixed Dyslipidemia"},{"children":[],"name":"Proctocolitis"},{"name":"Intestinal Infection","children":[]}],"name":"Inflammatory Bowel Disease"},{"name":"Colonic Diverticulitis","children":[{"children":[],"name":"Gastric Outlet Obstruction"},{"children":[],"name":"Alcohol Associated Liver Disease (ALD)"}]},{"name":"Hypotension","children":[]},{"children":[],"name":"Chronic Coronary Artery Disease (CAD) (Ischemic Heart Disease)"},{"children":[],"name":"Congenital Sucrase-Isomaltase Deficiency (CSID)"},{"name":"Retinal Degeneration","children":[{"children":[],"name":"Alcoholic Fatty Liver Disease"},{"children":[],"name":"Liver Cirrhosis"},{"name":"Adrenocortical Hyperfunction","children":[]},{"name":"Acidemia","children":[]},{"children":[],"name":"Metabolic and Alcohol-Associated Liver Disease (MetALD)"},{"name":"Hepatic Lesion","children":[]},{"children":[],"name":"Metabolic Syndrome"},{"children":[],"name":"Renal Failure"},{"children":[],"name":"Radiation Injury"},{"name":"Hepatomegaly","children":[]},{"name":"Liver Infections","children":[]},{"name":"Lung Disease","children":[]},{"children":[],"name":"Kidney Fibrosis"},{"children":[],"name":"Pompe Disease"},{"children":[],"name":"Hypophosphatasia"},{"name":"Usher Syndrome","children":[]},{"name":"Liver Failure (Hepatic Insufficiency)","children":[]},{"name":"Liver Fibrosis","children":[]},{"children":[],"name":"Non-Viral Hepatitis"},{"name":"Steatohepatitis","children":[]},{"name":"Cytokine Release Syndrome (Cytokine Storm)","children":[]},{"children":[],"name":"Steatorrhea"},{"name":"Malignant Mesothelioma","children":[]}]},{"name":"Short Bowel Syndrome","children":[{"name":"Motion Sickness","children":[]}]},{"name":"Mucositis","children":[]},{"children":[{"children":[],"name":"Mouth Ulcers"}],"name":"Nausea"},{"name":"Pancreatic Diseases","children":[]},{"children":[{"name":"Pigmented Villonodular Synovitis","children":[]},{"children":[],"name":"Nephrotic Syndrome"},{"name":"Lyme Disease","children":[]}],"name":"Candida Peritonitis"},{"children":[{"children":[],"name":"Pneumoperitoneum"},{"name":"Abdominal Abscess","children":[]}],"name":"Primary Sclerosing Cholangitis"},{"name":"Post Operative Nausea And Vomiting","children":[]},{"children":[],"name":"Proctitis"},{"children":[],"name":"Cancer Pain"},{"children":[],"name":"Splenomegaly"},{"children":[],"name":"Gaucher Disease Type I"},{"name":"Stomatitis (Sore Mouth)","children":[]},{"children":[{"name":"Oral Mucositis","children":[]}],"name":"Esophageal Ulcer"},{"children":[{"children":[],"name":"Esophageal Hemorrhage"},{"children":[],"name":"Gastritis"},{"name":"Alagille Syndrome","children":[]},{"children":[],"name":"Polyarticular Arthritis"}],"name":"Wounds"},{"children":[],"name":"Refractory Chronic Lymphocytic Leukemia (CLL)"},{"name":"Islet Cell Carcinoma (Insulinoma)","children":[]}]},"Non Malignant Disorders":{"children":[{"name":"Brenner Tumor","children":[{"children":[],"name":"Adiposis Dolorosa (Dercum's Disease or Anders Disease)"},{"name":"Juvenile Myelomonocytic Leukemia (JMML)","children":[]},{"children":[],"name":"Thrombocytosis"},{"children":[],"name":"Angiomyolipoma (AML)"},{"name":"Pyelonephritis","children":[]},{"name":"Blue Rubber Bleb Nevus","children":[]},{"name":"Familial Adenomatous Polyposis","children":[]},{"name":"Eye Infections","children":[]},{"name":"Cavernous Hemangioma (Cerebral Cavernous Malformation/Cerebral Cavernous Hemangioma)","children":[]},{"name":"Infantile Hemangiomas","children":[]},{"name":"Sturge-Weber Syndrome","children":[]},{"children":[],"name":"Inflammatory Myofibroblastic Tumor (IMT)"},{"children":[],"name":"Leiomyoma"},{"children":[],"name":"Myofibroma"},{"children":[],"name":"Atrophic Vaginitis (Vaginal Atrophy/Vulvovaginal Atrophy/Urogenital Atrophy)"},{"children":[],"name":"Precocious Puberty"},{"children":[],"name":"Neurofibroma"},{"children":[],"name":"Dermal Neurofibroma"},{"children":[],"name":"Plexiform Neurofibroma"},{"name":"Hamartoma","children":[]},{"name":"Alopecia","children":[]}]},{"children":[{"children":[],"name":"Multiple Hamartoma Syndrome"},{"name":"Avitaminosis (Hypovitaminosis)","children":[]},{"name":"Gastrointestinal Bleeding (Gastrointestinal Hemorrhage)","children":[]}],"name":"Cowden Syndrome"},{"children":[{"name":"Basaloid Squamous Cell Carcinoma","children":[]}],"name":"Insect Allergy"}]},"Metabolic Disorders":{"children":[{"children":[{"children":[],"name":"Osteopetrosis"},{"children":[],"name":"X-Linked Hypophosphatemic Rickets"},{"children":[],"name":"Corneal Neovascularization"}],"name":"Frontotemporal Dementia with Parkinsonism-17 (FTDP-17)"},{"name":"Glycogen Storage Disease (GSD)","children":[{"children":[],"name":"Heredofamilial Amyloidosis"}]},{"children":[{"name":"Primary Systemic Amyloidosis","children":[]},{"children":[],"name":"Unspecified Fungal Infections"},{"name":"Non-Neuropathic Heredofamilial Amyloidosis","children":[]},{"name":"Bladder Carcinoma","children":[]},{"children":[],"name":"Primary Cutaneous Amyloidosis"},{"name":"Mevalonate Kinase Deficiency (Hyperimmunoglobulin D Syndrome (HIDS))","children":[]},{"name":"Lichen Amyloidosis","children":[]},{"name":"Secondary Systemic Amyloidosis","children":[]},{"name":"Osteoarthritis Pain","children":[]},{"children":[],"name":"Carnitine Deficiency"}],"name":"Hepatic - Colorectal Metastasis"},{"children":[],"name":"Cardiometabolic Disease"},{"name":"Secondary Carnitine Deficiency","children":[{"children":[],"name":"Neurogenic Diabetes Insipidus"}]},{"name":"Peritonitis","children":[]},{"name":"Diabetes","children":[{"children":[],"name":"Flatulence"},{"children":[],"name":"Diabetic Angiopathies"},{"name":"Juvenile Rheumatoid Arthritis","children":[]},{"children":[],"name":"Diabetic Myonecrosis"},{"children":[],"name":"Opportunistic Infections"},{"name":"Glucose Intolerance","children":[]},{"name":"Trauma","children":[]},{"name":"Down Syndrome","children":[]},{"children":[],"name":"Adenocarcinoma"},{"name":"Type 2 Diabetes","children":[]}]},{"name":"Dysbetalipoproteinemia (Type III Hyperlipoproteinemia)","children":[]},{"children":[],"name":"Cerebral Edema"},{"name":"Relapsed Acute Myeloid Leukemia","children":[{"children":[],"name":"Heterozygous familial hypercholesterolemia (heFH)"},{"name":"Antithrombin III Deficiency","children":[]},{"children":[],"name":"Lipodystrophy (Lipoatrophy)"},{"name":"Hyperkalemia","children":[]},{"children":[],"name":"Turner Syndrome"}]},{"children":[],"name":"Severe Combined Immune Deficiency (SCID)"},{"children":[],"name":"Optic Neuropathy"},{"name":"Hypoalphalipoproteinemia","children":[]},{"children":[{"children":[],"name":"Congestive Heart Failure (Heart Failure)"}],"name":"CINCA Syndrome"},{"name":"House Dust Mite Allergy","children":[]},{"children":[],"name":"Hypovolemia (Hypovolaemia)"},{"name":"Hypokalemia","children":[]},{"name":"Congenital Hypoplastic Anemia","children":[{"children":[],"name":"Metastatic Liver Cancer"}]},{"children":[],"name":"Amino Acid Metabolism Disorders"},{"name":"Familial Lipoprotein Lipase Deficiency","children":[]},{"children":[{"name":"Drug Overdose","children":[]},{"name":"Urea Cycle Disorders","children":[]},{"children":[],"name":"Atransferrinemia"},{"name":"Carbohydrate Metabolism Disorders","children":[]},{"children":[],"name":"Congenital Disorder of Glycosylation"},{"children":[],"name":"Congenital Disorder of Glycosylation Type I A"},{"name":"Glycogen Storage Disorders (GSD)","children":[]},{"children":[],"name":"Impetigo"},{"name":"Galactosemia","children":[]},{"name":"Carnitine Palmitoyltransferase II (CPT- II)Deficiency","children":[]},{"children":[],"name":"Non-Proliferative Diabetic Retinopathy (NPDR)"},{"name":"Cholesterol Biosynthesis Disorders","children":[]},{"name":"Autoimmune Hepatitis","children":[]},{"name":"Smith-Lemli-Opitz Syndrome","children":[]},{"children":[],"name":"Cryopyrin-Associated Periodic Syndromes"},{"name":"Crigler-Najjar Syndrome Type I","children":[]},{"name":"Glucose Transporter Type 1 Deficiency Syndrome (GLUT1 Deficiency Syndrome/De Vivo Disease)","children":[]},{"name":"Acyl-CoA Dehydrogenase Deficiency","children":[]},{"children":[],"name":"Diastolic Heart Failure (HFpEF)"},{"children":[],"name":"Medium-Chain Acyl-CoA Dehydrogenase Deficiency"},{"children":[],"name":"Very Long -Chain Acyl-CoA Dehydrogenase Deficiency"},{"name":"Abetalipoproteinemia","children":[]},{"children":[],"name":"Tyrosinemia"},{"name":"Adrenomyeloneuropathy (AMN)","children":[]},{"name":"Glutaric Aciduria II (GA II)","children":[]},{"children":[],"name":"Long-Chain 3-Hydroxyacyl-CoA Dehydrogenase (LCHAD) Deficiency"},{"name":"Wolman's Disease","children":[]},{"children":[],"name":"Tay-Sachs Disease"},{"name":"Homocysteinemia","children":[]},{"children":[],"name":"Sandhoff Disease (Jatzkewitz-Pilz Syndrome)"},{"children":[],"name":"Subacute Necrotizing Encephalomyelopathy (Leigh Disease)"},{"name":"Premature Ejaculation","children":[]},{"children":[],"name":"Sphingolipidoses"},{"children":[],"name":"Lysosomal Storage Disorder"},{"name":"Dry (Atrophic) Macular Degeneration","children":[]},{"children":[],"name":"Mucopolysaccharidosis"},{"name":"Metabolic Dysfunction-Associated Steatotic Liver Disease (MASLD or NAFLD)","children":[]},{"name":"Nocturia","children":[]},{"name":"Acromegaly","children":[]},{"name":"Gaucher Disease Type III","children":[]},{"children":[],"name":"Skin Infections"},{"children":[],"name":"Familial Chylomicronemia (Type I Hyperlipoproteinemia)"},{"children":[],"name":"Tuberous Sclerosis"},{"children":[],"name":"Congenital Generalized Lipodystrophy (Berardinelli-Seip Syndrome)"},{"name":"Barth Syndrome","children":[]},{"name":"Shox Deficiency","children":[]},{"children":[],"name":"Interstitial Lung Diseases (Diffuse Parenchymal Lung Disease)"},{"name":"Hereditary Inclusion Body Myopathy (h-IBM)","children":[]},{"children":[],"name":"Molybdenum Cofactor Deficiency (MOCD)"},{"children":[],"name":"Cockayne Syndrome"},{"name":"Carbamoyl-Phosphate Synthase I Deficiency","children":[]},{"name":"Myotonic Dystrophy","children":[]},{"name":"Neurofibromatoses Type II","children":[]},{"children":[],"name":"Chronic Spinal Cord Injury"},{"children":[],"name":"Cystoid Macular Edema"},{"children":[],"name":"Prader-Willi Syndrome (PWS)"},{"children":[],"name":"Molybdenum Cofactor Deficiency Type A (MOCODA)"},{"children":[],"name":"Purine and Pyrimidine Metabolism Disorders"},{"name":"Autoimmune Insulin Resistance Syndrome","children":[]},{"children":[],"name":"Ischemia"}],"name":"Coronary Artery Disease (CAD) (Ischemic Heart Disease)"},{"name":"Non-ischemic Cardiomyopathy","children":[{"children":[],"name":"Insulin Resistance Syndrome Type B"},{"name":"Inherited Insulin Resistance Syndrome","children":[]},{"name":"Insulin Resistance Syndrome Type A","children":[]},{"name":"Leprechaunism (Donohue Syndrome)","children":[]},{"name":"RabsonâMendenhall Syndrome","children":[]},{"name":"Metabolic Acidosis","children":[]}]},{"name":"Refractory Angina","children":[]},{"children":[{"name":"Dyslipidemia","children":[]},{"name":"Niemann-Pick Disease","children":[]},{"name":"Hypertriglyceridemia","children":[]},{"children":[],"name":"Metabolic Dysfunction-Associated Steatohepatitis (MASH or NASH)"}],"name":"Pipeline"},{"name":"Achromatopsia","children":[{"name":"Acquired Partial Lipodystrophy (Barraquer-Simons Syndrome)","children":[]},{"children":[],"name":"Congenital Plasminogen Deficiency"},{"children":[],"name":"Bone Fracture"},{"children":[],"name":"Focal Segmental Glomerulosclerosis (FSGS)"}]},{"children":[{"name":"Esophageal Varices","children":[]},{"children":[],"name":"Respiratory Acidosis"},{"name":"Neurometabolic Disease","children":[]}],"name":"Lactic Acidosis"},{"children":[],"name":"Chronic Inflammatory Demyelinating Polyneuropathy (CIDP)"},{"children":[],"name":"Deep Vein Thrombosis (DVT)"},{"name":"Phenylalanine Hydroxylase Deficiencies","children":[]},{"name":"Obesity","children":[{"name":"Insulin Resistance","children":[]}]},{"name":"Gaucher Disease","children":[]},{"children":[],"name":"Pituitary ACTH Hypersecretion (Cushing Disease)"},{"children":[],"name":"Phenylketonuria (PKU)"},{"children":[],"name":"Hereditary Coproporphyria"},{"name":"Ewing Sarcoma","children":[]},{"children":[{"name":"Gastrointestinal Radiation Toxicity","children":[]},{"name":"Spasmodic Torticollis (Cervical Dystonia)","children":[]},{"name":"Porphyria Cutanea Tarda","children":[]},{"name":"Tumor Lysis Syndrome","children":[]},{"name":"Polypoidal Choroidal Vasculopathy","children":[]}],"name":"Porphyria"},{"name":"Familial Partial Lipodystrophy","children":[]},{"name":"Enamel Carious Lesions","children":[]},{"children":[],"name":"Bronchopulmonary Dysplasia"}]},"Dermatology":{"children":[{"name":"Severe Recalcitrant Nodular Acne","children":[{"children":[],"name":"Benign Prostatic Hyperplasia"},{"children":[],"name":"Acrodermatitis"}]},{"name":"Actinic (Solar) Purpura","children":[]},{"name":"Hypersensitivity","children":[]},{"children":[],"name":"Age-Related Skin Fragility"},{"name":"Alopecia Universalis","children":[]},{"name":"Familial Hemophagocytic Lymphohistiocytosis","children":[{"children":[],"name":"Anemia of Chronic Disease"},{"name":"Lichen Planopilaris","children":[]},{"children":[],"name":"Androgenic Alopecia"},{"children":[],"name":"Atrophic Lichen Planus"}]},{"children":[],"name":"Calcinosis Cutis (Cutaneous Calcification)"},{"children":[],"name":"Leg Ulcers"},{"name":"Thrombophlebitis","children":[]},{"children":[],"name":"Acute Lung Injury"},{"children":[],"name":"Autosomal Dominant Hyper-IgE Syndrome (AD-HIES or Job Syndrome)"},{"children":[],"name":"Chronic Urticaria Or Hives"},{"children":[],"name":"Pulmonary Radiation Toxicity"},{"children":[{"name":"Trichomonas Vaginitis","children":[]}],"name":"Dermatitis Herpetiformis (Duhring's Disease)"},{"name":"Decompensated Cirrhosis","children":[]},{"name":"Dermatographism","children":[]},{"name":"Folliculitis","children":[]},{"children":[{"children":[],"name":"Hypertrichosis"},{"name":"Acute Febrile Neutrophilic Dermatosis (Sweet Syndrome)","children":[]}],"name":"Thrombosis"},{"name":"Upper Respiratory Tract Infections","children":[{"name":"Epidermolysis Bullosa Simplex","children":[]}]},{"name":"Capillary Leak Syndrome (Systemic Capillary Leak Syndrome/Clarkson's Disease)","children":[]},{"name":"Epidermolysis Bullosa","children":[{"children":[],"name":"Malignant Ascites"},{"children":[],"name":"Cellulite"},{"children":[],"name":"Erythema Multiforme"}]},{"children":[{"name":"Lactose Intolerance (Lactase Deficiency)","children":[]}],"name":"Erythema Nodosum Idiopathic"},{"children":[],"name":"Exanthema"},{"children":[],"name":"Hormone Sensitive Breast Cancer"},{"name":"Oral Leukoplakia","children":[]},{"children":[],"name":"Fever Blisters"},{"children":[],"name":"Granuloma Annulare"},{"name":"Hyperpigmentation","children":[]},{"children":[],"name":"Pyoderma Gangrenosum"},{"name":"Inherited Skin Disorders","children":[]},{"name":"Systemic Sclerosis (Scleroderma)","children":[]},{"children":[{"name":"Ocular Rosacea","children":[]},{"name":"Chronic Granulomatous Disease","children":[]},{"name":"Harlequin Ichthyosis (Autosomal Recessive Congenital Ichthyosis 4B)","children":[]},{"children":[],"name":"Lamellar Ichthyosis (Collodion Baby Syndrome)"},{"children":[],"name":"LiâFraumeni Syndrome (LFS)"},{"name":"Sjogren-Larsson Syndrome","children":[]},{"children":[],"name":"X-Linked Ichthyosis (X-Linked Recessive Ichthyosis)"},{"children":[],"name":"Pachyonychia Congenita (Pachyonychia)"},{"name":"Juvenile Xanthogranuloma","children":[]},{"name":"Multifocal Motor Neuropathy","children":[]}],"name":"Epidermolytic Ichthyosis"},{"name":"Arterial Leg Ulcers","children":[]},{"name":"Septic Shock","children":[]},{"children":[{"children":[],"name":"Diabetic Ischemic Foot Ulcers"},{"name":"Diabetic Foot Ulcers","children":[]},{"children":[],"name":"Neurotrophic Leg Ulcers"},{"name":"Mammary Ductal Carcinoma","children":[]},{"children":[],"name":"Lipedema"},{"name":"Venous Leg Ulcers (Crural Ulcer)","children":[]},{"children":[],"name":"Coronary Thrombosis"}],"name":"Growth Disorders"},{"name":"Erythroblastosis Fetalis (Hemolytic Disease In Newborns)","children":[]},{"children":[],"name":"Localized Scleroderma"},{"children":[],"name":"Melasma (Chlosma)"},{"name":"Nevus","children":[]},{"children":[],"name":"Notalgia Paresthetica"},{"children":[],"name":"Palmoplantar Keratoderma"},{"name":"Hereditary Palmoplantar Keratodermas","children":[{"name":"Periorificial Lentiginosis","children":[]}]},{"children":[],"name":"Pilonidal Sinus"},{"children":[],"name":"Pityriasis Rubra Pilaris"},{"children":[],"name":"Pityriasis Simplex Capillitii (Dandruff)"},{"children":[],"name":"Polymorphous Light Eruption"},{"name":"Rosacea","children":[]},{"name":"Prurigo","children":[{"name":"Thymic Carcinoma","children":[]}]},{"children":[{"children":[],"name":"Tenosynovitis"},{"children":[],"name":"Dystrophic Epidermolysis Bullosa"}],"name":"Tachycardia (Tachyarrhythmias)"},{"name":"Scabies","children":[{"name":"Blepharitis","children":[]}]},{"children":[],"name":"Seborrheic Keratosis"},{"children":[],"name":"Scar"},{"children":[],"name":"Acute Skin Inflammation"},{"name":"Bacterial Conjunctivitis","children":[]},{"name":"Alphavirus Infections","children":[]},{"name":"Mucopolysaccharidosis III (MPS III) (Sanfilippo Syndrome )","children":[{"children":[],"name":"Chronic Skin Inflammation"},{"name":"Contact Dermatitis","children":[]},{"name":"Chronic Uremic Pruritus","children":[]},{"name":"Sicca Syndrome (Sjogren)","children":[]},{"name":"Hand Dermatitis","children":[]},{"name":"Perioral Dermatitis","children":[]},{"name":"Seborrhea","children":[]},{"name":"Stasis Dermatitis","children":[]},{"name":"Urticaria Pigmentosa (Mastocytosis, Mastocytoma)","children":[]},{"name":"Skin Rash","children":[]}]},{"name":"Acute Urticaria","children":[]},{"children":[{"children":[],"name":"Fistula"},{"name":"Recurrent Malignant Glioma","children":[]},{"name":"Oral Cancer","children":[]}],"name":"Bed Sores (Pressure Sores)"},{"name":"Germ Cell Tumors","children":[{"name":"Chicken Pox","children":[]}]},{"name":"Kennedy's Disease (Spinal and Bulbar Muscular Atrophy)","children":[]},{"children":[],"name":"Glioblastoma Multiforme (GBM)"},{"children":[{"children":[],"name":"Vulvar Lichen Sclerosus"}],"name":"Brain Hemorrhage"},{"name":"Vitiligo","children":[]},{"name":"Xeroderma Pigmentosum","children":[]},{"children":[],"name":"Juvenile Macular Degeneration (Stargardt Disease)"},{"name":"Xerosis (Dry Skin)","children":[]},{"children":[],"name":"Adenoid Hypertrophy"}]},"Infectious Disease":{"children":[{"children":[{"name":"Epiglottitis","children":[]},{"name":"Mastoiditis","children":[]},{"children":[],"name":"Carbuncle"},{"children":[],"name":"Peritonsillar Abscess"},{"children":[],"name":"Bacillary Dysentery (Shigellosis)"},{"children":[],"name":"Escherichia coli Sepsis"},{"children":[],"name":"Bacteremia"},{"children":[],"name":"Neonatal Sepsis"},{"children":[],"name":"Sepsis"},{"children":[],"name":"Influenza A Virus, H1N1 Subtype Infections"},{"name":"Staphylococcus aureus Sepsis","children":[]},{"children":[],"name":"Fournier Gangrene"},{"name":"Swine Influenza","children":[]},{"name":"Bacterial Vaginosis","children":[]},{"children":[],"name":"Major Depressive Disorder"},{"name":"Pelvic Inflammatory Disease (Pelvic Infections)","children":[]},{"children":[],"name":"Secondary Hyperparathyroidism"},{"name":"Gas Gangrene","children":[]},{"children":[],"name":"Herpes Zoster Ophthalmicus"},{"name":"Bartonella Infections","children":[]},{"children":[],"name":"Hospital-Acquired Infections"},{"children":[],"name":"Treponema pallidum Infections"},{"children":[],"name":"Bartonellosis"},{"name":"Bordetella Infections","children":[]},{"children":[],"name":"Borrelia Infections"},{"children":[],"name":"Diphtheria"},{"name":"Poliomyelitis","children":[]},{"name":"Borrelia burgdorferi Infections","children":[]},{"children":[],"name":"Erythema Chronicum Migrans"},{"name":"Endocarditis","children":[]},{"name":"Lyme Neuroborreliosis","children":[]},{"name":"Borrelia recurrentis Infections","children":[]},{"children":[],"name":"Louse-Borne Relapsing Fever"},{"children":[],"name":"Tick-Borne Relapsing Fever"},{"name":"Brucella Infections","children":[]},{"name":"Burkholderia mallei Infections (Glanders)","children":[]},{"name":"Nongonococcal Urethritis","children":[]},{"children":[],"name":"Yersinia pestis Infections"},{"name":"Campylobacter fetus Infections","children":[]},{"name":"Chronic Bacterial Prostatitis","children":[]},{"children":[],"name":"Cushing's Syndrome"},{"name":"Chlamydia Infections","children":[]},{"children":[],"name":"Chlamydia trachomatis Infections"},{"children":[],"name":"Uncomplicated Urethral, Endocervical, or Rectal Infections in Adults"},{"name":"Urogenital Infections During Pregnancy","children":[]},{"name":"Coxiella Infections","children":[]},{"children":[],"name":"Endotoxemia"},{"children":[],"name":"Complex Regional Pain Syndrome (Sympathetic Reflex Dystrophy/Reflex Sympathetic Dystrophy)"},{"name":"Proteus Infections","children":[]},{"name":"Pseudarthrosis (Nonunion of Fracture/Pseudoarthrosis)","children":[]},{"name":"Streptococcus pyogenes Infections","children":[]},{"name":"Vancomycin-Resistant Enterococcus faecium Infections","children":[]},{"name":"Stevens-Johnson Syndrome (SJS)","children":[]},{"name":"Salmonella Infections","children":[]},{"name":"Salmonella paratyphi Infections","children":[]},{"name":"Paratyphoid Fever","children":[]},{"name":"Salmonella typhi Infections","children":[]},{"name":"Salmonella typhimurium Infections","children":[]},{"name":"Familial Amyloid Neuropathies","children":[]},{"name":"Yersinia Infections","children":[]},{"name":"Francisella Infections","children":[]},{"children":[],"name":"Klebsiella pneumoniae Infections"},{"children":[],"name":"Francisella tularensis Infections"},{"children":[],"name":"Tularaemia"},{"name":"Haemophilus Infections","children":[]},{"name":"Haemophilus ducreyi Infections","children":[]},{"name":"Chancroid","children":[]},{"name":"Haemophilus influenzae Infections","children":[]},{"name":"Haemophilus influenzae Type A Infections","children":[]},{"name":"Legionella Infections","children":[]},{"name":"Pertussis (Whooping Cough)","children":[]},{"children":[],"name":"Edema"},{"name":"Legionella Pneumophila Infection","children":[]},{"children":[],"name":"Legionellosis"},{"name":"Leptospira Infections","children":[]},{"children":[],"name":"Moraxella Catarrhalis Infection"},{"name":"Middle East Respiratory Syndrome (MERS)","children":[]},{"name":"Neisseriaceae Infections","children":[]},{"children":[],"name":"Neisseria Infections"},{"name":"Uncomplicated Cervical And Urethral Gonorrhea","children":[]},{"name":"Neisseria meningitidis Infections","children":[]},{"children":[],"name":"Hepatitis C"},{"name":"Pseudomonas Infections","children":[]},{"children":[],"name":"Bacillus anthracis Infections"},{"children":[],"name":"Rickettsiaceae Infections"},{"name":"Visceral Pain","children":[]},{"children":[],"name":"Lung Injury"},{"name":"Orientia Infections","children":[]},{"name":"Orientia tsutsugamushi Infections","children":[]},{"children":[],"name":"Rickettsia Infections"},{"name":"Syphilis","children":[]},{"children":[],"name":"Rickettsia rickettsii Infections"},{"name":"Rocky Mountain Spotted Fever","children":[]},{"name":"Typhus Fever","children":[]},{"name":"Spirillum Infections","children":[]},{"children":[],"name":"Spirillum minus Infections"},{"children":[],"name":"Spirillary Rat Bite Fever (Sodoku)"},{"name":"Streptobacillus Infections","children":[]},{"name":"Streptobacillus moniliformis Infections","children":[]},{"children":[],"name":"Streptobacillary Rat Bite Fever (Epidemic Arthritic Erythema)"},{"children":[],"name":"Treponema Infections"},{"children":[],"name":"Neurosyphilis"},{"children":[],"name":"Vaginitis"},{"children":[],"name":"Chronic Bronchitis"},{"name":"Treponema pertenue Infections","children":[]},{"name":"Yaws","children":[]},{"children":[],"name":"Ureaplasma urealyticum Infections"},{"children":[],"name":"Vibrio Infections"},{"name":"Vibrio cholerae Infections","children":[]},{"name":"Actinomyces Infections","children":[]},{"children":[],"name":"Cholera"},{"children":[],"name":"Nerve Injury"},{"children":[],"name":"Actinomycosis"},{"children":[],"name":"Bacillus Infections"},{"children":[],"name":"Clostridioides difficile Associated Enteropathy (Clostridium difficile Associated Enteropathy)"},{"name":"Lewy Body Dementia","children":[]},{"name":"Sleep Disorders","children":[]},{"children":[],"name":"Myocardial Fibrosis"},{"name":"Idiopathic Inflammatory Myopathy (IIM)","children":[]},{"name":"Clostridium tetani Infections","children":[]},{"children":[],"name":"Left Ventricular Hypertrophy"},{"children":[],"name":"Streptococcus pneumoniae Sepsis"},{"name":"Corynebacterium Infections","children":[]},{"name":"Neuroendocrine Carcinoma","children":[]},{"name":"Corynebacterium minutissimum Infections","children":[]},{"children":[],"name":"Erythrasma"},{"children":[],"name":"Enterococcus faecium Infections"},{"name":"Haemophilus influenzae Type B Infections","children":[]},{"children":[],"name":"Vascular Calcification"},{"name":"Erysipelothrix Infections","children":[]},{"children":[],"name":"Pseudomonas aeruginosa Infections"},{"name":"Erysipelothrix rhusiopathiae Infections","children":[]},{"name":"Erysipeloid","children":[]},{"children":[],"name":"Listeria monocytogenes Infections"},{"name":"Listeriosis","children":[]},{"name":"Nocardia Infections","children":[]},{"children":[],"name":"Nocardiosis"},{"name":"Community Acquired Methicillin-Resistant Staphylococcus aureus (CA-MRSA) Infections","children":[]},{"children":[],"name":"Acquired (Autoimmune) Hemolytic Anemia"},{"name":"Diabetic Complications","children":[]},{"name":"Hordeolum","children":[]},{"children":[],"name":"Multiple Organ Failure (Multiple Organ Dysfunction Syndrome)"},{"children":[],"name":"Methicillin-Susceptible Staphylococcus aureus (MSSA) Infections"},{"children":[],"name":"Staphylococcal Infections"},{"children":[],"name":"Acute Lymphoblastic Lymphoma"},{"name":"Left Ventricular Dysfunction","children":[]},{"children":[],"name":"Escherichia coli Infections"},{"name":"Lymphangitis","children":[]},{"name":"Ventricular Arrhythmia","children":[]},{"children":[],"name":"Mycobacterium avium-Intracellulare Infections"},{"name":"Systemic Candidiasis","children":[]},{"name":"Toxemia","children":[]},{"name":"Mycobacterium avium Infections","children":[]},{"children":[],"name":"Mycobacterium tuberculosis Infections"},{"children":[],"name":"Mycobacterium ulcerans Infections"},{"children":[],"name":"Tuberculosis"},{"name":"Adenoviridae Infections","children":[]},{"children":[],"name":"Buruli Ulcer"},{"children":[],"name":"Mycoplasma pneumoniae Infections"},{"children":[],"name":"Bubonic Plague"},{"name":"Pharyngitis","children":[]},{"name":"Acute Bronchitis","children":[]},{"children":[],"name":"Plague"},{"children":[],"name":"Scrub Typhus"},{"name":"Pneumonic Plaque","children":[]},{"children":[],"name":"Puerperal Infection"},{"children":[],"name":"Suppuration"},{"name":"Cross Infections","children":[]},{"children":[],"name":"Heparin-Induced Thrombocytopenia"},{"name":"Gonorrhea","children":[]}],"name":"Hemangiomas"},{"name":"Community-Acquired Infections","children":[{"name":"Mycoses","children":[]},{"name":"Pelizaeus-Merzbacher Disease (PMD)","children":[]}]},{"name":"Chagas Disease (American Trypanosomiasis)","children":[{"name":"Systemic Aspergillosis","children":[]},{"name":"Cryptococcosis","children":[]},{"name":"Blastomyces dermatitidis Infections","children":[]},{"children":[],"name":"Zygomycosis (Mucormycosis)"},{"name":"Blastomycosis","children":[]},{"children":[],"name":"Systemic Blastomycosis"},{"children":[],"name":"Cutaneous Candidiasis"},{"children":[],"name":"Candidiasis"},{"children":[],"name":"Candidal Onychomycosis"},{"children":[],"name":"Chronic Mucocutaneous Candidiasis"},{"children":[],"name":"Oral Thrush"},{"children":[],"name":"Coccidioidomycosis"},{"name":"Peripheral Nerve Injury","children":[]},{"name":"Malignant Neoplasms","children":[]},{"name":"Astrocytoma","children":[]},{"name":"Cutaneous Cryptococcosis","children":[]},{"children":[],"name":"Abdominal Pain"},{"children":[],"name":"Systemic Cryptococcosis"},{"children":[],"name":"Cutaneous Mycosis"},{"name":"Dermatomycoses","children":[]},{"children":[],"name":"Dysuria"},{"children":[],"name":"Dermatophytosis"},{"name":"Tinea Barbae","children":[]},{"children":[],"name":"Tinea Capitis"},{"name":"Tinea Corporis","children":[]},{"name":"Tinea Cruris (Jock Itch)","children":[]},{"children":[],"name":"Tinea Faciei"},{"name":"Tinea Manuum","children":[]},{"name":"Tinea Nigra (Superficial Mycoses)","children":[]},{"children":[],"name":"Tinea Pedis (Athlete Foot)"},{"children":[],"name":"Tinea Versicolor (Cutaneous Mycoses)"},{"children":[],"name":"Histoplasma capsulatum Infections"},{"children":[],"name":"Histoplasmosis"},{"name":"Systemic Histoplasmosis","children":[]},{"name":"Microsporidiosis","children":[]},{"children":[],"name":"Pneumocystis Pneumonia (Pneumocystosis/Pneumocystis jiroveci Pneumonia)"},{"children":[],"name":"Sporotrichosis"},{"children":[],"name":"Cutaneous Zygomycosis (Mucormycosis)"},{"name":"Pulmonary Tuberculosis","children":[]},{"name":"Mycobacterium Infections","children":[]},{"name":"Disseminated Zygomycosis (Mucormycosis)","children":[]},{"children":[],"name":"Gastrointestinal Zygomycosis (Mucormycosis)"},{"name":"Pulmonary Cutaneous Zygomycosis (Mucormycosis)","children":[]},{"name":"Rhinocerebral Zygomycosis (Mucormycosis)","children":[]},{"name":"Infectious Lymphadenitis","children":[]}]},{"name":"Pneumococcal Meningitis","children":[]},{"children":[{"children":[],"name":"Hemoglobinuria"},{"children":[],"name":"Tuberculous Meningitis"},{"children":[],"name":"Fungal Meningitis"},{"name":"Cryptococcal Meningitis","children":[]},{"name":"Viral Meningitis","children":[]},{"name":"Parasitic Diseases","children":[]}],"name":"Sarcoidosis"},{"children":[],"name":"Chemotherapy Induced Myelosuppression"},{"children":[{"name":"Ancylostomiasis (Hookworm Infections)","children":[]},{"children":[],"name":"Anisakiasis"},{"name":"Iron Poisoning","children":[]},{"children":[],"name":"Ascariasis"},{"children":[],"name":"Filariasis"},{"name":"Elephantiasis (Lymphatic Filariasis)","children":[]},{"name":"Loiasis (Loa Loa Filariasis)","children":[]},{"name":"Onchocerciasis (River Blindness)","children":[]},{"children":[],"name":"Strongyloidiasis"},{"name":"Toxocariasis","children":[]},{"children":[],"name":"Trichuriasis"},{"children":[],"name":"Intestinal Schistosomiasis"},{"name":"Bronchospasm","children":[]},{"children":[],"name":"Urogenital Schistosomiasis"},{"name":"Tape Worm Infections","children":[]},{"name":"Cysticercosis (Taeniasis)","children":[]},{"children":[],"name":"Cysticercosis In Muscles"},{"name":"Neurocysticercosis","children":[]},{"children":[],"name":"Echinococcosis (Hydatid Disease)"},{"name":"Alveolar Echinococcosis (Alveolar Hydatid Disease)","children":[]},{"children":[],"name":"Cystic Echinococcosis (Alveolar Hydatid Disease)"},{"children":[],"name":"Parasitic Intestinal Diseases"},{"children":[],"name":"Parasitic Skin Diseases"},{"children":[],"name":"Pediculosis"},{"name":"Protozoal Infection","children":[]},{"children":[],"name":"Entamoeba Infections (Amoebiasis)"},{"name":"Proteus Syndrome","children":[]},{"children":[],"name":"Acute Intestinal Amoebiasis"},{"name":"Amoebic Dysentery","children":[]},{"name":"Chronic Intestinal Amoebiasis","children":[]},{"children":[],"name":"Extraintestinal Amoebiasis"},{"children":[],"name":"Amoebic Liver Abscess"},{"children":[],"name":"Coccidiosis"},{"name":"Pediculosis capitis (Head Lice Infestation)","children":[]},{"name":"Pediculosis pubis (Pubic Lice Infestation)","children":[]},{"name":"Cryptosporidiosis","children":[]},{"children":[],"name":"Giardiasis"},{"name":"Cerebral (Fatal) Malaria","children":[]},{"children":[],"name":"Extranodal Marginal Zone B-Cell Lymphoma (Mucosa-Associated Lymphoid Tissue or MALT-Lymphoma)"},{"name":"Toxoplasmosis","children":[]},{"name":"Trypanosomiasis","children":[]},{"name":"Angiofibroma","children":[]},{"children":[],"name":"African Trypanosomiasis"},{"name":"Leishmaniasis (Kala-Azar)","children":[]},{"children":[],"name":"Post-Acute Sequelae of COVID 2019 (PASC or Long COVID)"},{"name":"Tick-Borne Diseases","children":[]},{"children":[],"name":"Addictive Disorders"},{"name":"Botulism","children":[]},{"children":[],"name":"Unspecified Parasitic Infections"},{"name":"Complicated Skin And Skin Structure Infections (cSSSI)","children":[]}],"name":"Helminthiasis (Parasitic Worm Infestation)"},{"children":[{"children":[],"name":"Arenaviridae Infections"},{"name":"Trigeminal Neuralgia (Tic Douloureux)","children":[]}],"name":"Angiosarcoma Of Scalp"},{"children":[],"name":"Human Papillomavirus (HPV) Associated Cancer"},{"children":[],"name":"Juvenile Dermatomyositis"},{"children":[{"children":[],"name":"Malignant Hyperthermia"},{"name":"Mammarenavirus Infections","children":[]},{"name":"Argentinian Hemorrhagic Fever (Junin Hemorrhagic Fever)","children":[]},{"name":"Lassa Fever (Lassa Hemorrhagic Fever)","children":[]},{"children":[],"name":"Bunyaviridae Infections"},{"name":"Hantavirus Infections","children":[]},{"name":"Hemorrhagic Fever with Renal Syndrome (HFRS)","children":[]},{"name":"Nairovirus Infections","children":[]},{"name":"Orthobunyavirus Infections","children":[]},{"children":[],"name":"Portal Hypertension"},{"children":[],"name":"La Crosse Encephalitis"},{"name":"Phlebovirus Infections","children":[]},{"children":[],"name":"Rift Valley Fever"},{"children":[],"name":"Caliciviridae Infections"},{"children":[],"name":"Betacoronavirus Infections"},{"name":"Unspecified Central Nervous System Disorders","children":[]},{"name":"Human Metapneumovirus Infections","children":[]},{"children":[],"name":"Coronavirus Disease 2019 (COVID-19) Associated Acute Lung Injury"},{"name":"Metastatic Hepatocellular Carcinoma (HCC)","children":[]},{"name":"Deltavirus Infections","children":[]},{"name":"Adult Respiratory Distress Syndrome","children":[]},{"children":[],"name":"Subarachnoid Hemorrhage"},{"children":[],"name":"Chronic Inflammation"},{"children":[],"name":"Infantile Spasm (West Syndrome)"},{"name":"Movement Disorders","children":[]},{"name":"Chronic Kidney Disease (Chronic Renal Failure)","children":[]},{"children":[],"name":"Filoviridae Infections"},{"children":[],"name":"Keratoconjunctivitis Sicca (Dry Eye)"},{"name":"Flaviviridae Infections","children":[]},{"children":[],"name":"Epileptic Encephalopathy"},{"name":"Unspecified Neurologic Disorders","children":[]},{"children":[],"name":"Dengue Hemorrhagic Fever"},{"name":"Coronavirus Disease 2019 (COVID-19) AssociatedÂ Acute Respiratory Distress Syndrome","children":[]},{"name":"Viral Infections","children":[]},{"name":"St Louis Encephalitis","children":[]},{"children":[],"name":"Memory Impairment"},{"children":[],"name":"Tick Borne Encephalitis"},{"name":"West Nile Virus Infections","children":[]},{"children":[],"name":"West Nile Encephalitis (West Nile Fever)"},{"name":"Yellow Fever","children":[]},{"name":"Hepacivirus Infections","children":[]},{"children":[],"name":"Unspecified Bacterial Infections"},{"children":[],"name":"Hepadnaviridae Infections"},{"name":"Seasonal Influenza","children":[]},{"children":[],"name":"Herpes Simplex Encephalitis"},{"name":"Orthohepadnavirus Infections","children":[]},{"name":"Hepeviridae Infections","children":[]},{"name":"Hepatitis B","children":[]},{"name":"Orthohepevirus Infections","children":[]},{"name":"Herpesviridae Infections","children":[]},{"name":"Acute Intermittent Porphyria","children":[]},{"name":"Cytomegalovirus (CMV) Encephalitis","children":[]},{"name":"Acral Lentiginous Melanoma","children":[]},{"children":[],"name":"Lymphocryptovirus Infections"},{"name":"Adenosine Deaminase (ADA) Deficiency Related SCID","children":[]},{"name":"Rhadinovirus Infections","children":[]},{"children":[],"name":"Unspecified Pain"},{"name":"Human Herpesvirus 8 (HHV-8) Infections","children":[]},{"children":[],"name":"Varicellovirus Infections"},{"name":"Huntington Disease","children":[]},{"name":"Genital Herpes","children":[]},{"children":[],"name":"Precancerous Condition"},{"children":[],"name":"Viral Bronchiolitis"},{"name":"Varicella Zoster (HHV-3) Infections","children":[]},{"name":"Orthomyxoviridae Infections","children":[]},{"children":[],"name":"Dupuytren Contracture"},{"name":"Testicular Cancer","children":[]},{"children":[],"name":"Influenza A Virus, H2N2 Subtype Infections"},{"children":[],"name":"Influenzavirus B Infections"},{"name":"Japanese Encephalitis","children":[]},{"children":[],"name":"Influenza A Virus, H7N9 Subtype Infections"},{"children":[],"name":"Influenza A Virus, H7N3 Subtype Infections"},{"children":[],"name":"Influenza A Virus, H6N1 Subtype Infections"},{"children":[],"name":"Papillomaviridae Infections"},{"children":[],"name":"Influenza A Virus, H9N2 Subtype Infections"},{"children":[],"name":"Avian Influenza"},{"children":[],"name":"Fungal Infections"},{"name":"Influenza A Virus, H3N2 Subtype Infections","children":[]},{"name":"Schistosomiasis mansoni Infections","children":[]},{"children":[],"name":"Kidney Cancer (Renal Cell Cancer)"},{"name":"Pandemic Influenza","children":[]},{"name":"Influenza A Virus, H5N1 Subtype Infections","children":[]},{"children":[],"name":"Unspecified Viral Infections"},{"name":"Warts","children":[]},{"name":"Non-Small Cell Lung Carcinoma","children":[]},{"children":[],"name":"Dysgerminoma"},{"name":"Paramyxoviridae Infections","children":[]},{"children":[],"name":"Leukopenia"},{"children":[],"name":"Morbillivirus Infections"},{"children":[],"name":"Hypophosphatemia"},{"name":"Crimean-Congo Hemorrhagic Fever","children":[]},{"children":[],"name":"Pneumovirus Infections"},{"name":"Measles","children":[]},{"children":[],"name":"Benign Familial Pemphigus (Hailey-Hailey Disease)"},{"name":"Respirovirus Infections","children":[]},{"name":"Acute Spinal Cord Injury","children":[]},{"children":[],"name":"Human Parainfluenza Virus 1 Infections"},{"name":"Human Parainfluenza Virus 3 Infections","children":[]},{"name":"Rubulavirus Infections","children":[]},{"children":[],"name":"Human Parainfluenza Virus 2 Infections"},{"name":"Human Parainfluenza Virus 4 Infections","children":[]},{"children":[],"name":"Mumps"},{"name":"Picornaviridae Infections","children":[]},{"children":[],"name":"Hand, Foot and Mouth Disease"},{"name":"Recurrent Medulloblastoma","children":[]},{"name":"Post Polio Syndrome","children":[]},{"children":[],"name":"Burkholderia pseudomallei Infections (Melioidosis)"},{"children":[],"name":"Rhinovirus Infections"},{"name":"Hepatovirus Infections","children":[]},{"children":[],"name":"Hepatitis A"},{"children":[],"name":"Polyomaviridae Infections"},{"name":"Poxviridae Infections","children":[]},{"children":[],"name":"T-Cell Acute Lymphocytic Leukemia (T-Cell Acute Lymphoblastic Leukaemia)"},{"name":"Leukoplakia","children":[]},{"children":[],"name":"Molluscipoxvirus Infections"},{"children":[],"name":"Molluscum Contagiosum"},{"name":"Vaccinia Infections","children":[]},{"name":"Tendon and Ligament Pain","children":[]},{"children":[],"name":"Q Fever"},{"name":"Neisseria gonorrhoeae Infections","children":[]},{"name":"Reoviridae Infections","children":[]},{"children":[],"name":"Coltivirus Infections"},{"name":"Colorado Tick Fever","children":[]},{"children":[],"name":"Retroviridae Infections"},{"name":"Streptococcal Infections","children":[]},{"children":[],"name":"Lentivirus Infections"},{"children":[],"name":"AIDS-Related Opportunistic Infections"},{"children":[],"name":"Metastatic Adenocarcinoma of The Pancreas"},{"children":[],"name":"HIV Associated Diarrhea"},{"name":"HIV Related Neurological Diseases","children":[]},{"name":"Rhabdoviridae Infections","children":[]},{"name":"Peyronies Disease","children":[]},{"name":"Retinal Vein Occlusion","children":[]},{"children":[],"name":"Lyssavirus infections"},{"name":"Togaviridae Infections","children":[]},{"name":"Rabies","children":[]},{"children":[],"name":"Equine Encephalitis"},{"children":[],"name":"Eastern Equine Encephalitis"},{"children":[],"name":"Growth Hormone Deficiency"},{"children":[],"name":"Western Equine Encephalitis"},{"name":"Pancreatitis Pain","children":[]},{"name":"Rubivirus Infections","children":[]},{"children":[],"name":"Globoid Cell Leukodystrophy (Krabbe Disease)"},{"name":"Rubella (German Measles)","children":[]},{"children":[],"name":"Unspecified Hepatitis"},{"children":[],"name":"Premature Ageing"},{"name":"Anxiety Disorders","children":[]}],"name":"Anthrax"}]},"Genetic Disorders":{"children":[{"name":"Necrotizing Enterocolitis","children":[]},{"children":[],"name":"Albinism"},{"name":"Hermansky-Pudlak Syndrome (HPS)","children":[{"name":"Chromosomal Disorders","children":[]}]},{"children":[{"children":[],"name":"Alport Syndrome"},{"children":[],"name":"Congenital Ichthyosis"},{"name":"Dup15q Syndrome","children":[]},{"name":"SmithâMagenis Syndrome (Chromosome 17p11.2 Deletion Syndrome)","children":[]},{"children":[],"name":"Born Small For Gestational Age (SGA)"},{"name":"Hyperprolactinaemia","children":[]},{"children":[],"name":"Ascites"},{"children":[],"name":"Chemotherapy Induced Pain"},{"children":[],"name":"Duchenne Muscular Dystrophy"},{"children":[],"name":"CLOVES Syndrome"},{"name":"Dwarfism","children":[]},{"name":"Community Acquired Pneumonia","children":[]},{"children":[],"name":"Hutchinson-Gilford Progeria"},{"name":"Vestibular Schwannoma (Acoustic Neuroma)","children":[]},{"children":[],"name":"Fragile X Syndrome"},{"children":[],"name":"Thalassemia"},{"name":"Idiopathic Short Stature","children":[]},{"name":"Post-Polycythemia Vera Myelofibrosis (PPV-MF)","children":[]},{"name":"Streptococcal Pneumonia","children":[]}],"name":"DiGeorge Syndrome"},{"name":"Auto Inflammatory Disease","children":[]},{"name":"Hemochromatosis","children":[]},{"name":"Familial Cold Autoinflammatory Syndrome (Familial Cold Urticaria)","children":[{"children":[],"name":"Muckle-Wells Syndrome"},{"children":[],"name":"Tumor Necrosis Factor Receptor-Associated Periodic Syndrome (Familial Hibernian Fever)"},{"children":[],"name":"Schnitzler Syndrome"}]},{"children":[],"name":"Radiation Induced Myelosuppression"},{"name":"Inherited Neurodegenerative Diseases","children":[{"name":"Conjunctivitis","children":[]}]},{"name":"Female Contraception","children":[]},{"name":"Aceruloplasminemia","children":[{"name":"Kabuki Syndrome","children":[]},{"name":"Mitochondrial Myopathy","children":[]},{"name":"Lipid Storage Disorders (Lipidoses)","children":[]},{"children":[],"name":"Renal (Renovascular) Hypertension"}]},{"name":"Letterer-Siwe Disease (Multifocal and multisystemic (disseminated) Langerhans-cell histiocytosis)","children":[]},{"children":[],"name":"Marfan Syndrome"},{"children":[],"name":"Apolipoprotein A-I (ApoA-I) Deficiency"},{"name":"Hypoparathyroidism","children":[{"children":[],"name":"Methicillin-Resistant Staphylococcus aureus (MRSA) Infections"},{"name":"Charcot-Marie-Tooth Disease Type I B","children":[]},{"children":[],"name":"Presbycusis"},{"name":"Vancomycin-Resistant Staphylococcus aureus (VRSA) Infections","children":[]},{"children":[],"name":"X-Linked SCID"},{"name":"Ileitis","children":[]},{"name":"Charcot-Marie-Tooth Disease Type IV","children":[]},{"children":[],"name":"Fatty Acid Biosynthesis Disorders"},{"name":"Ehlers-Danlos Syndrome Vascular Type (Type IV)","children":[]},{"children":[],"name":"Wilson Disease"},{"name":"GM1 Gangliosidosis (Beta Galactosidase 1 Deficiency)","children":[]},{"children":[],"name":"Tympanic Membrane Perforation"},{"name":"Complement Hyperactivation Angiopathic Thrombosis and Protein Losing Enteropathy (CHAPLE Disease)","children":[]},{"children":[],"name":"Breast Tumor"},{"children":[],"name":"Ehlers-Danlos Syndrome (Cutis Hyperelastica)"},{"name":"Tenascin- X Deficient Type Ehlers-Danlos Syndrome","children":[]},{"children":[],"name":"Hereditary Pancreatitis"},{"children":[],"name":"Familial Hypercholesterolemia (Type II Hyperlipoproteinemia)"},{"children":[],"name":"Nocturnal Hypoglycemia"},{"children":[],"name":"Premature Labor (Tocolysis)"},{"name":"Netherton Syndrome (Trichorrhexis Invaginata, Bamboo Hair)","children":[]},{"children":[],"name":"Malaria"},{"children":[],"name":"Sarcoglycanopathy"},{"children":[],"name":"Neurofibromatoses"},{"children":[],"name":"Vasculitis"}]},{"name":"Schwannomatosis","children":[{"children":[],"name":"Natural Killer Cell Lymphomas"},{"name":"Mucopolysaccharidosis I (MPS I) (Hurler Syndrome )","children":[]},{"name":"Peutz-Jeghers Syndrome","children":[]}]},{"name":"Obstructive Sleep Apnea","children":[]},{"children":[],"name":"Polygenic Disease"},{"children":[],"name":"Radiation Toxicity (Radiation Sickness, Acute Radiation Syndrome)"},{"children":[],"name":"Von Hippel-Lindau Syndrome"},{"children":[],"name":"Supraventricular Tachycardia"},{"name":"Anaphylaxis","children":[]},{"name":"Unspecified Cardiovascular Disorders","children":[]},{"name":"Hypoglycemia","children":[]},{"children":[],"name":"Acute Urethral Discomfort (AUD)"},{"name":"Urinary Retention","children":[]}]},"Musculoskeletal Disorders":{"children":[{"name":"Articular Cartilage Defect","children":[]},{"name":"Arthritis","children":[{"name":"Congenital Myasthenic Syndrome","children":[]},{"children":[],"name":"Type 1 Diabetes (Juvenile Diabetes)"},{"name":"Osteomalacia","children":[]},{"children":[],"name":"Thrombotic Thrombocytopenic Purpura (Moschcowitz Disease)"},{"name":"Diabetic Neuropathy","children":[]},{"name":"Tenosynovial Giant Cell Tumor","children":[]},{"name":"Osteoarthritis","children":[]},{"children":[],"name":"Incisional (Ventral) Hernia"},{"children":[],"name":"Plaque Psoriasis (Psoriasis Vulgaris)"},{"name":"Osteomyelitis","children":[]},{"name":"Back Pain","children":[]}]},{"name":"Asthenia","children":[]},{"children":[],"name":"Bone Defects"},{"name":"Bone Disorders","children":[{"children":[],"name":"Primary (Inherited) Hemochromatosis"},{"children":[],"name":"Atrophic Pseudarthrosis (Non-Hypertrophic Pseudoarthrosis)"},{"name":"Meesmann Corneal Dystrophy (MECD/ Meesmann Corneal Epithelial Dystrophy)","children":[]},{"name":"Lower Respiratory Tract Infections","children":[]},{"name":"Vertebral Fracture Pain","children":[]},{"children":[],"name":"Werner Syndrome"},{"name":"Osteoporosis","children":[]},{"name":"Afibrinogenemia","children":[]},{"name":"Giant Cell Tumor Of Bone","children":[]}]},{"name":"Hereditary Angioedema (HAE) (C1 Esterase Inhibitor [C1-INH] Deficiency)","children":[{"children":[],"name":"Venezuelan Equine Encephalitis"},{"name":"Focal Bone Regeneration","children":[]},{"children":[],"name":"Corneal Ulcer (Ulcerative Keratitis/ Eyesore)"}]},{"name":"Acute Opioid Overdosage","children":[{"name":"Compartment Syndrome","children":[]}]},{"name":"Hospital Acquired Pneumonia (HAP)","children":[]},{"children":[],"name":"Congenital Myopathy"},{"name":"Degenerative Spondylolisthesis","children":[]},{"name":"Tibial Plateau Fracture","children":[]},{"name":"Fibrous Dysplasia","children":[]},{"children":[],"name":"Burns"},{"children":[],"name":"Cystitis"},{"name":"Glycogen Storage Disease 1A","children":[]},{"children":[{"children":[],"name":"McCune-Albright Syndrome"},{"children":[],"name":"Ganglion Cysts"}],"name":"Fibrosis"},{"children":[],"name":"Pre-Diabetes/Impaired Glucose Tolerance"},{"children":[],"name":"Mitochondrial Neurogastrointestinal Encephalopathy (MNGIE) Syndrome"},{"name":"Chronic Urticaria","children":[{"children":[],"name":"Ocular Inflammation"},{"name":"Gliosarcoma","children":[]}]},{"name":"Niemann-Pick Disease Type C","children":[{"name":"Laminin-Deficient Congenital Muscular Dystrophy (LAMA2 MD or LAMA2-Related Muscular Dystrophy)","children":[]},{"children":[],"name":"Unspecified Ear Nose Throat Disorders"}]},{"name":"Amblyopia","children":[{"name":"Myoclonic Epilepsy with Ragged Red Fibers (MERRF) Syndrome","children":[]},{"name":"Mixed Connective Tissue Disease","children":[]}]},{"children":[],"name":"Multiple Hereditary Exostoses"},{"name":"Atrophy","children":[]},{"name":"Unspecified Respiratory Disorders","children":[{"name":"Epidermal Atrophy","children":[]},{"name":"Muscle Injury","children":[]}]},{"children":[],"name":"Muscle Relaxation"},{"children":[],"name":"Musculoskeletal Inflammation"},{"name":"Sialorrhoea","children":[{"name":"Blepharospasm","children":[]}]},{"name":"Pancreatic Ductal Carcinoma","children":[{"children":[],"name":"Charcot-Marie-Tooth Disease Type I"}]},{"children":[{"children":[],"name":"Allergic Rhino-Conjunctivitis"},{"children":[],"name":"Facioscapulohumeral Muscular Dystrophy (FSHD)"},{"name":"Inherited Metabolic Disorders","children":[]},{"name":"Primary Hyperoxaluria Type I","children":[]},{"name":"Leukocyte Disorders (White Blood Cell Disorders)","children":[]},{"name":"Unspecified Gynecological Disorders","children":[]}],"name":"Muscular Dystrophy"},{"children":[{"name":"Non-Infectious Conjunctivitis","children":[]},{"name":"Hemorrhoids","children":[]},{"name":"Polyomavirus Infections","children":[]},{"children":[],"name":"Takayasu Arteritis"}],"name":"Nemaline Myopathy"},{"children":[],"name":"Ossification of Posterior Longitudinal Ligament"},{"children":[],"name":"Osteitis"},{"children":[],"name":"Osteolytic Lesion"},{"children":[],"name":"Osteopenia"},{"name":"Relapsing Polychondritis","children":[]},{"name":"Ischemic Cardiomyopathy","children":[]},{"children":[],"name":"Tonsillitis"},{"children":[],"name":"Resistant Pseudomonas aeruginosa Infections"},{"name":"Cystinosis","children":[]},{"name":"Scoliosis","children":[]},{"children":[{"children":[],"name":"Lateral Epicondylitis(Tennis Elbow)"}],"name":"Psoriatic Arthritis"},{"children":[],"name":"Sarcopenia"},{"children":[{"children":[],"name":"Acute Nonspecific Tenosynovitis"}],"name":"Degenerative Scoliosis"},{"children":[{"name":"Acute Torticollis","children":[]}],"name":"Acute and Sub-Acute Bursitis"},{"name":"Spastic Cerebral Palsy","children":[{"name":"Visceral Muscle Spasms","children":[]}]},{"name":"B-Cell Acute Lymphocytic Leukemia (B-Cell Acute Lymphoblastic Leukaemia)","children":[]},{"children":[],"name":"Acostic Neuroma (Auditory Nerve Tumor)"}]},"Immunology":{"children":[{"name":"Angioneurotic Edema","children":[{"name":"Cicatricial Pemphigoid (CP)","children":[]},{"children":[],"name":"Lysosomal Acid Lipase Deficiency"}]},{"children":[{"name":"Ankylosing Spondylitis (Bekhterev's Disease)","children":[]},{"name":"Granulomatosis with Polyangiitis (Wegener's Granulomatosis)","children":[]},{"children":[],"name":"Microscopic Polyangiitis (MPA)"},{"name":"Beta Thalassaemia","children":[]},{"children":[],"name":"Henoch-Schonlein Purpura (Vascular Purpura/ Anaphylactoid Purpura)"},{"name":"Central Precocious Puberty","children":[]},{"name":"LambertâEaton Myasthenic Syndrome (LEMS)","children":[]},{"name":"Acute Coronary Syndrome","children":[]},{"name":"Relapsing Multiple Sclerosis (RMS)","children":[]},{"name":"Lupus Erythematosus Tumidus","children":[]},{"name":"Chronic Liver Disease","children":[]},{"children":[],"name":"Allergies"},{"children":[],"name":"Goodpasture Syndrome (anti-Glomerular Basement Membrane Disease)"},{"children":[],"name":"Subacute Cutaneous Lupus Erythematosus (SCLE)"},{"name":"Reactive Arthritis (Reiter Disease)","children":[]},{"name":"Treatment Resistant Depression","children":[]},{"name":"Coronavirus Disease 2019 (COVID-19) Pneumonia","children":[]},{"children":[],"name":"Systemic Lupus Erythematosus"},{"children":[],"name":"Anal Fistula"},{"name":"Myasthenia Gravis","children":[]},{"name":"Oculopharyngeal Muscular Dystrophy","children":[]},{"children":[],"name":"Familial Mediterranean Fever"},{"name":"Pemphigus Vulgaris","children":[]},{"children":[],"name":"Psoriasis"},{"name":"Homozygous Familial Hypercholesterolemia (HoFH)","children":[]},{"name":"Dermatological Disorders","children":[]},{"name":"Neuromuscular Disorders","children":[]},{"children":[],"name":"Hemolytic Uremic Syndrome"},{"children":[],"name":"Cytomegalovirus (HHV-5) Infections"},{"children":[],"name":"Oligoarticular Juvenile Rheumatoid Arthritis"},{"name":"Rheumatoid Arthritis","children":[]},{"children":[],"name":"Chronic Pancreatitis"},{"name":"Secondary Sjogren's Syndrome","children":[]},{"name":"Blepharoconjunctivitis","children":[]},{"children":[],"name":"Bacterial Respiratory Tract Infections"},{"children":[],"name":"Venous (Vein) Thrombosis"},{"name":"Pulmonary Arterial Hypertension","children":[]},{"name":"Humoral Immune Deficiencies","children":[]},{"name":"Graft Versus Host Disease (GVHD)","children":[]},{"name":"Polymyositis","children":[]}],"name":"Autoimmune Disorders"},{"name":"Hypovolemic Shock","children":[]},{"children":[],"name":"Ischemia Reperfusion Injury"},{"name":"Erosive Oral Lichen Planus","children":[]},{"name":"Eosinophilic Asthma","children":[]},{"name":"Primary Humoral Immune Deficiencies","children":[{"children":[],"name":"Type I Hypersensitivity"},{"name":"Upper Respiratory Tract Disorders","children":[]}]},{"children":[{"children":[],"name":"Dog Allergy"},{"children":[],"name":"Heart Transplant Rejection"},{"children":[],"name":"Hemoglobinopathies"},{"name":"Tracheobronchitis","children":[]},{"children":[],"name":"Animal Allergy"},{"children":[],"name":"Blood Plasma Hypersensitivity"},{"name":"Serum Sickness","children":[]},{"children":[],"name":"Drug Hypersensitivity Reactions"},{"name":"Milk Allergy","children":[]},{"children":[],"name":"Wet (Neovascular / Exudative) Macular Degeneration"},{"children":[],"name":"Fungal Allergy"},{"children":[],"name":"Peanut Allergy"},{"name":"Alternaria Allergy (Ascomycete Fungi Allergy)","children":[]},{"children":[],"name":"Plant Allergy"},{"name":"Acute Decompensated Heart Failure","children":[]},{"children":[],"name":"Membranous Glomerulonephritis"},{"name":"Cedar Pollen Allergy","children":[]},{"name":"Idiopathic Juxtafoveolar Retinal Telangiectasis (IJRT)","children":[]},{"children":[],"name":"Refractory Anemia"},{"name":"Olive Pollen Allergy","children":[]},{"name":"Carcinoma of Unknown Primary (Occult Primary Tumor/Cancer of Unknown Primary)","children":[]},{"name":"Ragweed Pollen Allergy","children":[]},{"name":"Septicaemic Plaque","children":[]},{"name":"Symptomatic Sarcoidosis","children":[]}],"name":"Frozen Shoulder Syndrome"},{"children":[{"name":"Alcoholic Hepatitis","children":[]},{"children":[],"name":"Drug Toxicity"},{"name":"Neonatal Onset Multisystem Inflammatory Disease","children":[]},{"name":"Thrombotic Microangiopathy","children":[]},{"children":[],"name":"Idiopathic Interstitial Pneumonia (IIP)"},{"name":"Campylobacter Infections","children":[]},{"name":"Myelosuppression","children":[]}],"name":"Inflammation"},{"name":"Myeloablation","children":[{"name":"Bloom Syndrome","children":[]}]},{"children":[{"children":[],"name":"Acquired Hemophilia"}],"name":"Fasciitis"},{"name":"Abdominal Obesity","children":[{"children":[],"name":"Common Variable Immunodeficiency (CVID)"},{"children":[],"name":"Immunoglobulin G Subclass Deficiency (IgG Deficiency)"},{"children":[],"name":"Selective Immunoglobulin A (IgA) Deficiency (SIgAD)"},{"name":"Alpha Thalassaemia","children":[]},{"name":"Stem Cell Transplantation","children":[]},{"children":[],"name":"Primary Immune Deficiency (PID)"},{"name":"Bipolar Disorder (Manic Depression)","children":[]}]},{"children":[{"children":[],"name":"Corneal Graft Rejection"}],"name":"Hematopoietic Stem Cell Transplantation"},{"children":[{"name":"Venous Thromboembolism","children":[]},{"name":"Vaginal Fistula","children":[]},{"name":"Endometriosis","children":[]},{"children":[],"name":"Liver Abscess"},{"children":[],"name":"Herpetic Keratitis"},{"children":[],"name":"Chronic Obstructive Pulmonary Disease (COPD)"},{"name":"Pemphigus Foliaceus","children":[]},{"children":[],"name":"Normal-Tension Glaucoma"},{"children":[],"name":"Fuchs Endothelial Corneal Dystrophy (FECD)"}],"name":"Transplant Rejection"},{"name":"Atypical Hemolytic Uremic Syndrome (Nondiarrhea - Associated Hemolytic Uremic Syndrome)","children":[]},{"children":[],"name":"Wiskott-Aldrich Syndrome"},{"children":[],"name":"Hyperthyroidism"}]},"Hematological Disorders":{"children":[{"children":[{"children":[],"name":"Idiopathic Thrombocytopenic Purpura (Immune Thrombocytopenic Purpura)"},{"children":[],"name":"Post Menopausal Osteoporosis"},{"name":"Iron Deficiency Anemia","children":[]},{"children":[],"name":"Type 1 Narcolepsy (Narcolepsy with Cataplexy)"},{"children":[],"name":"Hyperargininemia (Arginase I Deficiency)"},{"children":[],"name":"Keratitis"},{"name":"Refractory Leukemia","children":[]},{"name":"Pearson Syndrome","children":[]},{"name":"Sickle Cell Disease","children":[]},{"children":[],"name":"Degenerative Disc Disease"},{"children":[],"name":"Ehlers-Danlos Syndrome Hypermobility Type (Type III)"},{"name":"Functional (Non Ulcer) Dyspepsia","children":[]},{"children":[],"name":"Polycythemia Vera"},{"children":[],"name":"Gastroesophageal (GE) Junction Carcinomas"},{"name":"Vitamin Deficiency Anemia","children":[]},{"name":"Megaloblastic Anemia","children":[]},{"children":[],"name":"Pernicious Anemia"},{"name":"Factor V Deficiency (Owren Parahemophilia)","children":[]}],"name":"Hyperglycemia"},{"name":"Opium Withdrawal Syndrome","children":[{"name":"Staphylococcus aureus Infections","children":[]},{"children":[],"name":"Schwannoma"},{"name":"Thromboembolism","children":[]},{"name":"Peripheral Artery Occlusive Disease (PAOD)","children":[]},{"children":[],"name":"Hemophilia B (Factor IX Deficiency)"},{"children":[],"name":"Sickle Cell Disease With Vaso-Occlusive Crisis"},{"name":"Kidney Transplant Rejection","children":[]},{"name":"Hypofibrinogenemia","children":[]},{"name":"Uremic (Renal) Pruritus","children":[]},{"name":"Erythrodermic Psoriasis","children":[]},{"children":[],"name":"Hematoma"},{"children":[],"name":"Cluster Headache Syndrome (Cluster Headache)"},{"children":[],"name":"Hemophilia"},{"name":"Diabetic Neuropathic Foot Ulcers","children":[]},{"children":[],"name":"Radiodermatitis"},{"name":"Hypoprothrombinemia (Prothrombin Deficiency or Factor II Deficiency)","children":[]},{"name":"Arthralgia (Joint Pain)","children":[]},{"children":[],"name":"Tinnitus"},{"children":[],"name":"Fibrin Stabilizing Factor Deficiency (Factor XIII Deficiency)"},{"children":[],"name":"Secondary Immune Thrombocytopenic Purpura"},{"name":"Hemophilia C (Factor XI Deficiency)","children":[]},{"name":"Percutaneous Coronary Intervention","children":[]},{"name":"Immune Mediated Necrotizing Myopathy (IMNM)","children":[]},{"children":[],"name":"Hypercholesterolemia"}]},{"children":[{"name":"Corneal Ulcers","children":[]},{"children":[],"name":"X-Linked Hypohidrotic Ectodermal Dysplasia (XLHED)"},{"name":"Chemotherapy Effects","children":[]},{"name":"Unstable Angina","children":[]},{"name":"Female Infertility","children":[]},{"name":"Acute Hemolysis","children":[]},{"name":"Sezary Syndrome","children":[]}],"name":"Cytopenia"},{"name":"Shock","children":[]},{"children":[],"name":"Homocystinuria"},{"children":[{"name":"Tetanus","children":[]}],"name":"Superficial Vein Thrombosis"},{"name":"Oligoarticular Idiopathic Juvenile Arthritis","children":[{"children":[],"name":"Agranulocytosis"}]},{"name":"Immunoglobulin G4-Related Disease (IgG4-RD)","children":[{"name":"Acute Sensorineural Hearing Loss","children":[]}]},{"children":[{"name":"Eosinophilia","children":[]},{"children":[],"name":"Neutrophilia"},{"children":[],"name":"Hemophilia A (Factor VIII Deficiency)"},{"children":[],"name":"Cytomegalovirus (CMV) Retinitis"},{"name":"Febrile Neutropenia","children":[]},{"name":"Hyperuricemia","children":[]},{"name":"Lymphedema","children":[]}],"name":"Thrombocytopenia"},{"name":"Methaemoglobinaemia","children":[]},{"children":[],"name":"Pancytopenia"},{"name":"Refractory Hematological Disorders","children":[]},{"children":[],"name":"Adrenal Gland Disorders"},{"children":[],"name":"Acquired Hemophilia A"},{"children":[],"name":"Fabry Disease"},{"name":"Varicose Ulcers","children":[]}]},"Toxicology":{"children":[{"name":"Niemann-Pick Disease Type B (Acid Sphingomyelinase Deficiency)","children":[{"name":"Glomerulonephritis","children":[]},{"name":"Opioid Induced Side Effects","children":[]},{"children":[],"name":"Neurotrophic Keratitis"},{"name":"Bone Marrow Transplant Rejection","children":[]},{"children":[],"name":"Radiation Induced Nausea and Vomiting (RINV)"},{"children":[],"name":"Acute Ischemic Stroke"},{"name":"Gastrointestinal Mucositis","children":[]},{"name":"Hypoxic-Ischemic Encephalopathy","children":[]},{"name":"Ganglioneuroma","children":[]},{"children":[],"name":"Phlebitis"},{"children":[],"name":"Opioid-Induced Constipation (OIC)"},{"name":"Opioid-Induced Bowel Dysfunction (OBD or OIBD)","children":[]},{"name":"Acetaldehyde Poisoning","children":[]},{"name":"Achondroplasia","children":[]}]},{"name":"Anemia","children":[{"name":"Alcohol Poisoning","children":[]},{"name":"Ethylene Glycol or Methanol Poisoning","children":[]},{"children":[],"name":"Food Poisoning"},{"name":"Hospital Acquired Methicillin-Resistant Staphylococcus aureus (HA-MRSA) Infections","children":[]},{"name":"Mushroom Poisoning","children":[]},{"name":"Gaseous Poisoning","children":[]},{"name":"Carbon Monooxide Poisoning","children":[]},{"children":[],"name":"Chlorine Poisoning"},{"children":[],"name":"Mustard Gas (Sulfur Mustard) Poisoning"},{"children":[],"name":"Nerve Gas Poisoning"},{"name":"Heavy Metal Poisoning","children":[]},{"children":[],"name":"Pesticide Poisoning"},{"children":[],"name":"Metapneumovirus Infections"},{"children":[],"name":"Intimal Hyperplasia"},{"name":"Organophosphate and Carbamate Poisoning","children":[]},{"name":"Plant Poisoning","children":[]},{"children":[],"name":"Unspecified Toxic Disorders"}]},{"name":"Netherton Syndrome (Bamboo Hair)","children":[{"name":"Enterococcus Infections","children":[]},{"name":"Lymphocytopenia","children":[]},{"children":[],"name":"HIV Wasting Syndrome"},{"children":[],"name":"Hyperphosphatemia In Chronic Kidney Disease"},{"name":"Arterial Calcification","children":[]},{"name":"Neutropenia","children":[]}]},{"children":[],"name":"Rare Disease"}]},"Nutritional Disorders":{"children":[{"children":[{"name":"Nyctalopia (Night Blindness) due to Vitamin A Deficiency","children":[]},{"children":[],"name":"Vitamin B Deficiency"},{"children":[],"name":"Hypocobalaminemia (Vitamin B12) Deficiency"},{"children":[],"name":"Thiamine (Vitamin B1) Deficiency"},{"children":[],"name":"Beriberi"},{"name":"Vitamin C Deficiency Disorders","children":[]},{"name":"Scurvy","children":[]},{"children":[],"name":"Vitamin D Deficiency Disorders"},{"children":[],"name":"Nutritional Rickets"},{"children":[],"name":"Pseudoxanthoma Elasticum (PXE or Gronblad Strandberg Syndrome)"},{"children":[],"name":"Vitamin D Dependent Rickets"},{"name":"Systemic-Onset Juvenile Idiopathic Arthritis (Still Disease)","children":[]},{"name":"Vitamin D Resistant Rickets","children":[]},{"children":[],"name":"Electrolyte Imbalance"},{"name":"Progressive Familial Intrahepatic Cholestasis","children":[]}],"name":"Vitamin A Deficiency Disorders"},{"children":[{"name":"Endocrine Gland Disorders","children":[]},{"name":"Periodontal Disease","children":[]},{"name":"Diabetic Neuropathic Pain","children":[]},{"children":[],"name":"Hyponatremia"},{"children":[],"name":"Malnutrition"},{"name":"Lip Cancer","children":[]}],"name":"Hypocalcemia"},{"children":[],"name":"Mineral Deficiency"},{"name":"Unspecified Nutritional Disorders","children":[]},{"children":[],"name":"AIDS - Related Cancer"}]},"Undisclosed":{"children":[{"children":[{"children":[],"name":"Chronic Asthma"}],"name":"Coronavirus Disease 2019 (COVID-19)"}]},"Oncology":{"children":[{"name":"Anaplastic Thyroid Cancer","children":[]},{"children":[],"name":"Erdheim-Chester Disease (ErdheimâChester Syndrome/ Polyostotic Sclerosing Histiocytosis)"},{"name":"Bone Sarcoma","children":[{"name":"Atypical Teratoid Rhabdoid Tumor","children":[]},{"children":[],"name":"Mast Cell Leukemia"},{"children":[],"name":"High-Grade Glioma"},{"name":"Muscle Invasive Bladder Cancer (MIBC)","children":[]},{"name":"Advanced Malignancy","children":[]},{"children":[],"name":"Lupus Nephritis"},{"name":"Waldenstrom Macroglobulinemia (Lymphoplasmacytic Lymphoma)","children":[]},{"name":"Anal Cancer","children":[]},{"children":[],"name":"Erythema Nodosum Leprosum (ENL)"},{"children":[],"name":"Meningeal Leukemia"},{"name":"Acute Myelocytic Leukemia (AML, Acute Myeloblastic Leukemia)","children":[]},{"name":"Adenoid Cystic Carcinoma (ACC)","children":[]},{"children":[],"name":"Gastroparesis"},{"children":[],"name":"Squamous Non-Small Cell Lung Carcinoma"},{"children":[],"name":"Pediatric Diffuse Intrinsic Pontine Glioma"},{"name":"Dermatitis (Eczema)","children":[]},{"name":"T-Cell Lymphoblastic Lymphoma","children":[]},{"name":"Relapsed Chronic Lymphocytic Leukemia (CLL)","children":[]},{"name":"Tauopathies","children":[]},{"children":[],"name":"Metastatic Pancreatic Cancer"},{"name":"Metastatic Prostate Cancer","children":[]},{"children":[],"name":"X-Linked Myotubular Myopathy (XLMTM or MTM)"},{"children":[],"name":"Primary Diffuse Large B-Cell Lymphoma of the CNS (PCNS-DLBCL)"},{"name":"Crigler-Najjar Syndrome","children":[]},{"children":[],"name":"Esophageal Squamous Cell Carcinoma (ESCC)"},{"children":[],"name":"Thyroid Cancer"},{"name":"Retinoblastoma","children":[]},{"children":[],"name":"Human Epidermal Growth Factor Receptor 2 Positive Breast Cancer (HER2+ Breast Cancer)"},{"name":"Chemotherapy Induced Neutropenia","children":[]},{"name":"Paroxysmal Nocturnal Hemoglobinuria","children":[]},{"children":[],"name":"Malignant Glioma"},{"children":[],"name":"Coronaviridae Infections"},{"children":[],"name":"Adenocarcinoma Of The Gastroesophageal Junction"},{"children":[],"name":"Primary Cutaneous Anaplastic Large Cell Lymphoma"},{"name":"Human Papillomavirus Infections","children":[]},{"name":"Hodgkin Lymphoma (B-Cell Hodgkin Lymphoma)","children":[]},{"name":"Fallopian Tube Cancer","children":[]},{"children":[],"name":"Non-Hodgkin Lymphoma"},{"name":"Nodal Marginal Zone B-Cell Lymphoma","children":[]},{"children":[],"name":"Esophageal Tumor"},{"children":[],"name":"Hypothalamic Amenorrhea"},{"name":"Chronic Myelomonocytic Leukemia (CMML)","children":[]},{"name":"Burkitt Lymphoma","children":[]},{"children":[],"name":"Erectile Dysfunction"},{"name":"WilliamsâBeuren Syndrome","children":[]},{"name":"Refractory Multiple Myeloma","children":[]},{"name":"Mantle Cell Lymphoma","children":[]},{"name":"Polymyalgia Rheumatica (PMR)","children":[]},{"name":"Metastatic Brain Tumor","children":[]},{"children":[],"name":"Lymphomatoid Papulosis"},{"children":[],"name":"Myelodysplastic Syndrome (Preleukemia)"},{"children":[],"name":"Autoimmune Lymphoproliferative Syndrome"},{"children":[],"name":"B-Cell Leukemia"},{"children":[],"name":"Mycosis Fungoides"},{"name":"Membranoproliferative Glomerulonephritis (Mesangiocapillary Glomerulonephritis)","children":[]},{"children":[],"name":"Traveler's Diarrhea"},{"name":"Leukemia","children":[]},{"name":"Myeloproliferative Disorders","children":[]},{"children":[],"name":"Brain Cancer"},{"children":[],"name":"CNS Lymphoma"},{"name":"Myeloid Metaplasia","children":[]},{"children":[],"name":"Secondary Myelofibrosis"},{"children":[],"name":"Transformed Mycosis Fungoides"},{"children":[],"name":"Juvenile Arthritis"},{"name":"Post-Essential Thrombocythemia Myelofibrosis (Post-ET MF)","children":[]},{"children":[],"name":"Germinomatous (Seminomatous) Germ Cell Tumors"},{"children":[],"name":"Behcet Disease"},{"name":"Emphysema","children":[]},{"children":[],"name":"Thrombocythemia Myelofibrosis"},{"children":[],"name":"Severe Acute Respiratory Syndrome (SARS)"},{"name":"Cholangiocellular Hepatoma","children":[]},{"name":"Acute Cutaneous Lupus Erythematosus (ACLE)","children":[]},{"children":[],"name":"Retinal Pigment Epithelial (RPE) Detachment"},{"children":[],"name":"Colon Tumor"},{"name":"Hidradenitis Suppurativa","children":[]},{"name":"Relapsed Multiple Myeloma","children":[]},{"name":"Crohn's Disease (Regional Enteritis)","children":[]},{"children":[],"name":"Amyloidosis"}]},{"children":[],"name":"Human Epidermal Growth Factor Receptor 2 Low Breast Cancer (HER2 Low Breast Cancer)"},{"children":[],"name":"Febrile Granulocytopenic Cancer"},{"children":[],"name":"Invasive Metastatic Cancer"},{"children":[],"name":"Unspecified Immunological Disorders"},{"name":"Paget Disease of Bone","children":[]},{"children":[],"name":"Anorexia Nervosa"},{"children":[{"name":"Refractory Anemia With Excess Blasts","children":[]}],"name":"Biliary Tumor"},{"name":"Dementia","children":[{"children":[],"name":"Corneal Degeneration"},{"children":[],"name":"Refractory Anemia With Ringed Sideroblasts"},{"name":"Neoplastic Syndrome","children":[]}]},{"children":[{"children":[],"name":"Nonhematologic Malignancy"}],"name":"Paraneoplastic Syndrome"},{"name":"Papillary Tumor","children":[]},{"name":"Osteolytic Bone Metastasis","children":[]},{"children":[],"name":"Pediatric Cancer"},{"children":[{"children":[],"name":"Antibody-Mediated Rejection (AMR)"},{"children":[],"name":"Unspecified Cancer"},{"children":[],"name":"Bone Tumor"},{"children":[],"name":"Blastic Plasmacytoid Dendritic Cell Neoplasm (BPDCN)"},{"children":[],"name":"Duodenal Cancer"},{"children":[],"name":"Rhabdomyosarcoma"},{"children":[],"name":"Unspecified"},{"name":"Malignant Osteoporosis","children":[]},{"children":[],"name":"Bone Metastasis"},{"children":[],"name":"Ductal Carcinoma"},{"children":[],"name":"Breast Cancer"},{"name":"Viral Respiratory Tract Infection","children":[]},{"children":[],"name":"Pituitary Gland Disorders"},{"children":[],"name":"Premenstrual Dysphoric Disorder (PMDD)"},{"name":"Sudoriferous (Sweat) Gland Disorders","children":[]},{"children":[],"name":"Squamous Non-Small Cell Lung Cancer"},{"children":[],"name":"Hypopharyngeal Cancer"},{"name":"Metastatic Breast Cancer","children":[]},{"children":[],"name":"Triple-Negative Breast Cancer (TNBC)"},{"name":"Extramammary Paget Disease (EMPD)","children":[]},{"name":"Epidermolysis Bullosa Acquisita","children":[]},{"children":[],"name":"Gastrointestinal Stromal Tumor (GIST)"},{"name":"Rectal Cancer","children":[]},{"name":"Adenoid Squamous Cell Carcinoma (Pseudoglandular Squamous Cell Carcinoma)","children":[]},{"children":[],"name":"Neck Pain (Cervicalgia)"},{"name":"Endomyocardial Fibrosis (Davies' Disease)","children":[]},{"name":"Unspecified Ophthalmological Disorders","children":[]},{"children":[],"name":"Unspecified Gastrointestinal Disorders"},{"name":"Anemia in Chronic Kidney Disease (Renal Anemia)","children":[]},{"name":"Keratoacanthoma","children":[]},{"name":"Malignant Fibrous Histiocytoma of Soft Tissue","children":[]},{"name":"Acute Asthma","children":[]},{"name":"NUT Midline Carcinoma (NMC or Nuclear Protein in Testis Midline Carcinoma)","children":[]},{"children":[],"name":"Cardiovascular Cancer"},{"children":[],"name":"Recombination Activating Genes (RAG1/RAG2) Deficiency (RAG-Deficient SCID)"},{"name":"Nongerminomatous (Nonseminomatous) Germ Cell Tumors","children":[]},{"children":[],"name":"Cardiovascular Tumor"},{"name":"Vascular Neoplasm","children":[]},{"children":[],"name":"Central Nervous System (CNS) Cancer"},{"name":"Low-Grade Astrocytoma","children":[]},{"name":"Ependymoma","children":[]},{"children":[],"name":"Synovial Sarcoma"},{"children":[],"name":"Oligodendroglioma"},{"name":"Sedation","children":[]},{"children":[],"name":"Precursor B-Cell Lymphoblastic Leukemia-Lymphoma"},{"children":[],"name":"Transitional Cell Carcinoma (Urothelial Cell Carcinoma)"},{"name":"Brain Tumor","children":[]},{"name":"Pharyngeal Neoplasm","children":[]},{"children":[],"name":"Herpes Zoster (Shingles)"},{"name":"Anaplastic Oligoastrocytoma","children":[]},{"children":[],"name":"Chordoma"},{"children":[],"name":"Soft Tissue Sarcoma"},{"name":"Calciphylaxis","children":[]},{"name":"Pilocytic Astrocytoma","children":[]},{"name":"Subependymal Giant Cell Astrocytoma","children":[]},{"name":"Adult Malignant Glioma","children":[]},{"name":"B-Cell Chronic Lymphocytic Leukemia","children":[]},{"name":"Primitive Neuroectodermal Tumor (PNET)","children":[]},{"name":"Kaposi Sarcoma","children":[]},{"children":[],"name":"Medulloblastoma"},{"children":[],"name":"Metastatic Uveal Melanoma"},{"name":"Endocrine Gland Cancer","children":[]},{"name":"Urticaria","children":[]},{"name":"Pituitary Tumor","children":[]},{"children":[],"name":"Carcinomas"},{"name":"Refractory Brain Metastasis","children":[]},{"name":"Signet Ring Cell Squamous Cell Carcinoma","children":[]},{"name":"Unspecified B-Cell Lymphomas","children":[]},{"name":"Refractory Medulloblastoma","children":[]},{"name":"Metastatic Colorectal Cancer","children":[]},{"children":[],"name":"Primary CNS Lymphoma"},{"children":[],"name":"Salivary Gland Cancer"},{"children":[],"name":"Malignant Fibrous Histiocytoma"},{"name":"Recurrent Head And Neck Squamous Cell Carcinoma","children":[]},{"name":"Gastric Cancer","children":[]},{"name":"Multiple Endocrine Adenomas","children":[]},{"children":[],"name":"Vulvar Cancer"},{"children":[],"name":"Glioma"},{"children":[],"name":"Progressive Multifocal Leukoencephalopathy"},{"name":"Low-Grade Glioma","children":[]},{"name":"Hepatic - Colon Metastasis","children":[]},{"children":[],"name":"Norovirus Infections"},{"children":[],"name":"Urethral Cancer"},{"children":[],"name":"Macular Edema"},{"name":"Diffuse Large B-Cell Lymphoma","children":[]},{"name":"Angiosarcoma","children":[]},{"name":"Papillary Thyroid Cancer","children":[]},{"children":[],"name":"Epithelial Tumor"},{"children":[],"name":"Benign Tumor"},{"name":"Congenital Heart Disease","children":[]},{"children":[],"name":"Lung Adenocarcinoma"},{"children":[],"name":"Bladder Cancer"},{"name":"Choriocarcinoma (Gestational Trophoblastic Neoplasia)","children":[]},{"name":"Hepatic (Liver) Tumor","children":[]},{"children":[],"name":"Gallbladder Cancer"},{"children":[],"name":"Unspecified Dermatological Disorders"},{"name":"Human Epidermal Growth Factor Receptor 2 Negative Breast Cancer (HER2- Breast Cancer)","children":[]},{"children":[],"name":"Secondary CNS Lymphoma"},{"name":"Bile Duct Cancer (Cholangiocarcinoma)","children":[]},{"name":"Pancreatic Tumor","children":[]},{"name":"Metastatic Bile Duct Cancer","children":[]},{"name":"Refractory Acute Myeloid Leukemia","children":[]},{"name":"Liposarcoma","children":[]},{"children":[],"name":"Gouty Arthritis (Gout)"},{"name":"Intestinal Tumors","children":[]},{"name":"Erythroplasia","children":[]},{"children":[],"name":"Paraproteinemias"},{"children":[],"name":"Small Intestine Cancer"},{"children":[],"name":"Large Intestinal Cancer"},{"name":"Pancreatic Exocrine Tumor","children":[]},{"name":"Osteosarcoma","children":[]},{"name":"Colon Cancer","children":[]},{"name":"Blood Cancer","children":[]},{"name":"Androgen-Sensitive Prostate Cancer","children":[]},{"name":"Radiculopathy","children":[]},{"children":[],"name":"Colorectal Cancer"},{"children":[],"name":"Hypoplastic Left Heart Syndrome"},{"name":"Peripheral Nerve Sheath Tumor (Neurofibrosarcoma)","children":[]},{"children":[],"name":"Ureter Cancer"},{"name":"Recurrent Respiratory Papillomatosis (Juvenile Laryngeal Papilloma or Laryngeal Papilloma)","children":[]},{"children":[],"name":"Angioimmunoblastic T-Cell Lymphoma (AITL)/Immunoblastic Lymphadenopathy"},{"children":[],"name":"Enteritis"},{"children":[],"name":"Liver Cancer"},{"name":"Lymphoblastic Lymphoma","children":[]},{"children":[],"name":"Hepatocellular Carcinoma"},{"children":[],"name":"Metastatic Renal Cell Carcinoma"},{"name":"Rectal Tumor","children":[]},{"children":[],"name":"Pancreatic Cancer"},{"children":[],"name":"Neurofibromatoses Type I (Von Recklinghausen's Disease)"},{"children":[],"name":"Transitional Cell Cancer (Urothelial Cell Cancer)"},{"children":[],"name":"Small-Cell Lung Cancer"},{"children":[],"name":"Peritoneal Tumor"},{"children":[],"name":"Cyclical Mastalgia (Cyclical Breast Pain/ Cyclic Mastitis/Cyclic Mastalgia)"},{"children":[],"name":"Hepatobiliary System Tumor"},{"children":[],"name":"Sacrococcygeal Teratoma"},{"name":"Chikungunya Fever","children":[]},{"children":[],"name":"Craniopharyngioma"},{"children":[],"name":"Delayed Graft Function (DGF)"},{"children":[],"name":"Splenic Marginal Zone B-Cell Lymphoma"},{"name":"Malignant Mixed MÃ¼llerian Tumor","children":[]},{"name":"Neuroendocrine Gastroenteropancreatic Tumors (GEP-NET)","children":[]},{"name":"Head And Neck Cancer","children":[]},{"name":"Ovarian Cancer","children":[]},{"name":"Clear Cell Squamous Cell Carcinoma","children":[]},{"name":"Paraganglioma (Glomus Jugulare Tumor)","children":[]},{"name":"Extrahepatic Bile Duct Cancer","children":[]},{"name":"Metastatic Biliary Tract Cancer","children":[]},{"name":"Metastatic Melanoma","children":[]},{"children":[],"name":"Cervical Cancer"},{"children":[],"name":"Gynecological Cancer"},{"name":"Endometrial Cancer","children":[]},{"children":[],"name":"Nose Neoplasms"},{"children":[],"name":"Chronic Lymphocytic Leukemia (CLL)"},{"name":"Acute Respiratory Failure","children":[]},{"name":"Head And Neck Squamous Cell Carcinoma (HNSC)","children":[]},{"children":[],"name":"Hypercalcemia"},{"name":"Hematological Tumor","children":[]},{"children":[],"name":"Uterine Cancer"},{"name":"Locally Recurrent Or Locoregional Solid Malignancies","children":[]},{"name":"Latent Autoimmune Diabetes of Adulthood (LADA)/ Type 1.5 Diabetes","children":[]},{"name":"Atopic Dermatitis (Atopic Eczema)","children":[]},{"name":"Porphyria Variegata","children":[]},{"children":[],"name":"Oropharyngeal Cancer"},{"name":"Sarcomas","children":[]},{"children":[],"name":"Follicular Thyroid Cancer"},{"name":"Malignant Pleural Mesothelioma","children":[]},{"children":[],"name":"Von Willebrand Disease (vWD)"},{"name":"Laryngeal Cancer","children":[]},{"children":[],"name":"Non Muscle Invasive Bladder Cancer (NMIBC) (Superficial Bladder Cancer)"},{"children":[],"name":"Thymoma (Thymic Epithelial Tumor)"},{"name":"Endobronchial Cancer","children":[]},{"name":"Lung Cancer","children":[]},{"name":"Male Cancer","children":[]},{"name":"Upper Limb Muscle Spasticity","children":[]},{"name":"Non-Small Cell Lung Cancer","children":[]},{"children":[],"name":"Squamous Cell Carcinoma"},{"name":"Cutaneous T-Cell Lymphoma","children":[]},{"name":"Plasma Cell Neoplasm","children":[]},{"children":[],"name":"T-Cell Leukemia"},{"children":[],"name":"Acute Respiratory Distress Syndrome"},{"children":[],"name":"Testosterone-Sensitive Prostate Cancer"},{"children":[],"name":"Adrenocortical Carcinoma (Adrenal Cortex Cancer)"},{"name":"Prostate Cancer","children":[]},{"name":"Bone Cancer","children":[]},{"name":"Human Immunodeficiency Virus (HIV) Infections (AIDS)","children":[]},{"children":[],"name":"Enterovirus Infections"},{"children":[],"name":"Carcinoid Tumor"},{"name":"Ocular Melanoma","children":[]},{"children":[],"name":"Nonseminomatous Testicular Cancer"},{"name":"Oropharyngeal Candidiasis","children":[]},{"name":"Metastatic Nonseminomatous Testicular Cancer","children":[]},{"name":"Mesenchymal Tumor Of The Gastrointestinal Tract","children":[]},{"name":"Non-infectious Uveitis","children":[]},{"name":"Nasopharyngeal Cancer","children":[]},{"name":"Developmental Disorders","children":[]},{"name":"Nipah Virus (NiV) Infections","children":[]},{"name":"Alexander's Disease (Factor VII Deficiency)","children":[]},{"name":"Nerve Sheath Tumor","children":[]},{"name":"Nasal Polyps (Nasal Polyposis)","children":[]},{"name":"Gastrointestinal Carcinoid Tumor","children":[]},{"name":"Peritoneal Cancer","children":[]},{"children":[],"name":"Ductal Carcinoma In Situ"},{"name":"Urinary Tract Cancer","children":[]},{"name":"Recurrent Glioblastoma Multiforme (GBM)","children":[]},{"children":[],"name":"Medullary Thyroid Cancer"},{"name":"Metastatic Cancer","children":[]},{"children":[],"name":"Neuroma"},{"name":"Pre-Eclampsia","children":[]},{"children":[],"name":"Pheochromocytoma"},{"children":[],"name":"Neoplastic Neuromas"},{"name":"Non-Neoplastic Neuromas","children":[]},{"name":"Cutaneous B-Cell Lymphoma","children":[]},{"children":[],"name":"Traumatic Neuroma"},{"name":"Peripheral Nervous System (PNS) Cancer","children":[]},{"name":"Unspecified Metabolic Disorders","children":[]},{"name":"Lymphoproliferative Disorders","children":[]},{"name":"Wilms' Tumor (Nephroblastoma)","children":[]},{"name":"Peripheral Nervous System (PNS) Tumor","children":[]},{"name":"Adipocytic Sarcoma","children":[]},{"children":[],"name":"T-Cell Lymphomas"},{"children":[],"name":"Polycystic Kidney Disease"},{"name":"Myxoid Liposarcoma","children":[]},{"name":"Hemophagocytic Lymphohistiocytosis","children":[]},{"children":[],"name":"Angiosarcoma Of Bone"},{"children":[],"name":"Lymphoma"},{"name":"Angiosarcoma Of Breast","children":[]},{"name":"Lymphangiosarcoma","children":[]},{"name":"Exocrine Pancreatic Insufficiency","children":[]},{"name":"Pleomorphic Liposarcoma","children":[]},{"children":[],"name":"Oligozoospermia"},{"name":"Well Differentiated Liposarcoma","children":[]},{"name":"Chemotherapy-Induced Diarrhea (CID)","children":[]},{"children":[],"name":"Post-Transplant Lymphoproliferative Disorder"},{"children":[],"name":"Adrenal Gland Cancer"},{"children":[],"name":"Neuroendocrine Cancer"},{"children":[],"name":"Metastatic Ovarian Cancer"},{"name":"Chondrosarcoma","children":[]},{"name":"Leptomeningeal Disease (Neoplastic Meningitis, Leptomeningeal Carcinomatosis)","children":[]},{"children":[],"name":"Metastatic Castration-Resistant Prostate Cancer (mCRPC)"},{"name":"Toxic Shock","children":[]},{"name":"Xerostomia","children":[]},{"name":"Unspecified Infectious Diseases","children":[]},{"name":"Neuroblastoma","children":[]},{"children":[],"name":"Round Cell Liposarcoma"},{"name":"Corneal Edema","children":[]},{"name":"Anal Dysplasia","children":[]},{"name":"Childhood Rhabdomyosarcoma","children":[]},{"children":[],"name":"Lumbar Stenosis"},{"name":"Paget's Disease Of Vulva","children":[]},{"name":"Colon Carcinoma","children":[]},{"children":[],"name":"Skin Cancer"},{"name":"Merkel Cell Carcinoma","children":[]},{"children":[],"name":"Non-Rhabdomyosarcoma"},{"children":[],"name":"Choroidal Neovascularization"},{"children":[],"name":"Throat Cancer"},{"children":[],"name":"Intermediate Uveitis"},{"children":[],"name":"Lentigo Maligna Melanoma"},{"children":[],"name":"Melanoma"},{"children":[],"name":"Hereditary Hemorrhagic Telangiectasia (OslerâWeberâRendu Disease)"},{"name":"Nodular Melanoma","children":[]},{"children":[],"name":"Follicular Lymphoma"},{"name":"Aniridia","children":[]},{"name":"Fibrosarcoma","children":[]},{"name":"Acute Lymphocytic Leukemia (ALL, Acute Lymphoblastic Leukemia)","children":[]},{"children":[],"name":"Gastrointestinal Tumor"},{"children":[],"name":"Gastrointestinal Tract Cancer"},{"children":[],"name":"Central Nervous System (CNS) Tumor"},{"name":"Axillary Hyperhidrosis","children":[]},{"children":[],"name":"Graves' Ophthalmopathy"},{"children":[],"name":"Anaplastic Large Cell Lymphoma (ALCL)"},{"name":"Oral Cavity (Mouth) Cancer","children":[]},{"children":[],"name":"Primary Mediastinal B-Cell Lymphoma"},{"name":"Penile Cancer","children":[]},{"children":[],"name":"Paget Disease of The Breast"},{"name":"Renal Cell Carcinoma","children":[]},{"children":[],"name":"Metastatic Transitional (Urothelial) Tract Cancer"},{"name":"Myelofibrosis","children":[]},{"name":"Intestinal Cancer","children":[]},{"name":"Dedifferentiated Liposarcoma","children":[]},{"children":[],"name":"Vaginal Cancer"}],"name":"Solid Tumor"},{"children":[],"name":"Ulcerative Colitis"}]},"Genito Urinary System":{"children":[{"children":[],"name":"Bartter Syndrome"},{"children":[],"name":"Enuresis"},{"children":[],"name":"Complicated Intra-Abdominal Infections"},{"name":"Nocturnal Enuresis","children":[{"name":"Genital Ulcers","children":[]}]},{"name":"Hematuria","children":[]},{"children":[],"name":"Hyperoxaluria"},{"name":"Primary Hyperoxaluria","children":[{"name":"Primary Hyperoxaluria Type II","children":[]},{"children":[],"name":"Diffuse Cutaneous Systemic Sclerosis"},{"name":"Secondary Hyperoxaluria","children":[]},{"name":"Hypoactive Bladder","children":[]}]},{"name":"Inflammation Of Urinary Bladder","children":[]},{"children":[{"name":"Autoimmune Inner Ear Disease (AIED)","children":[]},{"name":"Urethritis","children":[]},{"name":"Hemorrhagic Cystitis (Haemorrhagic Cystitis)","children":[]},{"name":"Radiation Cystitis","children":[]},{"name":"Acute Interstitial Nephritis (AIN)","children":[]}],"name":"Drug Induced Cystitis"},{"name":"Prurigo Nodularis","children":[{"children":[],"name":"Contrast Induced Nephropathy"},{"name":"Renal Insufficiency","children":[]},{"name":"Ulcers","children":[]},{"children":[],"name":"Peripheral T-Cell Lymphomas (PTCL)"},{"name":"Craniofacial Bone Defects","children":[]},{"children":[],"name":"Invasive Ductal Carcinoma"},{"children":[],"name":"Proliferative Diabetic Retinopathy (PDR)"},{"children":[],"name":"Dermatomyositis"},{"name":"Myocardial Ischemia","children":[]},{"name":"Menkes Disease (Kinky Hair Disease)","children":[]},{"children":[],"name":"Mesenchymal Tumor"},{"children":[],"name":"Respiratory Distress Syndrome"},{"children":[],"name":"Influenzavirus A Infections"},{"children":[],"name":"Gonadal Dysgenesis"},{"children":[],"name":"Friedreich Ataxia"},{"name":"Leiomyosarcoma","children":[]},{"name":"Storage Symptoms of Benign Prostatic Hyperplasia","children":[]}]},{"name":"Bleeding And Clotting Disorders","children":[{"children":[],"name":"Vasomotor Symptoms of Menopause (Hot Flashes)"},{"name":"Burning Sensation","children":[]},{"name":"Voiding Symptoms of Benign Prostatic Hyperplasia","children":[]},{"children":[],"name":"Intermittency of Urination"},{"name":"Urinary Dribbling","children":[]},{"children":[],"name":"Gynecomastia"},{"name":"Male Contraception","children":[]},{"name":"Asthenozoospermia","children":[]},{"children":[],"name":"Male Infertility"},{"children":[],"name":"Testicular Diseases"},{"name":"Cryptorchidism","children":[]},{"name":"Female Sexual Dysfunction","children":[]},{"children":[],"name":"Hyperphenylalaninemia"},{"name":"Undescended Testicle","children":[]},{"children":[],"name":"Unspecified Male Health Disorders"},{"name":"Microalbuminuria","children":[]}]},{"name":"Polyuria (Hyperuresis)","children":[]},{"children":[],"name":"Lung Transplant Rejection"},{"name":"Bone Regeneration","children":[]},{"children":[{"children":[],"name":"Poisoning"},{"name":"Pyuria","children":[]}],"name":"Pollakiuria"},{"children":[],"name":"Liver Diseases"},{"name":"Renal Osteodystrophy","children":[]},{"children":[],"name":"Renal Stones/Calculi"},{"name":"Acute Uncomplicated Cystitis In Women","children":[]},{"children":[],"name":"Unspecified Psychiatric Disorders"},{"children":[],"name":"Abscess"},{"name":"Hemifacial Spasm","children":[{"children":[],"name":"Gastroenteritis"}]},{"children":[],"name":"Cartilage Degeneration"},{"children":[{"name":"Asymptomatic Bacteriuria","children":[]},{"children":[],"name":"Bacteriuria"},{"name":"Symptomatic Bacteriuria","children":[]},{"name":"Corrosive Esophagitis (Erosive Esophagitis)","children":[]},{"children":[],"name":"Urea Splitting Urinary Tract Infections"},{"name":"Urinary Tract Infections Due To Catheter Encrustation","children":[]},{"children":[],"name":"Inherited Anemia"}],"name":"Urinary Tract Infections"}]},"Cardiovascular":{"children":[{"children":[],"name":"Cerebral Venous Sinus Thrombosis (CVST)"},{"children":[{"name":"Renal Artery Stenosis","children":[]},{"children":[],"name":"Cardiovascular Calcification"}],"name":"Intracranial Artery Stenosis"},{"children":[{"name":"LeschâNyhan Syndrome (LNS)","children":[]},{"name":"Acrocyanosis","children":[]},{"children":[],"name":"Hyperphosphatemia"}],"name":"Cardiac Valve Calcification"},{"name":"Cardiovascular Disease","children":[{"name":"Aneurysm","children":[]},{"name":"Chronic Respiratory Failure","children":[]},{"children":[],"name":"Aortic Aneurysm"},{"name":"Cerebral Aneurysms","children":[]},{"name":"Graves Diseases","children":[]},{"name":"Microvascular Angina","children":[]},{"children":[],"name":"Disseminated Intravascular Coagulation (DIC)"},{"children":[],"name":"Prinzmetal Angina (Variant Angina/Vasospastic Angina)"},{"children":[],"name":"Chronic Stable Angina"},{"children":[],"name":"Dyskeratosis Congenita (Zinsser-Cole-Engman Syndrome)"},{"name":"Female Hypoactive Sexual Desire Disorder","children":[]},{"name":"Premature Ventricular Complexes","children":[]},{"name":"Humoral Hypercalcemia of Malignancy","children":[]},{"name":"Retinitis Pigmentosa (Retinitis)","children":[]},{"name":"Sick Sinus Syndrome","children":[]},{"children":[],"name":"Arterial Stiffness"},{"name":"Fibromyalgia (Fibromyalgia Syndrome)","children":[]},{"children":[],"name":"Atrial Flutter"},{"name":"Nonmelanomatous Skin Cancer","children":[]},{"name":"Atherosclerosis","children":[]},{"name":"Atrial Fibrillation","children":[]},{"name":"Cardiomegaly","children":[]},{"name":"End-Stage Kidney Disease (End-Stage Renal Disease or ESRD)","children":[]},{"name":"Fanconi Anemia","children":[]},{"children":[],"name":"Eosinophilic Esophagitis"},{"name":"Hypertensive Cardiomyopathy","children":[]},{"name":"Cardiomyopathy","children":[]},{"name":"Peripartum Cardiomyopathy (PPCM/ Postpartum Cardiomyopathy)","children":[]},{"name":"Endothelial Dysfunction","children":[]},{"name":"Retinopathy Of Prematurity","children":[]},{"children":[],"name":"Dilated Cardiomyopathy"},{"children":[],"name":"Allergic Conjunctivitis"},{"name":"Valvular Cardiomyopathy","children":[]},{"children":[],"name":"Cerebral Vasospasm"},{"children":[],"name":"Vestibular Diseases"},{"children":[],"name":"Cardiogenic Shock"},{"children":[],"name":"Brain (Head) Trauma"},{"children":[],"name":"Chronic Ischemic Stroke"},{"children":[],"name":"Sinusitis"},{"name":"Coronavirus Disease 2019 (COVID-19) Associated Acute Respiratory Distress Syndrome","children":[]},{"name":"Ischemic Stroke","children":[]},{"children":[],"name":"Cutaneous Squamous Cell Carcinoma (cSCC)"},{"children":[],"name":"Transient Ischemic Attack"},{"name":"Eisenmenger Syndrome","children":[]},{"children":[],"name":"Tardive Dyskinesia"},{"children":[],"name":"Ventricular Septal Defect"},{"name":"Supratentorial Glioma","children":[]},{"children":[],"name":"Patent Ductus Arteriosus"},{"name":"Tetralogy Of Fallot","children":[]},{"children":[],"name":"Tricuspid Atresia"},{"name":"Congenital Vascular Malformation","children":[]},{"children":[],"name":"Cutaneous Vascular Malformations"},{"children":[],"name":"Occlusive Coronary Artery Disease"},{"children":[],"name":"Food Allergy"},{"name":"Membranoproliferative Glomerulonephritis Type II (Dense Deposit Disease or C3 Glomerulopathy)","children":[]},{"name":"Zollinger-Ellison Syndrome (Gastrinoma)","children":[]},{"name":"Organic Acidemia","children":[]},{"name":"X-Linked Agammaglobulinemia","children":[]},{"children":[],"name":"Enterocolitis"},{"name":"Adrenoleukodystrophy (X-Linked Adrenoleukodystrophy (X-ALD))","children":[]},{"children":[],"name":"Optic Nerve Injury"},{"name":"Acute Rheumatic Heart Disease","children":[]},{"name":"Epicondylitis","children":[]},{"name":"Coronary Disease","children":[]},{"children":[],"name":"Stable Angina"},{"children":[],"name":"Coronary Stenosis"},{"name":"Coronary Vasospasm","children":[]},{"name":"Intradialytic Hypotension","children":[]},{"name":"Gorlin Syndrome (Basal Cell Nevus Syndrome/ Nevoid Basal Cell Carcinoma Syndrome)","children":[]},{"name":"Lung Infections","children":[]},{"name":"Orthostatic Hypotension","children":[]},{"children":[],"name":"Neurogenic Orthostatic Hypotension (nOH)"},{"name":"Klippel-Trenaunay Syndrome","children":[]},{"name":"Malabsorption Syndrome","children":[]},{"children":[],"name":"Thromboangiitis obliterans (Buerger disease)"},{"name":"Vascular Injury","children":[]},{"name":"Low Cardiac Output Syndrome","children":[]},{"name":"Lymphangioleiomyomatosis","children":[]},{"children":[],"name":"Cardiac Asthma"},{"name":"Myocardial Infarction","children":[]},{"children":[],"name":"Choroideremia"},{"children":[],"name":"Pulmonary Vascular Disease (PVD)"},{"name":"Branch Retinal Vein Occlusion","children":[]},{"name":"Blood Coagulation","children":[]},{"children":[],"name":"Deafness"},{"name":"Acute Heart Failure","children":[]},{"name":"Post Acute Coronary Syndrome","children":[]},{"children":[],"name":"Vascular Dysfunction"},{"children":[],"name":"Bronchiectasis"},{"children":[],"name":"Progressive Supranuclear Palsy"},{"name":"Fever","children":[]},{"name":"Primary Progressive Multiple Sclerosis (PPMS)","children":[]},{"name":"Genital Warts (Condylomata Acuminata)","children":[]},{"name":"Arterial Thrombosis","children":[]},{"name":"Palmoplantar Pustulosis","children":[]},{"children":[],"name":"Resistant Hypertension"},{"children":[],"name":"Multiple System Atrophy (Multi-System Degeneration)"},{"name":"Leber's Hereditary Optic Neuropathy (Leber Optic Atrophy)","children":[]},{"children":[],"name":"Coronary Arteriosclerosis"},{"children":[],"name":"B-Cell Non-Hodgkin Lymphoma"},{"name":"Digital Ulcers","children":[]},{"name":"Cerebrotendinous Xanthomatosis","children":[]},{"children":[],"name":"Ventricular Fibrillation"},{"name":"Diarrhea","children":[]},{"name":"Arteritis","children":[]}]},{"children":[{"children":[],"name":"Stroke"},{"name":"Proteinuria","children":[]},{"name":"Bradycardia","children":[]},{"name":"Occlusive Arterial Disease (OAD)","children":[]},{"children":[],"name":"Giant Lymph Node Hyperplasia (Castleman's Disease)"},{"children":[],"name":"Chemotherapy Induced Anemia"},{"name":"Obsessive-Compulsive Disorder","children":[]},{"children":[],"name":"Skin And Skin Structure Infections (SSSI)"},{"name":"Pancreatic Fistula","children":[]},{"name":"Myalgia (Muscle Pain)","children":[]},{"children":[],"name":"Unspecified Genetic Disorders"}],"name":"Pseudomonas aeruginosa Pneumonia"},{"children":[{"children":[],"name":"Hyperemia"},{"name":"Diabetic Hypertension","children":[]},{"children":[],"name":"Skin Inflammation"},{"children":[],"name":"Diastolic Hypertension"},{"children":[],"name":"Portal Hypertensive Gastropathy (PHG)"},{"children":[],"name":"Pouchitis"},{"children":[],"name":"Stiff-Person Syndrome (SPS or Stiff-Man Syndrome)"},{"children":[],"name":"Chronic Thromboembolic Pulmonary Hypertension"},{"name":"Rheumatic Disorders","children":[]},{"children":[],"name":"Pulmonary Edema"},{"name":"Familial Pulmonary Hypertension","children":[]},{"children":[],"name":"Idiopathic Pulmonary Hypertension"},{"name":"Systolic Hypertension","children":[]},{"name":"Hepatitis D","children":[]},{"name":"Gaucher Disease Type II","children":[]},{"children":[],"name":"Systemic Mastocytosis"},{"name":"Restenosis","children":[]},{"name":"Atrial Tachycardia","children":[]},{"children":[],"name":"Arterial Thromboembolism"},{"name":"Paroxysmal Ventricular Tachycardia","children":[]},{"name":"AIDS - Related Lymphoma","children":[]},{"children":[],"name":"Congenital Malformations of Heart"},{"children":[],"name":"Reflux Esophagitis (Gastroesophageal Reflux Disease)"},{"name":"Bronchiolitis Obliterans","children":[]}],"name":"Attention Deficit Hyperactivity Disorder (ADHD)"},{"name":"Endomyocardial (Eosinophilic) Disease","children":[]},{"name":"Adrenal Insufficiency","children":[{"name":"Mutational Disorders","children":[]}]},{"children":[{"children":[],"name":"Darier Disease"},{"name":"Generalized Pustular Psoriasis (GPP)","children":[]},{"name":"Uveal Melanoma","children":[]}],"name":"Heart Valve Disease"},{"name":"Aortic Valve Diseases","children":[{"children":[],"name":"Mitral Valve Diseases"},{"name":"Nephropathic Cystinosis","children":[]},{"name":"Mitral Valve Prolapse","children":[]},{"children":[],"name":"Mitral Valve Stenosis"},{"name":"Pulmonary Valve Diseases","children":[]},{"children":[],"name":"Pulmonary Valve Stenosis"},{"children":[],"name":"Hepatic Veno-Occlusive Disease"}]},{"children":[],"name":"Hypoxemia"},{"children":[],"name":"Pericardial Disease"},{"name":"Fucosidosis","children":[]},{"name":"Raynauds Disease","children":[{"name":"Unspecified Musculoskeletal Disorders","children":[]}]},{"children":[],"name":"Regurgitation"},{"name":"Pulmonic Regurgitation","children":[{"children":[],"name":"Reperfusion Injury"}]},{"name":"Distributive Shock","children":[{"children":[],"name":"Emesis (Vomiting)"}]},{"name":"Hepatic Edema","children":[{"children":[],"name":"Pancreatic Islet Transplant Rejection"},{"name":"Anaphylactic Shock","children":[]},{"children":[],"name":"Neurogenic Shock"},{"children":[],"name":"Muscle Atrophy"},{"name":"Mucopolysaccharidosis II (MPS II) (Hunter Syndrome )","children":[]},{"children":[],"name":"Vulvovaginal Candidiasis"},{"children":[],"name":"Obstructive Shock"},{"children":[],"name":"Telangiectasis"},{"children":[],"name":"Adenomas"}]},{"children":[],"name":"Periventricular Leukomalacia"},{"children":[],"name":"Hyperinsulinemia"}]},"Women's Health":{"children":[{"name":"Induced Abortion","children":[{"name":"Adnexitis","children":[]},{"children":[],"name":"Rickets"},{"children":[],"name":"Hemostasis"}]},{"children":[],"name":"Kraurosis Vulvae"},{"name":"Chronic Inducible Urticaria","children":[{"name":"Postmenopausal Vaginal Atrophy","children":[]},{"children":[],"name":"Breast Hyperplasia"}]},{"children":[{"name":"Cervical Ripening In Pregnant Women Near Term","children":[]}],"name":"Cyclomastopathy"},{"name":"Osteogenesis Imperfecta","children":[]},{"children":[],"name":"Disorders of the Breast"},{"children":[{"name":"Hormonal Contraception","children":[]}],"name":"Fibrocystic Breast Disease"},{"children":[],"name":"Osteolysis"},{"children":[{"children":[],"name":"Dyspareunia"}],"name":"Cervical Intraepithelial Neoplasia (CIN)"},{"children":[{"children":[],"name":"Axial Spondyloarthritis"},{"name":"Ovarian Hyperstimulation Syndrome","children":[]}],"name":"Essential Thrombocythemia"},{"name":"Visceral Leishmaniasis (Kala-Azar)","children":[{"children":[],"name":"Gynecological Infections"},{"name":"Recurrent Abortion","children":[]}]},{"name":"Dystocia","children":[]},{"name":"Varicose Veins","children":[]},{"name":"Chemotherapy Induced Nausea and Vomiting","children":[{"name":"Post Partum Depression (Maternal Depression / Postnatal Depression)","children":[]},{"name":"Protracted Labor","children":[]},{"children":[],"name":"Macromastia"}]},{"children":[],"name":"Menopausal Disorders"},{"children":[{"name":"Post Menopausal Disorder","children":[]},{"name":"Hormonal Disorders In Post Menopausal Women","children":[]},{"name":"Post Menopausal Mood Disorder","children":[]},{"children":[],"name":"Menstrual Disorders"},{"name":"Ventilator Associated Pneumonia (VAP)","children":[]}],"name":"Genitourinary Syndrome of Menopause (GSM)"},{"name":"Premenopausal Amenorrhea","children":[{"name":"Angina (Angina Pectoris)","children":[]},{"name":"Female Hypogonadism","children":[]},{"children":[],"name":"Primary Amenorrhea"},{"children":[],"name":"Secondary Amenorrhea"},{"children":[],"name":"Lactation Amenorrhea"},{"children":[],"name":"Pituitary Amenorrhea"},{"name":"Primary Anovulation","children":[]},{"children":[],"name":"Polycystic Ovarian Syndrome"},{"name":"Secondary Anovulation","children":[]},{"children":[],"name":"Secondary Dysmenorrhea"},{"children":[],"name":"Laryngitis"},{"name":"Dysmenorrhea","children":[]},{"children":[],"name":"Menometrorrhagia"},{"name":"Menstrual Cramps","children":[]},{"children":[],"name":"Low Back Pain"},{"children":[],"name":"Ovarian Disease"},{"children":[],"name":"Psychosis"},{"children":[],"name":"Premenstrual Syndrome"}]},{"children":[],"name":"Toxic Epidermal Necrolysis"},{"name":"Pregnancy","children":[{"children":[],"name":"Amenorrhea"},{"children":[],"name":"Fibrodysplasia Ossificans Progressiva (Myositis Ossificans Progressiva)"},{"name":"Intracerebral Hemorrhage","children":[]}]},{"name":"Eclampsia","children":[{"name":"Giant Cell Arteritis (Temporal Arteritis/Cranial Arteritis/Horton Disease)","children":[]},{"children":[],"name":"Ectopic Pregnancy (Tubal Pregnancy)"},{"name":"Fetal Distress","children":[]},{"children":[],"name":"Gestational Trophoblastic Disease"},{"children":[],"name":"Hydatidiform Mole"},{"children":[],"name":"Subinvolution"},{"children":[],"name":"Cardiovascular Inflammation"}]},{"children":[],"name":"Bacterial Corneal Ulcers"},{"children":[],"name":"acroç¾ç.id"},{"children":[],"name":"Systolic Heart Failure (HFrEF)"},{"name":"Rectal Fistula","children":[]}]}};
+const FIELD_LIST = ["Hormonal Disorders","Respiratory","Mouth and Dental Disorders","Ophthalmology","Central Nervous System","Other Diseases","Ear Nose Throat Disorders","Gastrointestinal","Non Malignant Disorders","Metabolic Disorders","Dermatology","Infectious Disease","Genetic Disorders","Musculoskeletal Disorders","Immunology","Hematological Disorders","Toxicology","Nutritional Disorders","Undisclosed","Oncology","Genito Urinary System","Cardiovascular","Women's Health"];
+const FIELD_COLORS = {};
+FIELD_LIST.forEach((f, i) => {
+  const hue = Math.round((i / FIELD_LIST.length) * 360);
+  FIELD_COLORS[f] = `hsl(${hue}, 70%, 55%)`;
+});
 
-  <script>
-    // ===== 数据 =====
-    const fields = {
-      "Oncology": ["Lung Cancer","Breast Cancer","Colorectal Cancer","Gastric Cancer","Liver Cancer","Pancreatic Cancer"],
-      "Immunology": ["Rheumatoid Arthritis","Psoriasis","Lupus","Multiple Sclerosis","Type 1 Diabetes"],
-      "Neurology": ["Alzheimer's Disease","Parkinson's Disease","Epilepsy","Migraine","ALS"],
-      "Metabolism": ["Type 2 Diabetes","Obesity","NASH","Dyslipidemia","Gout"],
-      "Cardiovascular": ["Atherosclerosis","Heart Failure","Atrial Fibrillation","Hypertension","Thrombosis"],
-      "Infectious Disease": ["COVID-19","Influenza","HBV","HIV","RSV"]
-    };
+let currentField = null;
+let currentL1 = null;
 
-    const fieldColors = {
-      "Oncology": "#e74c3c",
-      "Immunology": "#3498db",
-      "Neurology": "#9b59b6",
-      "Metabolism": "#f39c12",
-      "Cardiovascular": "#1abc9c",
-      "Infectious Disease": "#2ecc71"
-    };
+function init() {
+  renderFields();
+  renderOcean();
+  // Auto-select first field
+  if (FIELD_LIST.length > 0) {
+    selectField(FIELD_LIST[0]);
+  }
+}
 
-    const proteins = [];
-    const prefixes = ["AB","CD","EF","GH","IJ","KL","MN","OP","QR","ST","UV","WX","YZ"];
-    const suffixes = ["mab","cept","nib","tinib","zumab","ximab","limab","tide","stat","vatinib"];
-    let id = 1;
-    for (const [field, indications] of Object.entries(fields)) {
-      const count = 16 + Math.floor(Math.random() * 10);
-      for (let i = 0; i < count; i++) {
-        const indication = indications[Math.floor(Math.random() * indications.length)];
-        const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
-        const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
-        const num = 100 + Math.floor(Math.random() * 900);
-        proteins.push({
-          id: id++,
-          name: `${prefix}-${num}${suffix}`,
-          field: field,
-          indication: indication,
-          target: `Target-${String.fromCharCode(65 + Math.floor(Math.random()*26))}${Math.floor(Math.random()*99)}`,
-          phase: ["Discovery","Preclinical","IND-enabling","Phase I"][Math.floor(Math.random()*4)],
-          format: ["Monoclonal Antibody","Bispecific","Small Molecule","Peptide","Fusion Protein"][Math.floor(Math.random()*5)]
-        });
-      }
-    }
+function renderFields() {
+  const nav = document.getElementById('fieldNav');
+  nav.innerHTML = '';
+  FIELD_LIST.forEach(field => {
+    const btn = document.createElement('div');
+    btn.className = 'field-tab';
+    btn.textContent = field;
+    btn.dataset.field = field;
+    btn.onclick = () => selectField(field);
+    nav.appendChild(btn);
+  });
+}
 
-    const ghostConstellations = {};
-    Object.keys(fields).forEach(field => {
-      ghostConstellations[field] = proteins.filter(p => p.field === field).slice(0, 4 + Math.floor(Math.random() * 4));
+function scrollNav(dir) {
+  const nav = document.getElementById('fieldNav');
+  nav.scrollBy({ left: dir * 200, behavior: 'smooth' });
+}
+
+function selectField(field) {
+  currentField = field;
+  currentL1 = null;
+
+  // Update tabs
+  document.querySelectorAll('.field-tab').forEach(tab => {
+    tab.classList.toggle('active', tab.dataset.field === field);
+  });
+
+  const data = HIERARCHY[field];
+  const l1List = data && data.children ? data.children : [];
+
+  // Render L1 grid
+  const l1Section = document.getElementById('l1Section');
+  const l1Grid = document.getElementById('l1Grid');
+  const l1Label = document.getElementById('l1Label');
+  l1Grid.innerHTML = '';
+
+  if (l1List.length > 0) {
+    l1Section.classList.add('active');
+    l1Label.textContent = field + ' â Primary Indications (' + l1List.length + ')';
+
+    const allBtn = document.createElement('div');
+    allBtn.className = 'l1-tab active';
+    allBtn.textContent = 'View All';
+    allBtn.onclick = () => { currentL1 = null; renderL1Tabs(); renderConstellationForField(); };
+    l1Grid.appendChild(allBtn);
+
+    l1List.forEach(item => {
+      const btn = document.createElement('div');
+      btn.className = 'l1-tab';
+      btn.textContent = item.name;
+      btn.dataset.l1 = item.name;
+      btn.onclick = () => selectL1(item.name);
+      l1Grid.appendChild(btn);
     });
+  } else {
+    l1Section.classList.remove('active');
+  }
 
-    let activeField = null;
-    let activeIndication = null;
-    let searchQuery = "";
+  renderConstellationForField();
+}
 
-    // ===== 初始化 =====
-    function init() {
-      renderFieldTabs();
-      renderOcean();
-      setTimeout(showGhostConstellations, 150);
+function selectL1(l1Name) {
+  currentL1 = l1Name;
+  renderL1Tabs();
+  renderConstellationForL1();
+}
+
+function renderL1Tabs() {
+  document.querySelectorAll('.l1-tab').forEach(tab => {
+    if (tab.dataset.l1) {
+      tab.classList.toggle('active', tab.dataset.l1 === currentL1);
+    } else {
+      tab.classList.toggle('active', currentL1 === null);
     }
+  });
+}
 
-    // ===== 渲染领域Tab =====
-    function renderFieldTabs() {
-      const container = document.getElementById('fieldTabs');
-      container.innerHTML = '';
-      Object.keys(fields).forEach(field => {
-        const btn = document.createElement('div');
-        btn.className = 'field-tab';
-        btn.textContent = field;
-        btn.onclick = () => selectField(field);
-        container.appendChild(btn);
-      });
-    }
+function renderConstellationForField() {
+  const label = document.getElementById('constellationLabel');
+  const canvas = document.getElementById('constellationCanvas');
+  label.textContent = currentField + ' â All Indications';
 
-    function selectField(field) {
-      if (activeField === field) {
-        activeField = null;
-        activeIndication = null;
-      } else {
-        activeField = field;
-        activeIndication = null;
+  const data = HIERARCHY[currentField];
+  const nodes = (data && data.children ? data.children : []).map(c => c.name);
+  renderConstellation(nodes, label.textContent);
+}
+
+function renderConstellationForL1() {
+  const label = document.getElementById('constellationLabel');
+  const data = HIERARCHY[currentField];
+  const l1Item = (data && data.children ? data.children : []).find(c => c.name === currentL1);
+
+  if (!l1Item || !l1Item.children || l1Item.children.length === 0) {
+    label.textContent = currentField + ' â ' + currentL1 + ' (No sub-indications)';
+    renderConstellation([], label.textContent);
+    return;
+  }
+
+  label.textContent = currentField + ' â ' + currentL1 + ' (' + l1Item.children.length + ' sub-indications)';
+  const nodes = l1Item.children.map(c => c.name);
+  renderConstellation(nodes, label.textContent);
+}
+
+function renderConstellation(nodeNames, labelText) {
+  const canvas = document.getElementById('constellationCanvas');
+  canvas.innerHTML = '';
+
+  if (nodeNames.length === 0) {
+    const hint = document.createElement('div');
+    hint.className = 'empty-hint';
+    hint.textContent = 'No nodes to display';
+    canvas.appendChild(hint);
+    return;
+  }
+
+  const rect = canvas.getBoundingClientRect();
+  const centerX = rect.width > 0 ? rect.width / 2 : 400;
+  const centerY = 150;
+
+  const positions = [];
+  nodeNames.forEach((name, i) => {
+    const angle = i * 2.4;
+    const radius = 28 + i * 10;
+    const x = centerX + radius * Math.cos(angle);
+    const y = centerY + radius * Math.sin(angle) * 0.7;
+    positions.push({ x, y, name });
+  });
+
+  // Draw lines first (so they appear behind nodes)
+  for (let i = 0; i < positions.length; i++) {
+    for (let j = i + 1; j < positions.length; j++) {
+      const a = positions[i];
+      const b = positions[j];
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 130) {
+        const line = document.createElement('div');
+        line.className = 'constellation-line';
+        line.style.left = a.x + 'px';
+        line.style.top = a.y + 'px';
+        line.style.width = dist + 'px';
+        line.style.transform = 'rotate(' + Math.atan2(dy, dx) + 'rad)';
+        canvas.appendChild(line);
       }
-      refreshUI();
+    }
+  }
+
+  // Draw nodes
+  positions.forEach((pos, i) => {
+    const node = document.createElement('div');
+    node.className = 'molecule-node';
+    node.textContent = pos.name;
+    node.style.left = (pos.x) + 'px';
+    node.style.top = (pos.y) + 'px';
+    node.style.transform = 'translate(-50%, -50%)';
+    // Staggered fade-in
+    node.style.opacity = '0';
+    node.style.animation = 'fadeIn 0.4s ease ' + (i * 0.03) + 's forwards';
+    canvas.appendChild(node);
+  });
+}
+
+function renderOcean() {
+  const canvas = document.getElementById('oceanCanvas');
+  canvas.innerHTML = '';
+
+  const width = canvas.offsetWidth || 900;
+  const height = 160;
+  const dotSize = 6;
+
+  FIELD_LIST.forEach((field, idx) => {
+    const color = FIELD_COLORS[field];
+    // Number of dots proportional to total nodes in this field
+    const fieldData = HIERARCHY[field];
+    let count = 3;
+    if (fieldData && fieldData.children) {
+      count = Math.max(3, Math.min(18, Math.round(fieldData.children.length / 2)));
     }
 
-    function selectIndication(indication) {
-      activeIndication = activeIndication === indication ? null : indication;
-      refreshUI();
+    for (let i = 0; i < count; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'ocean-dot';
+      dot.style.width = dotSize + 'px';
+      dot.style.height = dotSize + 'px';
+      dot.style.background = color;
+      const left = (idx / FIELD_LIST.length) * width + (Math.random() * (width / FIELD_LIST.length - 10));
+      const top = Math.random() * (height - dotSize);
+      dot.style.left = Math.max(0, Math.min(width - dotSize, left)) + 'px';
+      dot.style.top = top + 'px';
+      dot.title = field;
+      canvas.appendChild(dot);
     }
+  });
+}
 
-    // ===== 刷新UI =====
-    function refreshUI() {
-      document.querySelectorAll('.field-tab').forEach(tab => {
-        tab.classList.toggle('active', tab.textContent === activeField);
-      });
+function handleSearch() {
+  const query = document.getElementById('searchInput').value.trim().toLowerCase();
+  if (!query) return;
 
-      const indSection = document.getElementById('indicationSection');
-      const indTabs = document.getElementById('indicationTabs');
-      if (activeField) {
-        indSection.classList.add('active');
-        const indications = fields[activeField];
-        indTabs.innerHTML = indications.map(ind =>
-          `<div class="indication-tab ${ind === activeIndication ? 'active' : ''}" onclick="selectIndication('${ind}')">${ind}</div>`
-        ).join('');
-      } else {
-        indSection.classList.remove('active');
-      }
-
-      const filtered = proteins.filter(p => {
-        if (activeField && p.field !== activeField) return false;
-        if (activeIndication && p.indication !== activeIndication) return false;
-        if (searchQuery) {
-          const q = searchQuery;
-          return p.name.toLowerCase().includes(q) || p.target.toLowerCase().includes(q) ||
-                 p.field.toLowerCase().includes(q) || p.indication.toLowerCase().includes(q);
+  // Find matching field or L1
+  for (const field of FIELD_LIST) {
+    if (field.toLowerCase().includes(query)) {
+      selectField(field);
+      document.getElementById('searchInput').value = '';
+      return;
+    }
+    const data = HIERARCHY[field];
+    if (data && data.children) {
+      for (const child of data.children) {
+        if (child.name.toLowerCase().includes(query)) {
+          selectField(field);
+          selectL1(child.name);
+          document.getElementById('searchInput').value = '';
+          return;
         }
-        return true;
-      });
-
-      if (activeField || activeIndication || searchQuery) {
-        showActiveConstellation(filtered);
-      } else {
-        showGhostConstellations();
-      }
-      updateOcean(filtered);
-    }
-
-    // ===== 虚线星座（未筛选） =====
-    function showGhostConstellations() {
-      const canvas = document.getElementById('constellationCanvas');
-      document.getElementById('canvasLabel').textContent = 'Default View — Popular Constellations';
-      canvas.querySelectorAll('.molecule-node, .constellation-line, .ghost-constellation').forEach(el => el.remove());
-
-      const fieldNames = Object.keys(fields);
-      const cx = canvas.offsetWidth / 2;
-      const cy = canvas.offsetHeight / 2;
-
-      fieldNames.forEach((field, idx) => {
-        const angle = (idx / fieldNames.length) * Math.PI * 2 - Math.PI / 2;
-        const radius = Math.min(cx, cy) * 0.55;
-        const gx = cx + Math.cos(angle) * radius - 50;
-        const gy = cy + Math.sin(angle) * radius - 25;
-
-        const ghost = document.createElement('div');
-        ghost.className = 'ghost-constellation';
-        ghost.style.left = gx + 'px';
-        ghost.style.top = gy + 'px';
-        ghost.style.width = '100px';
-        ghost.style.height = '50px';
-        ghost.dataset.label = field;
-        canvas.appendChild(ghost);
-
-        const ghostProteins = ghostConstellations[field];
-        ghostProteins.forEach((p, i) => {
-          const sa = angle + (i / ghostProteins.length) * Math.PI * 0.7 - Math.PI * 0.35;
-          const sr = 30 + (i % 2) * 22;
-          const nx = cx + Math.cos(sa) * sr + Math.cos(angle) * radius * 0.25;
-          const ny = cy + Math.sin(sa) * sr * 0.6 + Math.sin(angle) * radius * 0.25;
-          const node = document.createElement('div');
-          node.className = 'molecule-node ghost';
-          node.style.left = nx + 'px';
-          node.style.top = ny + 'px';
-          node.textContent = p.name;
-          canvas.appendChild(node);
-        });
-      });
-    }
-
-    // ===== 活跃星座（筛选后） =====
-    function showActiveConstellation(filtered) {
-      const canvas = document.getElementById('constellationCanvas');
-      canvas.querySelectorAll('.molecule-node, .constellation-line, .ghost-constellation').forEach(el => el.remove());
-
-      const label = activeIndication ? `${activeField}  >  ${activeIndication}` :
-                    activeField ? `${activeField} — All Indications` :
-                    `Search: "${searchQuery}" — ${filtered.length} results`;
-      document.getElementById('canvasLabel').textContent = label;
-
-      triggerAscendEffect();
-
-      const cx = canvas.offsetWidth / 2;
-      const cy = canvas.offsetHeight / 2;
-      const count = Math.min(filtered.length, 22);
-      const nodes = [];
-
-      for (let i = 0; i < count; i++) {
-        const t = i * 2.4;
-        const r = 28 + t * 7;
-        const x = cx + Math.cos(t) * r;
-        const y = cy + Math.sin(t) * r * 0.6;
-        const node = document.createElement('div');
-        node.className = 'molecule-node active';
-        node.style.left = x + 'px';
-        node.style.top = y + 'px';
-        node.textContent = filtered[i].name;
-        node.onclick = () => showDetail(filtered[i]);
-        canvas.appendChild(node);
-        nodes.push({x, y});
-      }
-
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-          const dx = nodes[j].x - nodes[i].x;
-          const dy = nodes[j].y - nodes[i].y;
-          const dist = Math.sqrt(dx*dx + dy*dy);
-          if (dist < 110) {
-            const line = document.createElement('div');
-            line.className = 'constellation-line active';
-            line.style.left = nodes[i].x + 'px';
-            line.style.top = nodes[i].y + 'px';
-            line.style.width = dist + 'px';
-            line.style.transform = `rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;
-            canvas.appendChild(line);
-          }
-        }
       }
     }
+  }
+  alert('No matching field or indication found.');
+}
 
-    function triggerAscendEffect() {
-      const container = document.getElementById('ascendingParticles');
-      for (let i = 0; i < 20; i++) {
-        const dot = document.createElement('div');
-        dot.className = 'ascend-dot';
-        const size = 3 + Math.random() * 4;
-        dot.style.width = size + 'px';
-        dot.style.height = size + 'px';
-        dot.style.left = (25 + Math.random() * 50) + '%';
-        dot.style.bottom = (5 + Math.random() * 10) + '%';
-        dot.style.animationDelay = (Math.random() * 0.6) + 's';
-        container.appendChild(dot);
-        setTimeout(() => dot.remove(), 1500);
-      }
-    }
+function resetAll() {
+  document.getElementById('searchInput').value = '';
+  if (FIELD_LIST.length > 0) {
+    selectField(FIELD_LIST[0]);
+  }
+}
 
-    // ===== 分子大海 — 散点图 =====
-    function renderOcean() {
-      const canvas = document.getElementById('oceanCanvas');
-      canvas.innerHTML = '';
-      for (let i = 0; i < proteins.length; i++) {
-        const p = proteins[i];
-        const dot = document.createElement('div');
-        dot.className = 'ocean-dot';
-        dot.style.background = fieldColors[p.field] || '#e74c3c';
-        dot.title = `${p.name} | ${p.field} | ${p.indication}`;
-        dot.onclick = () => showDetail(p);
-        canvas.appendChild(dot);
-      }
-    }
+window.addEventListener('resize', () => {
+  if (currentField && !currentL1) {
+    renderConstellationForField();
+  } else if (currentField && currentL1) {
+    renderConstellationForL1();
+  }
+});
 
-    function updateOcean(filtered) {
-      const dots = document.querySelectorAll('.ocean-dot');
-      if (!activeField && !activeIndication && !searchQuery) {
-        dots.forEach(d => d.classList.remove('dimmed', 'matched'));
-        return;
-      }
-      dots.forEach(d => d.classList.add('dimmed'));
-      const matchedIds = new Set(filtered.map(p => p.id));
-      dots.forEach((d, i) => {
-        if (matchedIds.has(proteins[i].id)) {
-          d.classList.remove('dimmed');
-          d.classList.add('matched');
-        }
-      });
-    }
-
-    // ===== 搜索 =====
-    function applySearch() {
-      searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
-      refreshUI();
-    }
-
-    // ===== 重置 =====
-    function resetAll() {
-      activeField = null;
-      activeIndication = null;
-      searchQuery = "";
-      document.getElementById('searchInput').value = "";
-      refreshUI();
-    }
-
-    // ===== 详情弹窗 =====
-    function showDetail(p) {
-      document.getElementById('detailTitle').textContent = p.name;
-      document.getElementById('detailContent').innerHTML = `
-        <div class="detail-row"><span class="label">Research Field</span><span class="value">${p.field}</span></div>
-        <div class="detail-row"><span class="label">Indication</span><span class="value">${p.indication}</span></div>
-        <div class="detail-row"><span class="label">Target</span><span class="value">${p.target}</span></div>
-        <div class="detail-row"><span class="label">Phase</span><span class="value">${p.phase}</span></div>
-        <div class="detail-row"><span class="label">Format</span><span class="value">${p.format}</span></div>
-        <div class="detail-row"><span class="label">Molecule ID</span><span class="value">#${String(p.id).padStart(4,'0')}</span></div>
-      `;
-      document.getElementById('detailModal').classList.add('active');
-    }
-    function closeDetail() {
-      document.getElementById('detailModal').classList.remove('active');
-    }
-
-    // ===== 反馈弹窗 =====
-    function openFeedback() {
-      document.getElementById('feedbackModal').classList.add('active');
-    }
-    function closeFeedback() {
-      document.getElementById('feedbackModal').classList.remove('active');
-    }
-    function submitFeedback() {
-      alert('Thank you for your feedback!');
-      closeFeedback();
-      document.getElementById('rating').value = '5';
-      document.getElementById('feedbackText').value = '';
-    }
-
-    document.getElementById('searchInput').addEventListener('keypress', e => {
-      if (e.key === 'Enter') applySearch();
-    });
-    document.querySelectorAll('.modal-overlay').forEach(o => {
-      o.addEventListener('click', e => { if (e.target === o) o.classList.remove('active'); });
-    });
-
-    init();
-    window.addEventListener('resize', () => {
-      if (!activeField && !activeIndication && !searchQuery) showGhostConstellations();
-    });
-  </script>
+init();
+</script>
 </body>
 </html>
